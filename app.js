@@ -186,7 +186,7 @@ function performSearch() {
     let results = [];
     
     if (!searchText) {
-        results = allQuestions.slice(0, 20); // показываем первые 20
+        results = allQuestions; // ПОКАЗЫВАЕМ ВСЕ ВОПРОСЫ
     } else {
         results = allQuestions.filter(q => 
             (q.punkt && q.punkt.toLowerCase().includes(searchText)) ||
