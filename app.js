@@ -162,7 +162,7 @@ function switchBase(baseName) {
         // Прокручиваем страницу вверх
         window.scrollTo({
             top: 0,
-            behavior: 'auto' // плавная прокрутка
+            behavior: 'smooth' // плавная прокрутка
         });
         
         // Или если используешь main-content:
@@ -410,4 +410,5 @@ function importJSON() {
     };
     input.click();
 }
+
 
