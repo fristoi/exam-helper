@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -27,21 +27,23 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.08);
         }
         
-        /* Шапка */
+        /* Верхняя панель */
         .top-bar {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             margin-bottom: 20px;
+            width: 100%;
         }
         .title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
             color: #0b3b5c;
             white-space: nowrap;
         }
         .base-select {
             flex: 1;
+            min-width: 0; /* важно для мобильных */
             padding: 10px 14px;
             border: 1px solid #e2e8f0;
             border-radius: 30px;
@@ -69,6 +71,7 @@
             align-items: center;
             justify-content: center;
             transition: background 0.2s;
+            flex-shrink: 0;
         }
         .icon-btn:hover {
             background: #cbd5e1;
@@ -102,7 +105,6 @@
             border-color: #28a745;
         }
         
-        /* Выпадающий список для разделов (когда их много) */
         .section-dropdown {
             margin-bottom: 20px;
             width: 100%;
@@ -135,7 +137,6 @@
             box-shadow: 0 0 0 3px rgba(40,167,69,0.1);
         }
         
-        /* Список вопросов */
         .questions-list {
             background: white;
             border-radius: 24px;
@@ -200,7 +201,6 @@
             padding: 40px 20px;
         }
         
-        /* Панель настроек */
         .settings-panel {
             background: #f8fafc;
             border-radius: 16px;
@@ -275,18 +275,64 @@
             font-weight: 600;
             cursor: pointer;
         }
-        .mobile-create-btn {
-    display: none;
-}
-
-@media (max-width: 600px) {
-    .mobile-create-btn {
-        display: block !important;
-    }
-}
         
         .hidden {
             display: none;
+        }
+        
+        /* Модальные окна */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+        }
+        .modal-content h3 {
+            margin-bottom: 16px;
+            color: #1e293b;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        
+        /* Адаптация для мобильных */
+        @media (max-width: 600px) {
+            .top-bar {
+                gap: 4px;
+            }
+            .title {
+                font-size: 16px;
+            }
+            .base-select {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
+            .icon-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+            .question-item {
+                padding: 12px 0;
+            }
         }
     </style>
 </head>
@@ -294,16 +340,15 @@
     <div class="container">
         <!-- Верхняя панель -->
         <div class="top-bar">
-            <span class="title">📚 Помощник экз.</span>
+            <span class="title">📚 Помощник</span>
             <select class="base-select" id="baseSelect"></select>
-            <!-- Для мобильных: отдельная кнопка создания -->
-<button class="icon-btn" id="mobileCreateBtn" style="display: none;" title="Создать базу">➕</button>
+            <button class="icon-btn" id="mobileCreateBtn" style="display: none;" title="Создать базу">➕</button>
             <div class="top-buttons">
                 <button class="icon-btn" id="toggleSettingsBtn" title="Настройки">⚙️</button>
             </div>
         </div>
 
-        <!-- Панель настроек (скрыта по умолчанию) -->
+        <!-- Панель настроек -->
         <div class="settings-panel hidden" id="settingsPanel">
             <div class="settings-title">⚙️ Управление базой</div>
             <div class="double-row">
@@ -327,9 +372,11 @@
         </div>
 
         <!-- Фильтр разделов -->
-        <div class="filter-bar" id="filterBar"></div>
+        <div class="filter-bar" id="filterBar">
+            <button class="source-filter all active" data-source="all">📋 Все</button>
+        </div>
 
-        <!-- Выпадающий список для разделов (когда их много) -->
+        <!-- Выпадающий список для разделов -->
         <div class="section-dropdown hidden" id="sectionDropdown">
             <select class="section-select" id="sectionSelect">
                 <option value="all">📋 Все разделы</option>
@@ -351,11 +398,11 @@
         </div>
     </div>
 
-    <!-- Модальные окна -->
-    <div class="modal-overlay" id="createBaseModal" style="display: none; position: fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:1000;">
-        <div style="background:white; border-radius:24px; padding:24px; width:400px;">
-            <h3 style="margin-bottom:16px;">➕ Создать новую базу</h3>
-            <input type="text" id="newBaseName" placeholder="Название базы" style="width:100%; padding:12px; margin-bottom:16px; border:1px solid #e2e8f0; border-radius:8px;">
+    <!-- Модальное окно создания базы -->
+    <div class="modal-overlay" id="createBaseModal">
+        <div class="modal-content">
+            <h3>➕ Создать новую базу</h3>
+            <input type="text" id="newBaseName" placeholder="Название базы">
             <div class="double-row">
                 <button class="add-btn" id="confirmCreateBtn">Создать</button>
                 <button class="action-btn clear" id="closeCreateModal">Отмена</button>
@@ -363,10 +410,11 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="renameBaseModal" style="display: none; position: fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:1000;">
-        <div style="background:white; border-radius:24px; padding:24px; width:400px;">
-            <h3 style="margin-bottom:16px;">✏️ Переименовать базу</h3>
-            <input type="text" id="renameBaseInput" placeholder="Новое название" style="width:100%; padding:12px; margin-bottom:16px; border:1px solid #e2e8f0; border-radius:8px;">
+    <!-- Модальное окно переименования -->
+    <div class="modal-overlay" id="renameBaseModal">
+        <div class="modal-content">
+            <h3>✏️ Переименовать базу</h3>
+            <input type="text" id="renameBaseInput" placeholder="Новое название">
             <div class="double-row">
                 <button class="add-btn" id="confirmRenameBtn">Переименовать</button>
                 <button class="action-btn clear" id="closeRenameModal">Отмена</button>
@@ -377,4 +425,3 @@
     <script src="app.js"></script>
 </body>
 </html>
-
