@@ -14,7 +14,50 @@ document.addEventListener('DOMContentLoaded', function() {
     renderBaseSelect();
     loadQuestions();
 });
+// Проверяем мобильное устройство
+function isMobile() {
+    return window.innerWidth <= 600;
+}
 
+function setupEventListeners() {
+    // ... существующие обработчики ...
+    
+    // Показываем/скрываем кнопку создания при изменении размера
+    window.addEventListener('resize', checkMobile);
+    checkMobile();
+}
+
+function checkMobile() {
+    let createBtn = document.getElementById('mobileCreateBtn');
+    let baseSelect = document.getElementById('baseSelect');
+    
+    if (isMobile()) {
+        createBtn.style.display = 'flex';
+        // Убираем пункт "Создать новую базу" из select на мобильных
+        for (let i = baseSelect.options.length - 1; i >= 0; i--) {
+            if (baseSelect.options[i].value === 'CREATE_NEW') {
+                baseSelect.remove(i);
+                break;
+            }
+        }
+    } else {
+        createBtn.style.display = 'none';
+        // Возвращаем пункт создания в select на десктопе
+        let hasCreate = false;
+        for (let i = 0; i < baseSelect.options.length; i++) {
+            if (baseSelect.options[i].value === 'CREATE_NEW') {
+                hasCreate = true;
+                break;
+            }
+        }
+        if (!hasCreate) {
+            let createOpt = document.createElement('option');
+            createOpt.value = 'CREATE_NEW';
+            createOpt.textContent = '➕ Создать новую базу...';
+            baseSelect.appendChild(createOpt);
+        }
+    }
+}
 function loadFromStorage() {
     const saved = localStorage.getItem('examHelperBases');
     if (saved) {
@@ -59,6 +102,11 @@ function setupEventListeners() {
     document.getElementById('renameBaseBtn').addEventListener('click', showRenameModal);
     document.getElementById('deleteBaseBtn').addEventListener('click', deleteBase);
     
+    // 👇 ЭТОТ НОВЫЙ ОБРАБОТЧИК
+    document.getElementById('mobileCreateBtn').addEventListener('click', () => {
+        document.getElementById('createBaseModal').style.display = 'flex';
+    });
+    
     // Модальные окна
     document.getElementById('confirmCreateBtn').addEventListener('click', createNewBase);
     document.getElementById('closeCreateModal').addEventListener('click', () => {
@@ -68,6 +116,10 @@ function setupEventListeners() {
     document.getElementById('closeRenameModal').addEventListener('click', () => {
         document.getElementById('renameBaseModal').style.display = 'none';
     });
+    
+    // 👇 И ЭТОТ ТОЖЕ (для адаптации под мобильные)
+    window.addEventListener('resize', checkMobile);
+    checkMobile();
 }
 
 function toggleSettings() {
@@ -355,3 +407,4 @@ function importJSON() {
     };
     input.click();
 }
+
