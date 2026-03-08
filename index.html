@@ -12,36 +12,24 @@
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
         }
         body {
-            background: #f1f5f9;
+            background: #f8fafc;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            padding: 16px;
-        }
-        .container {
-            max-width: 800px;
-            width: 100%;
-            background: white;
-            border-radius: 32px;
-            padding: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            max-height: calc(100vh - 32px);
-            overflow-y: auto;
-            position: relative;
+            flex-direction: column;
         }
         
-        /* Верхняя панель - фиксированная при скролле */
+        /* Верхняя панель - всегда на месте */
         .top-bar {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 20px;
-            width: 100%;
+            padding: 12px 16px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
             position: sticky;
             top: 0;
-            background: white;
-            z-index: 10;
-            padding: 10px 0;
+            z-index: 100;
+            width: 100%;
         }
         .title {
             font-size: 20px;
@@ -85,152 +73,20 @@
             background: #cbd5e1;
         }
         
-        /* Фильтр разделов - тоже фиксируется */
-        .filter-bar, .section-dropdown {
-            position: sticky;
-            top: 70px;
-            background: white;
-            z-index: 9;
-            padding: 10px 0;
-            margin-bottom: 10px;
-        }
-        .filter-bar {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .source-filter {
-            padding: 6px 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 30px;
-            font-size: 13px;
-            background: white;
-            cursor: pointer;
-            max-width: 180px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .source-filter:hover {
-            background: #e2e8f0;
-        }
-        .source-filter.active {
-            background: #28a745;
-            color: white;
-            border-color: #28a745;
-        }
-        
-        .section-dropdown {
-            width: 100%;
-        }
-        .section-select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 30px;
-            font-size: 14px;
-            background: white;
-            cursor: pointer;
-        }
-        
-        /* Поиск - тоже фиксируется */
-        .search-box {
-            position: sticky;
-            top: 120px;
-            background: white;
-            z-index: 8;
-            padding: 10px 0;
-            margin-bottom: 10px;
-        }
-        .search-box input {
-            width: 100%;
-            padding: 12px 18px;
-            border: 1px solid #e2e8f0;
-            border-radius: 40px;
-            font-size: 15px;
-            transition: all 0.2s;
-            background: white;
-        }
-        .search-box input:focus {
-            outline: none;
-            border-color: #28a745;
-            box-shadow: 0 0 0 3px rgba(40,167,69,0.1);
-        }
-        
-        /* Список вопросов - скроллится */
-        .questions-list {
-            background: white;
-            border-radius: 24px;
-            padding: 20px;
-            border: 1px solid #e9edf2;
-            margin-top: 10px;
-        }
-        .list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            color: #64748b;
-            font-size: 14px;
-        }
-        .count-badge {
-            background: #e2e8f0;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-weight: 600;
-        }
-        
-        .question-item {
-            border-bottom: 1px solid #e9edf2;
-            padding: 16px 0;
-        }
-        .question-item:last-child {
-            border-bottom: none;
-        }
-        .punkt {
-            color: #2563eb;
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
-        .source {
-            color: #6c757d;
-            font-size: 12px;
-            margin-left: 8px;
-            font-style: italic;
-        }
-        .question {
-            font-weight: 600;
-            margin-bottom: 12px;
-            line-height: 1.5;
-        }
-        .answers {
-            margin-left: 16px;
-        }
-        .answer-correct {
-            color: #28a745;
-            margin-bottom: 4px;
-        }
-        .answer-wrong {
-            color: #dc3545;
-            margin-bottom: 4px;
-        }
-        .no-results {
-            text-align: center;
-            color: #94a3b8;
-            padding: 40px 20px;
+        /* Основной контент */
+        .main-content {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
         }
         
         /* Панель настроек */
         .settings-panel {
-            background: #f8fafc;
+            background: white;
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 20px;
-            position: sticky;
-            top: 180px;
-            background: white;
-            z-index: 7;
+            border: 1px solid #e2e8f0;
         }
         .settings-title {
             font-size: 16px;
@@ -301,6 +157,130 @@
             cursor: pointer;
         }
         
+        /* Фильтр разделов */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .source-filter {
+            padding: 6px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 13px;
+            background: white;
+            cursor: pointer;
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .source-filter:hover {
+            background: #e2e8f0;
+        }
+        .source-filter.active {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .section-dropdown {
+            margin-bottom: 16px;
+            width: 100%;
+        }
+        .section-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        /* Поиск */
+        .search-box {
+            margin-bottom: 16px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            font-size: 15px;
+            transition: all 0.2s;
+            background: white;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40,167,69,0.1);
+        }
+        
+        /* Список вопросов */
+        .questions-list {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            color: #64748b;
+            font-size: 14px;
+        }
+        .count-badge {
+            background: #e2e8f0;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        
+        .question-item {
+            border-bottom: 1px solid #e9edf2;
+            padding: 16px 0;
+        }
+        .question-item:last-child {
+            border-bottom: none;
+        }
+        .punkt {
+            color: #2563eb;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+        .source {
+            color: #6c757d;
+            font-size: 12px;
+            margin-left: 8px;
+            font-style: italic;
+        }
+        .question {
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .answers {
+            margin-left: 16px;
+        }
+        .answer-correct {
+            color: #28a745;
+            margin-bottom: 4px;
+        }
+        .answer-wrong {
+            color: #dc3545;
+            margin-bottom: 4px;
+        }
+        .no-results {
+            text-align: center;
+            color: #94a3b8;
+            padding: 40px 20px;
+        }
+        
         .hidden {
             display: none;
         }
@@ -320,7 +300,7 @@
         }
         .modal-content {
             background: white;
-            border-radius: 24px;
+            border-radius: 16px;
             padding: 24px;
             width: 90%;
             max-width: 400px;
@@ -341,7 +321,7 @@
         /* Адаптация для мобильных */
         @media (max-width: 600px) {
             .top-bar {
-                gap: 4px;
+                padding: 8px 12px;
             }
             .title {
                 font-size: 16px;
@@ -355,30 +335,28 @@
                 height: 36px;
                 font-size: 18px;
             }
-            .filter-bar, .section-dropdown, .search-box {
-                top: 60px;
+            .main-content {
+                padding: 12px;
             }
-            .search-box {
-                top: 100px;
-            }
-            .settings-panel {
-                top: 150px;
+            .question-item {
+                padding: 12px 0;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Верхняя панель -->
-        <div class="top-bar">
-            <span class="title">📚 Помощник</span>
-            <select class="base-select" id="baseSelect"></select>
-            <button class="icon-btn" id="mobileCreateBtn" style="display: none;" title="Создать базу">➕</button>
-            <div class="top-buttons">
-                <button class="icon-btn" id="toggleSettingsBtn" title="Настройки">⚙️</button>
-            </div>
+    <!-- Верхняя панель -->
+    <div class="top-bar">
+        <span class="title">📚 Помощник</span>
+        <select class="base-select" id="baseSelect"></select>
+        <button class="icon-btn" id="mobileCreateBtn" style="display: none;" title="Создать базу">➕</button>
+        <div class="top-buttons">
+            <button class="icon-btn" id="toggleSettingsBtn" title="Настройки">⚙️</button>
         </div>
+    </div>
 
+    <!-- Основной контент -->
+    <div class="main-content">
         <!-- Панель настроек -->
         <div class="settings-panel hidden" id="settingsPanel">
             <div class="settings-title">⚙️ Управление базой</div>
