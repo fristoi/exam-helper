@@ -275,6 +275,15 @@
             font-weight: 600;
             cursor: pointer;
         }
+        .mobile-create-btn {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .mobile-create-btn {
+        display: block !important;
+    }
+}
         
         .hidden {
             display: none;
@@ -287,6 +296,8 @@
         <div class="top-bar">
             <span class="title">📚 Помощник экз.</span>
             <select class="base-select" id="baseSelect"></select>
+            <!-- Для мобильных: отдельная кнопка создания -->
+<button class="icon-btn" id="mobileCreateBtn" style="display: none;" title="Создать базу">➕</button>
             <div class="top-buttons">
                 <button class="icon-btn" id="toggleSettingsBtn" title="Настройки">⚙️</button>
             </div>
@@ -366,3 +377,4 @@
     <script src="app.js"></script>
 </body>
 </html>
+
