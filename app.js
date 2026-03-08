@@ -158,6 +158,19 @@ function switchBase(baseName) {
         currentBase = baseName;
         const questions = localStorage.getItem(`base_${currentBase}`);
         allQuestions = questions ? JSON.parse(questions) : [];
+        
+        // Прокручиваем страницу вверх
+        window.scrollTo({
+            top: 0,
+            behavior: 'auto' // плавная прокрутка
+        });
+        
+        // Или если используешь main-content:
+        // document.querySelector('.main-content').scrollTo({
+        //     top: 0,
+        //     behavior: 'smooth'
+        // });
+        
         loadQuestions();
         saveToStorage();
     }
@@ -397,3 +410,4 @@ function importJSON() {
     };
     input.click();
 }
+
