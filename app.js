@@ -159,20 +159,19 @@ function switchBase(baseName) {
         const questions = localStorage.getItem(`base_${currentBase}`);
         allQuestions = questions ? JSON.parse(questions) : [];
         
-        // Прокручиваем страницу вверх
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // плавная прокрутка
-        });
-        
-        // Или если используешь main-content:
-        // document.querySelector('.main-content').scrollTo({
-        //     top: 0,
-        //     behavior: 'smooth'
-        // });
-        
+        // Загружаем вопросы
         loadQuestions();
         saveToStorage();
+        
+        // Жёстко прокручиваем страницу в самый верх
+        window.scrollTo({
+            top: 0,
+            behavior: 'instant'  // мгновенно, без анимации
+        });
+        
+        // Для мобильных браузеров дополнительно
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
     }
 }
 
@@ -410,5 +409,6 @@ function importJSON() {
     };
     input.click();
 }
+
 
 
