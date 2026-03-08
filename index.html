@@ -28,30 +28,23 @@
         }
         
         /* Шапка */
-        .header {
+        .top-bar {
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
-            justify-content: space-between;
             gap: 12px;
             margin-bottom: 20px;
         }
         .title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
             color: #0b3b5c;
-        }
-        .base-selector {
-            display: flex;
-            gap: 8px;
-            flex: 1;
-            min-width: 200px;
+            white-space: nowrap;
         }
         .base-select {
             flex: 1;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border: 1px solid #e2e8f0;
-            border-radius: 40px;
+            border-radius: 30px;
             font-size: 15px;
             background: white;
             cursor: pointer;
@@ -60,82 +53,98 @@
         .base-select:hover {
             border-color: #28a745;
         }
-        
-        /* Панель инструментов */
-        .toolbar {
+        .top-buttons {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            margin-bottom: 20px;
+            gap: 6px;
         }
-        .tool-btn {
+        .icon-btn {
             background: #e2e8f0;
             border: none;
-            border-radius: 40px;
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 500;
+            border-radius: 30px;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
             cursor: pointer;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
+            justify-content: center;
+            transition: background 0.2s;
         }
-        .tool-btn:hover {
+        .icon-btn:hover {
             background: #cbd5e1;
         }
-        .tool-btn.primary {
-            background: #28a745;
-            color: white;
-        }
-        .tool-btn.primary:hover {
-            background: #218838;
-        }
-        .tool-btn.import { background: #fd7e14; color: white; }
-        .tool-btn.export { background: #17a2b8; color: white; }
-        .tool-btn.clear { background: #dc3545; color: white; }
         
-        /* Поиск */
-        .search-section {
-            margin-bottom: 20px;
-        }
-        .search-box {
+        /* Фильтр разделов */
+        .filter-bar {
             display: flex;
             gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
-        .search-input {
-            flex: 1;
-            padding: 14px 18px;
+        .source-filter {
+            padding: 6px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 13px;
+            background: white;
+            cursor: pointer;
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .source-filter:hover {
+            background: #e2e8f0;
+        }
+        .source-filter.active {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        /* Выпадающий список для разделов (когда их много) */
+        .section-dropdown {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .section-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 18px;
             border: 1px solid #e2e8f0;
             border-radius: 40px;
-            font-size: 16px;
+            font-size: 15px;
             transition: all 0.2s;
+            background: white;
         }
-        .search-input:focus {
+        .search-box input:focus {
             outline: none;
             border-color: #28a745;
             box-shadow: 0 0 0 3px rgba(40,167,69,0.1);
         }
-        .clear-search {
-            background: #e2e8f0;
-            border: none;
-            border-radius: 40px;
-            width: 48px;
-            font-size: 20px;
-            cursor: pointer;
-        }
         
-        /* Результат */
-        .result-area {
-            background: #ffffff;
-            border: 1px solid #e9edf2;
+        /* Список вопросов */
+        .questions-list {
+            background: white;
             border-radius: 24px;
-            padding: 24px;
-            margin-bottom: 20px;
-            min-height: 200px;
+            padding: 20px;
+            border: 1px solid #e9edf2;
+            max-height: 500px;
+            overflow-y: auto;
         }
-        .result-header {
+        .list-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -143,32 +152,38 @@
             color: #64748b;
             font-size: 14px;
         }
-        .result-stats {
+        .count-badge {
             background: #e2e8f0;
             padding: 4px 12px;
             border-radius: 30px;
             font-weight: 600;
         }
         
-        .result-item {
+        .question-item {
             border-bottom: 1px solid #e9edf2;
             padding: 16px 0;
         }
-        .result-item:last-child {
+        .question-item:last-child {
             border-bottom: none;
         }
-        .result-punkt {
+        .punkt {
             color: #2563eb;
             font-weight: 700;
-            font-size: 15px;
+            font-size: 14px;
             margin-bottom: 6px;
         }
-        .result-question {
+        .source {
+            color: #6c757d;
+            font-size: 12px;
+            margin-left: 8px;
+            font-style: italic;
+        }
+        .question {
             font-weight: 600;
             margin-bottom: 12px;
             line-height: 1.5;
         }
-        .result-answers {
+        .answers {
             margin-left: 16px;
         }
         .answer-correct {
@@ -185,96 +200,66 @@
             padding: 40px 20px;
         }
         
-        /* Управление базами */
-        .bases-list {
+        /* Панель настроек */
+        .settings-panel {
             background: #f8fafc;
             border-radius: 16px;
-            padding: 16px;
+            padding: 20px;
             margin-bottom: 20px;
         }
-        .bases-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
+        .settings-title {
+            font-size: 16px;
             font-weight: 600;
-        }
-        .base-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            background: white;
-            border-radius: 40px;
-            margin-bottom: 8px;
-        }
-        .base-name {
-            font-weight: 500;
-        }
-        .base-count {
-            background: #e2e8f0;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
-        .delete-base {
-            background: none;
-            border: none;
-            color: #dc3545;
-            font-size: 18px;
-            cursor: pointer;
-            margin-left: 8px;
-        }
-        
-        /* Модальное окно */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .modal-overlay.active {
-            display: flex;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 24px;
-            padding: 24px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .modal-header h3 {
+            margin-bottom: 16px;
             color: #1e293b;
         }
-        .close-btn {
-            background: none;
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .action-btn {
+            flex: 1;
+            padding: 10px;
             border: none;
-            font-size: 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
             cursor: pointer;
-            color: #64748b;
+        }
+        .action-btn.import {
+            background: #fd7e14;
+            color: white;
+        }
+        .action-btn.export {
+            background: #17a2b8;
+            color: white;
+        }
+        .action-btn.clear {
+            background: #dc3545;
+            color: white;
+        }
+        .action-btn.rename {
+            background: #6c757d;
+            color: white;
+        }
+        .action-btn.delete {
+            background: #dc3545;
+            color: white;
+        }
+        .double-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
         }
         
         .add-form input, .add-form textarea {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
             margin-bottom: 12px;
-            font-size: 15px;
+            font-size: 14px;
         }
         .add-form textarea {
             min-height: 80px;
@@ -282,108 +267,102 @@
         }
         .add-btn {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: #28a745;
             color: white;
             border: none;
-            border-radius: 40px;
+            border-radius: 30px;
             font-weight: 600;
             cursor: pointer;
         }
         
-        .action-row {
-            display: flex;
-            gap: 8px;
-            margin: 16px 0;
-        }
-        
-        @media (max-width: 600px) {
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .title {
-                text-align: center;
-            }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Шапка -->
-        <div class="header">
-            <div class="title">📚 Помощник экзаменов</div>
-            <div class="base-selector">
-                <select class="base-select" id="baseSelect"></select>
+        <!-- Верхняя панель -->
+        <div class="top-bar">
+            <span class="title">📚 Помощник экз.</span>
+            <select class="base-select" id="baseSelect"></select>
+            <div class="top-buttons">
+                <button class="icon-btn" id="toggleSettingsBtn" title="Настройки">⚙️</button>
             </div>
         </div>
-        
-        <!-- Панель инструментов -->
-        <div class="toolbar">
-            <button class="tool-btn" id="newBaseBtn">➕ Создать базу</button>
-            <button class="tool-btn import" id="importBtn">📥 Импорт JSON</button>
-            <button class="tool-btn export" id="exportBtn">📤 Экспорт JSON</button>
-            <button class="tool-btn clear" id="clearBaseBtn">🗑️ Очистить</button>
-            <button class="tool-btn" id="addQuestionBtn">✏️ Добавить вопрос</button>
-        </div>
-        
-        <!-- Поиск -->
-        <div class="search-section">
-            <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Введите пункт (например 1.1) или текст вопроса...">
-                <button class="clear-search" id="clearSearchBtn">✖</button>
+
+        <!-- Панель настроек (скрыта по умолчанию) -->
+        <div class="settings-panel hidden" id="settingsPanel">
+            <div class="settings-title">⚙️ Управление базой</div>
+            <div class="double-row">
+                <button class="action-btn rename" id="renameBaseBtn">✏️ Переименовать</button>
+                <button class="action-btn delete" id="deleteBaseBtn">🗑️ Удалить базу</button>
             </div>
-        </div>
-        
-        <!-- Результат поиска -->
-        <div class="result-area" id="resultArea">
-            <div class="result-header">
-                <span>Результаты поиска</span>
-                <span class="result-stats" id="resultCount">0</span>
-            </div>
-            <div id="resultsList"></div>
-        </div>
-        
-        <!-- Список баз (скрыт по умолчанию) -->
-        <div class="bases-list" id="basesList" style="display: none;">
-            <div class="bases-header">
-                <span>📁 Мои базы</span>
-                <span class="result-stats" id="totalBasesCount">0</span>
-            </div>
-            <div id="basesContainer"></div>
-        </div>
-    </div>
-    
-    <!-- Модальное окно создания базы -->
-    <div class="modal-overlay" id="createBaseModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>➕ Создать новую базу</h3>
-                <button class="close-btn" id="closeCreateModal">×</button>
-            </div>
-            <input type="text" id="newBaseName" placeholder="Название базы (например, ПТБ_2024)" style="width:100%; padding:12px; margin-bottom:16px;">
             <div class="action-row">
-                <button class="add-btn" id="confirmCreateBtn">Создать</button>
+                <button class="action-btn import" id="importBtn">📥 Импорт JSON</button>
+                <button class="action-btn export" id="exportBtn">📤 Экспорт JSON</button>
             </div>
-        </div>
-    </div>
-    
-    <!-- Модальное окно добавления вопроса -->
-    <div class="modal-overlay" id="addQuestionModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>➕ Добавить вопрос</h3>
-                <button class="close-btn" id="closeAddModal">×</button>
-            </div>
+            <button class="action-btn clear" id="clearBaseBtn">🗑️ Очистить базу</button>
+            
+            <div class="settings-title" style="margin-top:20px;">➕ Добавить вопрос</div>
             <div class="add-form">
                 <input type="text" id="newPunkt" placeholder="Пункт (например, 1.1)">
-                <textarea id="newQuestion" placeholder="Вопрос" rows="3"></textarea>
-                <textarea id="newAnswer" placeholder="Ответ (можно с ++)" rows="3"></textarea>
+                <input type="text" id="newSource" placeholder="Источник (необязательно)">
+                <textarea id="newQuestion" placeholder="Вопрос" rows="2"></textarea>
+                <textarea id="newAnswer" placeholder="Ответ" rows="2"></textarea>
                 <button class="add-btn" id="addBtn">➕ Добавить</button>
             </div>
         </div>
+
+        <!-- Фильтр разделов -->
+        <div class="filter-bar" id="filterBar"></div>
+
+        <!-- Выпадающий список для разделов (когда их много) -->
+        <div class="section-dropdown hidden" id="sectionDropdown">
+            <select class="section-select" id="sectionSelect">
+                <option value="all">📋 Все разделы</option>
+            </select>
+        </div>
+
+        <!-- Поиск -->
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Поиск по пункту, вопросу или источнику...">
+        </div>
+
+        <!-- Список вопросов -->
+        <div class="questions-list">
+            <div class="list-header">
+                <span>Вопросы</span>
+                <span class="count-badge" id="questionCount">0</span>
+            </div>
+            <div id="questionsContainer"></div>
+        </div>
     </div>
-    
+
+    <!-- Модальные окна -->
+    <div class="modal-overlay" id="createBaseModal" style="display: none; position: fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:1000;">
+        <div style="background:white; border-radius:24px; padding:24px; width:400px;">
+            <h3 style="margin-bottom:16px;">➕ Создать новую базу</h3>
+            <input type="text" id="newBaseName" placeholder="Название базы" style="width:100%; padding:12px; margin-bottom:16px; border:1px solid #e2e8f0; border-radius:8px;">
+            <div class="double-row">
+                <button class="add-btn" id="confirmCreateBtn">Создать</button>
+                <button class="action-btn clear" id="closeCreateModal">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="renameBaseModal" style="display: none; position: fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:1000;">
+        <div style="background:white; border-radius:24px; padding:24px; width:400px;">
+            <h3 style="margin-bottom:16px;">✏️ Переименовать базу</h3>
+            <input type="text" id="renameBaseInput" placeholder="Новое название" style="width:100%; padding:12px; margin-bottom:16px; border:1px solid #e2e8f0; border-radius:8px;">
+            <div class="double-row">
+                <button class="add-btn" id="confirmRenameBtn">Переименовать</button>
+                <button class="action-btn clear" id="closeRenameModal">Отмена</button>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
