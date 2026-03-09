@@ -1,121 +1,81 @@
 // =============================================
-// ПОМОЩНИК ЭКЗАМЕНОВ - ВЕБ-ВЕРСИЯ 2.0
+// ПОМОЩНИК ЭКЗАМЕНОВ - ВЕБ-ВЕРСИЯ
 // =============================================
 
-let currentBase = 'Основная';
-let allBases = ['Основная'];
+let currentBase = '';
+let allBases = [];
 let allQuestions = [];
 let currentFilter = 'all';
 
-// Загрузка при старте
 document.addEventListener('DOMContentLoaded', function() {
-    loadFromStorage();
     setupEventListeners();
-    renderBaseSelect();
-    loadQuestions();
+    loadBasesFromGitHub();
 });
 
-function loadFromStorage() {
-    const saved = localStorage.getItem('examHelperBases');
-    if (saved) {
-        try {
-            const data = JSON.parse(saved);
-            allBases = data.bases || ['Основная'];
-            currentBase = data.currentBase || allBases[0];
-            const questions = localStorage.getItem(`base_${currentBase}`);
-            allQuestions = questions ? JSON.parse(questions) : [];
-        } catch (e) {
-            resetToDefault();
-        }
-    } else {
-        resetToDefault();
-    }
-}
-
-function resetToDefault() {
-    allBases = ['Основная'];
-    currentBase = 'Основная';
-    allQuestions = [];
-    saveToStorage();
-}
-
-function saveToStorage() {
-    localStorage.setItem('examHelperBases', JSON.stringify({
-        bases: allBases,
-        currentBase: currentBase
-    }));
-    localStorage.setItem(`base_${currentBase}`, JSON.stringify(allQuestions));
-}
-
-function isMobile() {
-    return window.innerWidth <= 600;
-}
-
 function setupEventListeners() {
-    document.getElementById('toggleSettingsBtn').addEventListener('click', toggleSettings);
+    document.getElementById('toggleSettingsBtn').addEventListener('click', () => {
+        document.getElementById('infoModal').style.display = 'flex';
+    });
+    
+    document.getElementById('closeInfoBtn').addEventListener('click', () => {
+        document.getElementById('infoModal').style.display = 'none';
+    });
+    
     document.getElementById('baseSelect').addEventListener('change', (e) => switchBase(e.target.value));
     document.getElementById('searchInput').addEventListener('input', loadQuestions);
-    document.getElementById('importBtn').addEventListener('click', importJSON);
-    document.getElementById('exportBtn').addEventListener('click', exportJSON);
-    document.getElementById('clearBaseBtn').addEventListener('click', clearBase);
-    document.getElementById('addBtn').addEventListener('click', addQuestion);
-    document.getElementById('renameBaseBtn').addEventListener('click', showRenameModal);
-    document.getElementById('deleteBaseBtn').addEventListener('click', deleteBase);
     
-    // Кнопка создания для мобильных
-    document.getElementById('mobileCreateBtn').addEventListener('click', () => {
-        document.getElementById('createBaseModal').style.display = 'flex';
+    // Закрытие модального окна по клику вне его
+    document.getElementById('infoModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('infoModal')) {
+            document.getElementById('infoModal').style.display = 'none';
+        }
     });
-    
-    // Модальные окна
-    document.getElementById('confirmCreateBtn').addEventListener('click', createNewBase);
-    document.getElementById('closeCreateModal').addEventListener('click', () => {
-        document.getElementById('createBaseModal').style.display = 'none';
-    });
-    document.getElementById('confirmRenameBtn').addEventListener('click', renameBase);
-    document.getElementById('closeRenameModal').addEventListener('click', () => {
-        document.getElementById('renameBaseModal').style.display = 'none';
-    });
-    
-    // Адаптация под мобильные
-    window.addEventListener('resize', checkMobile);
-    checkMobile();
 }
 
-function checkMobile() {
-    let createBtn = document.getElementById('mobileCreateBtn');
-    let baseSelect = document.getElementById('baseSelect');
-    
-    if (isMobile()) {
-        createBtn.style.display = 'flex';
-        // Убираем пункт "Создать новую базу" из select на мобильных
-        for (let i = baseSelect.options.length - 1; i >= 0; i--) {
-            if (baseSelect.options[i].value === 'CREATE_NEW') {
-                baseSelect.remove(i);
-                break;
+async function loadBasesFromGitHub() {
+    try {
+        // Загружаем список баз из index.json
+        let indexResponse = await fetch('bases/index.json');
+        let index = await indexResponse.json();
+        
+        allBases = [];
+        
+        // Загружаем каждую базу
+        for (let baseName of index.bases) {
+            try {
+                let response = await fetch(`bases/${baseName}.json`);
+                let questions = await response.json();
+                
+                // Сохраняем в localStorage для быстрого доступа
+                localStorage.setItem(`base_${baseName}`, JSON.stringify(questions));
+                allBases.push(baseName);
+                console.log(`✅ Загружена база: ${baseName} (${questions.length} вопросов)`);
+            } catch(e) {
+                console.log(`❌ Ошибка загрузки ${baseName}:`, e);
             }
         }
-    } else {
-        createBtn.style.display = 'none';
-        // Возвращаем пункт создания в select на десктопе
-        let hasCreate = false;
-        for (let i = 0; i < baseSelect.options.length; i++) {
-            if (baseSelect.options[i].value === 'CREATE_NEW') {
-                hasCreate = true;
-                break;
-            }
+        
+        // СОРТИРУЕМ БАЗЫ ПО АЛФАВИТУ
+        allBases.sort((a, b) => {
+            return a.localeCompare(b, 'ru');
+        });
+        
+        if (allBases.length > 0) {
+            currentBase = allBases[0];
+            // Загружаем вопросы для текущей базы
+            const saved = localStorage.getItem(`base_${currentBase}`);
+            allQuestions = saved ? JSON.parse(saved) : [];
+            loadQuestions();
         }
-        if (!hasCreate) {
-            let createOpt = document.createElement('option');
-            createOpt.value = 'CREATE_NEW';
-            createOpt.textContent = '➕ Создать новую базу...';
-            baseSelect.appendChild(createOpt);
-        }
+        
+        renderBaseSelect();
+        
+    } catch(e) {
+        console.log('❌ Ошибка загрузки списка баз:', e);
+        // Если что-то пошло не так, показываем тестовую базу
+        allBases = ['ПТБ'];
+        renderBaseSelect();
     }
-}
-
-function toggleSettings() {
-    document.getElementById('settingsPanel').classList.toggle('hidden');
 }
 
 function renderBaseSelect() {
@@ -129,100 +89,21 @@ function renderBaseSelect() {
         if (base === currentBase) opt.selected = true;
         select.appendChild(opt);
     });
-    
-    // На десктопе добавляем пункт создания
-    if (!isMobile()) {
-        let createOpt = document.createElement('option');
-        createOpt.value = 'CREATE_NEW';
-        createOpt.textContent = '➕ Создать новую базу...';
-        select.appendChild(createOpt);
-    }
-}
-
-function showRenameModal() {
-    if (currentBase === 'Основная') {
-        alert('Нельзя переименовать основную базу');
-        return;
-    }
-    document.getElementById('renameBaseInput').value = currentBase;
-    document.getElementById('renameBaseModal').style.display = 'flex';
 }
 
 function switchBase(baseName) {
-    if (baseName === 'CREATE_NEW') {
-        document.getElementById('createBaseModal').style.display = 'flex';
-        setTimeout(() => {
-            document.getElementById('baseSelect').value = currentBase;
-        }, 100);
-    } else {
-        currentBase = baseName;
-        const questions = localStorage.getItem(`base_${currentBase}`);
-        allQuestions = questions ? JSON.parse(questions) : [];
-        
-        // Загружаем вопросы
-        loadQuestions();
-        saveToStorage();
-        
-        // Жёстко прокручиваем страницу в самый верх
-        window.scrollTo({
-            top: 0,
-            behavior: 'instant'  // мгновенно, без анимации
-        });
-        
-        // Для мобильных браузеров дополнительно
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-    }
-}
-
-function createNewBase() {
-    let name = document.getElementById('newBaseName').value.trim();
-    if (!name) return alert('Введите название');
-    if (allBases.includes(name)) return alert('Такая база уже есть');
+    currentBase = baseName;
     
-    allBases.push(name);
-    currentBase = name;
-    allQuestions = [];
-    saveToStorage();
-    renderBaseSelect();
+    // Загружаем вопросы для выбранной базы
+    const saved = localStorage.getItem(`base_${currentBase}`);
+    allQuestions = saved ? JSON.parse(saved) : [];
+    
     loadQuestions();
-    document.getElementById('createBaseModal').style.display = 'none';
-    document.getElementById('newBaseName').value = '';
-}
-
-function renameBase() {
-    let newName = document.getElementById('renameBaseInput').value.trim();
-    if (!newName) return alert('Введите новое название');
-    if (allBases.includes(newName)) return alert('База с таким названием уже существует');
     
-    localStorage.setItem(`base_${newName}`, JSON.stringify(allQuestions));
-    localStorage.removeItem(`base_${currentBase}`);
-    
-    let index = allBases.indexOf(currentBase);
-    allBases[index] = newName;
-    currentBase = newName;
-    saveToStorage();
-    renderBaseSelect();
-    loadQuestions();
-    document.getElementById('renameBaseModal').style.display = 'none';
-    alert('✅ База переименована');
-}
-
-function deleteBase() {
-    if (currentBase === 'Основная') {
-        alert('Нельзя удалить основную базу');
-        return;
-    }
-    if (!confirm(`Точно удалить базу "${currentBase}"?`)) return;
-    
-    localStorage.removeItem(`base_${currentBase}`);
-    allBases = allBases.filter(b => b !== currentBase);
-    currentBase = allBases[0];
-    allQuestions = [];
-    saveToStorage();
-    renderBaseSelect();
-    loadQuestions();
-    alert('✅ База удалена');
+    // Прокручиваем страницу вверх
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
 }
 
 function getAllSources() {
@@ -243,6 +124,12 @@ function renderSourceFilter() {
     let filterBar = document.getElementById('filterBar');
     let sectionDropdown = document.getElementById('sectionDropdown');
     let sectionSelect = document.getElementById('sectionSelect');
+    
+    if (sources.length === 0) {
+        filterBar.style.display = 'none';
+        sectionDropdown.classList.add('hidden');
+        return;
+    }
     
     if (sources.length <= 6) {
         filterBar.style.display = 'flex';
@@ -323,7 +210,7 @@ function loadQuestions() {
     let container = document.getElementById('questionsContainer');
     
     if (filtered.length === 0) {
-        container.innerHTML = '<div class="no-results">📭 В этой базах пока нет вопросов</div>';
+        container.innerHTML = '<div class="no-results">📭 В этой базе нет вопросов</div>';
         return;
     }
     
@@ -340,75 +227,3 @@ function loadQuestions() {
     
     container.innerHTML = html;
 }
-
-function addQuestion() {
-    let punkt = document.getElementById('newPunkt').value.trim();
-    let source = document.getElementById('newSource').value.trim();
-    let question = document.getElementById('newQuestion').value.trim();
-    let answer = document.getElementById('newAnswer').value.trim();
-    
-    if (!punkt || !question || !answer) return alert('Заполни пункт, вопрос и ответ');
-    
-    allQuestions.push({ 
-        id: Date.now(), 
-        punkt, 
-        source: source || null,
-        question, 
-        answer 
-    });
-    
-    saveToStorage();
-    
-    document.getElementById('newPunkt').value = '';
-    document.getElementById('newSource').value = '';
-    document.getElementById('newQuestion').value = '';
-    document.getElementById('newAnswer').value = '';
-    
-    loadQuestions();
-    alert('✅ Вопрос добавлен');
-}
-
-function clearBase() {
-    if (!confirm(`Очистить базу "${currentBase}"?`)) return;
-    allQuestions = [];
-    saveToStorage();
-    loadQuestions();
-}
-
-function exportJSON() {
-    let dataStr = JSON.stringify(allQuestions, null, 2);
-    let blob = new Blob([dataStr], {type: 'application/json'});
-    let url = URL.createObjectURL(blob);
-    let a = document.createElement('a');
-    a.href = url;
-    a.download = `${currentBase}.json`;
-    a.click();
-}
-
-function importJSON() {
-    let input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = (e) => {
-        let file = e.target.files[0];
-        let reader = new FileReader();
-        reader.onload = (ev) => {
-            try {
-                let data = JSON.parse(ev.target.result);
-                if (!Array.isArray(data)) throw new Error('Не массив');
-                
-                allQuestions = [...allQuestions, ...data];
-                saveToStorage();
-                loadQuestions();
-                alert(`✅ Импортировано ${data.length} вопросов`);
-            } catch(e) {
-                alert('❌ Ошибка при чтении JSON');
-            }
-        };
-        reader.readAsText(file);
-    };
-    input.click();
-}
-
-
-

@@ -80,83 +80,6 @@
             overflow-y: auto;
         }
         
-        /* Панель настроек */
-        .settings-panel {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #e2e8f0;
-        }
-        .settings-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: #1e293b;
-        }
-        .action-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        .action-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-        }
-        .action-btn.import {
-            background: #fd7e14;
-            color: white;
-        }
-        .action-btn.export {
-            background: #17a2b8;
-            color: white;
-        }
-        .action-btn.clear {
-            background: #dc3545;
-            color: white;
-        }
-        .action-btn.rename {
-            background: #6c757d;
-            color: white;
-        }
-        .action-btn.delete {
-            background: #dc3545;
-            color: white;
-        }
-        .double-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        
-        .add-form input, .add-form textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-        .add-form textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-        .add-btn {
-            width: 100%;
-            padding: 12px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
         /* Фильтр разделов */
         .filter-bar {
             display: flex;
@@ -285,39 +208,6 @@
             display: none;
         }
         
-        /* Модальные окна */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            width: 90%;
-            max-width: 400px;
-        }
-        .modal-content h3 {
-            margin-bottom: 16px;
-            color: #1e293b;
-        }
-        .modal-content input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            font-size: 14px;
-        }
-        
         /* Адаптация для мобильных */
         @media (max-width: 600px) {
             .top-bar {
@@ -349,37 +239,13 @@
     <div class="top-bar">
         <span class="title">📚 Помощник</span>
         <select class="base-select" id="baseSelect"></select>
-        <button class="icon-btn" id="mobileCreateBtn" style="display: none;" title="Создать базу">➕</button>
         <div class="top-buttons">
-            <button class="icon-btn" id="toggleSettingsBtn" title="Настройки">⚙️</button>
+            <button class="icon-btn" id="toggleSettingsBtn" title="О сайте">ℹ️</button>
         </div>
     </div>
 
     <!-- Основной контент -->
     <div class="main-content">
-        <!-- Панель настроек -->
-        <div class="settings-panel hidden" id="settingsPanel">
-            <div class="settings-title">⚙️ Управление базой</div>
-            <div class="double-row">
-                <button class="action-btn rename" id="renameBaseBtn">✏️ Переименовать</button>
-                <button class="action-btn delete" id="deleteBaseBtn">🗑️ Удалить базу</button>
-            </div>
-            <div class="action-row">
-                <button class="action-btn import" id="importBtn">📥 Импорт JSON</button>
-                <button class="action-btn export" id="exportBtn">📤 Экспорт JSON</button>
-            </div>
-            <button class="action-btn clear" id="clearBaseBtn">🗑️ Очистить базу</button>
-            
-            <div class="settings-title" style="margin-top:20px;">➕ Добавить вопрос</div>
-            <div class="add-form">
-                <input type="text" id="newPunkt" placeholder="Пункт (например, 1.1)">
-                <input type="text" id="newSource" placeholder="Источник (необязательно)">
-                <textarea id="newQuestion" placeholder="Вопрос" rows="2"></textarea>
-                <textarea id="newAnswer" placeholder="Ответ" rows="2"></textarea>
-                <button class="add-btn" id="addBtn">➕ Добавить</button>
-            </div>
-        </div>
-
         <!-- Фильтр разделов -->
         <div class="filter-bar" id="filterBar">
             <button class="source-filter all active" data-source="all">📋 Все</button>
@@ -407,27 +273,12 @@
         </div>
     </div>
 
-    <!-- Модальное окно создания базы -->
-    <div class="modal-overlay" id="createBaseModal">
-        <div class="modal-content">
-            <h3>➕ Создать новую базу</h3>
-            <input type="text" id="newBaseName" placeholder="Название базы">
-            <div class="double-row">
-                <button class="add-btn" id="confirmCreateBtn">Создать</button>
-                <button class="action-btn clear" id="closeCreateModal">Отмена</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Модальное окно переименования -->
-    <div class="modal-overlay" id="renameBaseModal">
-        <div class="modal-content">
-            <h3>✏️ Переименовать базу</h3>
-            <input type="text" id="renameBaseInput" placeholder="Новое название">
-            <div class="double-row">
-                <button class="add-btn" id="confirmRenameBtn">Переименовать</button>
-                <button class="action-btn clear" id="closeRenameModal">Отмена</button>
-            </div>
+    <!-- Простое модальное окно с информацией -->
+    <div class="modal-overlay" id="infoModal" style="display: none; position: fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:1000;">
+        <div style="background:white; border-radius:16px; padding:24px; width:90%; max-width:400px;">
+            <h3 style="margin-bottom:16px;">ℹ️ О сайте</h3>
+            <p style="margin-bottom:20px;">Сайт для поиска ответов на экзаменах. Базы обновляются автоматически из репозитория.</p>
+            <button class="icon-btn" id="closeInfoBtn" style="width:100%; border-radius:30px;">OK</button>
         </div>
     </div>
 
