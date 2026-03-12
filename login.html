@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: center;
+        }
+        h2 { color: #0b3b5c; margin-bottom: 20px; }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+        }
+        .error {
+            color: #dc3545;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .info {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔐 Вход</h2>
+        <p style="color: #64748b;">Введите пароль от администратора</p>
+        
+        <input type="text" id="passwordInput" placeholder="Пароль">
+        <button onclick="login()">Войти</button>
+        
+        <div id="error" class="error"></div>
+        <div class="info">⏰ Время доступа ограничено</div>
+    </div>
+
+    <script>
+        function login() {
+            let password = document.getElementById('passwordInput').value.trim();
+            if (password) {
+                window.location.href = 'index.html?p=' + encodeURIComponent(password);
+            }
+        }
+        
+        // Показываем ошибку если есть
+        let params = new URLSearchParams(window.location.search);
+        if (params.get('expired')) {
+            document.getElementById('error').textContent = '⏰ Срок действия пароля истек';
+        } else if (params.get('error')) {
+            document.getElementById('error').textContent = '❌ Неверный пароль';
+        }
+    </script>
+</body>
+</html>
