@@ -314,6 +314,32 @@
             }
         })();
 
+
+        // ТЕСТ ЗАПИСИ
+async function testFirestore() {
+    try {
+        console.log('🔄 Тест записи в Firestore...');
+        
+        // Пробуем записать тестовый документ
+        await db.collection('test').doc('test').set({
+            timestamp: Date.now(),
+            message: 'test'
+        });
+        
+        console.log('✅ Запись работает!');
+        
+        // Пробуем прочитать
+        const doc = await db.collection('test').doc('test').get();
+        console.log('✅ Чтение работает!', doc.data());
+        
+    } catch (error) {
+        console.error('❌ Ошибка Firestore:', error);
+    }
+}
+
+// Запускаем тест
+testFirestore();
+        
         function checkMasterPass() {
             let pass = document.getElementById('masterPass').value;
             if (pass === MASTER_PASSWORD) {
@@ -487,4 +513,5 @@
         }
     </script>
 </body>
+
 </html>
