@@ -196,23 +196,13 @@ function loadQuestions() {
         : allQuestions.filter(q => q.source === currentFilter);
     
     let search = document.getElementById('searchInput').value.toLowerCase().trim();
-if (search) {
-    // Разбиваем поисковый запрос на отдельные слова
-    let searchWords = search.split(/\s+/).filter(word => word.length > 1); // убираем слова из 1 буквы
-    
-    filtered = filtered.filter(q => {
-        // Собираем весь текст вопроса в одну строку
-        let textToSearch = (
-            (q.punkt || '') + ' ' + 
-            (q.question || '') + ' ' + 
-            (q.source || '')
-        ).toLowerCase();
-        
-        // Проверяем, что ВСЕ слова из запроса есть в тексте
-        return searchWords.every(word => textToSearch.includes(word));
-    });
-}
-
+    if (search) {
+        filtered = filtered.filter(q => 
+            (q.punkt && q.punkt.toLowerCase().includes(search)) ||
+            (q.question && q.question.toLowerCase().includes(search)) ||
+            (q.source && q.source.toLowerCase().includes(search))
+        );
+    }
     
     document.getElementById('questionCount').textContent = filtered.length;
     renderSourceFilter();
