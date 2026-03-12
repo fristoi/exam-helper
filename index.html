@@ -2,282 +2,18 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📚 Помощник экзаменов</title>
-    
-    <!-- Firebase SDK (добавлено) -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-        }
-        body {
-            background: #f8fafc;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* Верхняя панель - всегда на месте */
-        .top-bar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 16px;
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            width: 100%;
-        }
-        .title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #0b3b5c;
-            white-space: nowrap;
-        }
-        .base-select {
-            flex: 1;
-            min-width: 0;
-            padding: 10px 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 30px;
-            font-size: 15px;
-            background: white;
-            cursor: pointer;
-            outline: none;
-        }
-        .base-select:hover {
-            border-color: #28a745;
-        }
-        .top-buttons {
-            display: flex;
-            gap: 6px;
-        }
-        .icon-btn {
-            background: #e2e8f0;
-            border: none;
-            border-radius: 30px;
-            width: 40px;
-            height: 40px;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-            flex-shrink: 0;
-        }
-        .icon-btn:hover {
-            background: #cbd5e1;
-        }
-        
-        /* Основной контент */
-        .main-content {
-            flex: 1;
-            padding: 16px;
-            overflow-y: auto;
-        }
-        
-        /* Фильтр разделов */
-        .filter-bar {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-        .source-filter {
-            padding: 6px 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 30px;
-            font-size: 13px;
-            background: white;
-            cursor: pointer;
-            max-width: 180px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .source-filter:hover {
-            background: #e2e8f0;
-        }
-        .source-filter.active {
-            background: #28a745;
-            color: white;
-            border-color: #28a745;
-        }
-        
-        .section-dropdown {
-            margin-bottom: 16px;
-            width: 100%;
-        }
-        .section-select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 30px;
-            font-size: 14px;
-            background: white;
-            cursor: pointer;
-        }
-        
-        /* Поиск */
-        .search-box {
-            margin-bottom: 16px;
-        }
-        .search-box input {
-            width: 100%;
-            padding: 12px 18px;
-            border: 1px solid #e2e8f0;
-            border-radius: 40px;
-            font-size: 15px;
-            transition: all 0.2s;
-            background: white;
-        }
-        .search-box input:focus {
-            outline: none;
-            border-color: #28a745;
-            box-shadow: 0 0 0 3px rgba(40,167,69,0.1);
-        }
-        
-        /* Список вопросов */
-        .questions-list {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid #e2e8f0;
-        }
-        .list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            color: #64748b;
-            font-size: 14px;
-        }
-        .count-badge {
-            background: #e2e8f0;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-weight: 600;
-        }
-        
-        .question-item {
-            border-bottom: 1px solid #e9edf2;
-            padding: 16px 0;
-        }
-        .question-item:last-child {
-            border-bottom: none;
-        }
-        .punkt {
-            color: #2563eb;
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
-        .source {
-            color: #6c757d;
-            font-size: 12px;
-            margin-left: 8px;
-            font-style: italic;
-        }
-        .question {
-            font-weight: 600;
-            margin-bottom: 12px;
-            line-height: 1.5;
-        }
-        .answers {
-            margin-left: 16px;
-        }
-        .answer-correct {
-            color: #28a745;
-            margin-bottom: 4px;
-        }
-        .answer-wrong {
-            color: #dc3545;
-            margin-bottom: 4px;
-        }
-        .no-results {
-            text-align: center;
-            color: #94a3b8;
-            padding: 40px 20px;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        /* Стили для таймера (добавлено) */
-        #accessTimer {
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            background: #28a745;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 9999;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        /* Адаптация для мобильных */
-        @media (max-width: 600px) {
-            .top-bar {
-                padding: 8px 12px;
-            }
-            .title {
-                font-size: 16px;
-            }
-            .base-select {
-                font-size: 13px;
-                padding: 8px 10px;
-            }
-            .icon-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
-            }
-            .main-content {
-                padding: 12px;
-            }
-            .question-item {
-                padding: 12px 0;
-            }
-            #accessTimer {
-                top: 60px;
-                right: 10px;
-                font-size: 12px;
-                padding: 6px 12px;
-            }
-        }
-    </style>
+    <!-- твои стили -->
 </head>
 <body>
-    <!-- СКРИПТ ПРОВЕРКИ ДОСТУПА (добавлено) -->
+    <!-- СКРИПТ ПРОВЕРКИ ПАРОЛЯ (вставь в самое начало после <body>) -->
     <script>
-        const firebaseConfig = {
-  apiKey: "AIzaSyBQwaWGwi67PDMqgWLK2D1UElGRr3kRPqg",
-  authDomain: "exam-helper-dd34e.firebaseapp.com",
-  projectId: "exam-helper-dd34e",
-  storageBucket: "exam-helper-dd34e.firebasestorage.app",
-  messagingSenderId: "240650883777",
-  appId: "1:240650883777:web:e7b2219c6220e995503a40"
-};
+        const BIN_ID = '65f1a2b3c4d5e6f7g8h9i0j1';  // ← твой Bin ID
+        const X_MASTER_KEY = '$2b$10$...';  // ← твой Master Key
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-        
-        // Проверка пароля при загрузке
         (async function() {
-            // Получаем пароль из URL или сессии
+            // Получаем пароль из URL
             let urlParams = new URLSearchParams(window.location.search);
             let password = urlParams.get('p') || sessionStorage.getItem('current_password');
             
@@ -285,144 +21,122 @@ const app = initializeApp(firebaseConfig);
                 window.location.href = 'login.html';
                 return;
             }
-            
+
             try {
-                const doc = await db.collection('passwords').doc(password).get();
+                // Загружаем данные из JSONBin
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    headers: { 'X-Master-Key': X_MASTER_KEY }
+                });
+                const data = await response.json();
+                let passwords = data.record.passwords || {};
+                let passData = passwords[password];
                 
-                if (!doc.exists) {
+                if (!passData) {
                     window.location.href = 'login.html?error=1';
                     return;
                 }
-                
-                let data = doc.data();
+
                 let now = Date.now();
-                
+
                 // Если первый вход
-                if (!data.activated) {
-                    data.activated = now;
-                    data.expires = now + data.duration * 60 * 1000;
-                    data.visits = 1;
-                    data.lastVisit = now;
-                    await db.collection('passwords').doc(password).set(data);
+                if (!passData.activated) {
+                    passData.activated = now;
+                    passData.expires = now + passData.duration * 60 * 1000;
+                    passData.visits = 1;
+                    
+                    // Сохраняем обновленные данные
+                    passwords[password] = passData;
+                    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': X_MASTER_KEY
+                        },
+                        body: JSON.stringify({ passwords: passwords })
+                    });
+                    
                     sessionStorage.setItem('current_password', password);
                 } 
-                // Если уже активирован
                 else {
-                    if (now > data.expires) {
+                    if (now > passData.expires) {
                         window.location.href = 'login.html?expired=1';
                         return;
                     }
                     
-                    data.visits = (data.visits || 0) + 1;
-                    data.lastVisit = now;
-                    await db.collection('passwords').doc(password).set(data);
+                    passData.visits = (passData.visits || 0) + 1;
+                    passwords[password] = passData;
+                    
+                    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': X_MASTER_KEY
+                        },
+                        body: JSON.stringify({ passwords: passwords })
+                    });
+                    
                     sessionStorage.setItem('current_password', password);
                 }
-                
+
                 // Запускаем таймер
-                startTimer(data.expires);
-                
+                startTimer(passData.expires);
+
             } catch (e) {
                 console.error('Ошибка:', e);
                 window.location.href = 'login.html?error=1';
             }
         })();
-        
+
         function startTimer(expires) {
-            // Создаем элемент таймера
             let timerDiv = document.createElement('div');
             timerDiv.id = 'accessTimer';
+            timerDiv.style.cssText = `
+                position: fixed;
+                top: 70px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 8px 16px;
+                border-radius: 30px;
+                font-size: 14px;
+                font-weight: bold;
+                z-index: 9999;
+            `;
             document.body.appendChild(timerDiv);
-            
+
             let warningShown = false;
-            
-            let timer = setInterval(() => {
+
+            setInterval(() => {
                 let left = expires - Date.now();
                 
                 if (left <= 0) {
-                    clearInterval(timer);
                     timerDiv.textContent = '⛔ Доступ истек';
                     timerDiv.style.background = '#dc3545';
-                    
-                    // Блокируем всё
                     document.querySelectorAll('button, input, select').forEach(el => el.disabled = true);
-                    if (document.querySelector('.questions-list')) {
-                        document.querySelector('.questions-list').style.opacity = '0.3';
-                    }
-                    
                     alert('⏰ Время доступа истекло');
                     setTimeout(() => {
                         sessionStorage.removeItem('current_password');
                         window.location.href = 'login.html?expired=1';
                     }, 2000);
-                    
                 } else {
                     let mins = Math.floor(left / 60000);
                     let secs = Math.floor((left % 60000) / 1000);
                     timerDiv.textContent = `⏳ ${mins}:${secs.toString().padStart(2, '0')}`;
                     
-                    // Предупреждения
-                    if (left < 300000 && !warningShown) { // 5 минут
+                    if (left < 300000 && !warningShown) {
                         warningShown = true;
                         timerDiv.style.background = '#fd7e14';
                         alert('⚠️ Доступ истечет через 5 минут');
                     }
-                    
-                    if (left < 60000) { // 1 минута
-                        timerDiv.style.background = '#dc3545';
-                    }
+                    if (left < 60000) timerDiv.style.background = '#dc3545';
                 }
             }, 1000);
         }
     </script>
 
-    <!-- Верхняя панель -->
-    <div class="top-bar">
-        <span class="title">📚 Помощник</span>
-        <select class="base-select" id="baseSelect"></select>
-        <div class="top-buttons">
-            <button class="icon-btn" id="toggleSettingsBtn" title="О сайте">ℹ️</button>
-        </div>
-    </div>
-
-    <!-- Основной контент -->
-    <div class="main-content">
-        <!-- Фильтр разделов -->
-        <div class="filter-bar" id="filterBar">
-            <button class="source-filter all active" data-source="all">📋 Все</button>
-        </div>
-
-        <!-- Выпадающий список для разделов -->
-        <div class="section-dropdown hidden" id="sectionDropdown">
-            <select class="section-select" id="sectionSelect">
-                <option value="all">📋 Все разделы</option>
-            </select>
-        </div>
-
-        <!-- Поиск -->
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 Поиск по пункту, вопросу или источнику...">
-        </div>
-
-        <!-- Список вопросов -->
-        <div class="questions-list">
-            <div class="list-header">
-                <span>Вопросы</span>
-                <span class="count-badge" id="questionCount">0</span>
-            </div>
-            <div id="questionsContainer"></div>
-        </div>
-    </div>
-
-    <!-- Простое модальное окно с информацией -->
-    <div class="modal-overlay" id="infoModal" style="display: none; position: fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:1000;">
-        <div style="background:white; border-radius:16px; padding:24px; width:90%; max-width:400px;">
-            <h3 style="margin-bottom:16px;">ℹ️ О сайте</h3>
-            <p style="margin-bottom:20px;">Сайт для поиска ответов на экзаменах. Базы обновляются автоматически из репозитория.</p>
-            <button class="icon-btn" id="closeInfoBtn" style="width:100%; border-radius:30px;">OK</button>
-        </div>
-    </div>
-
+    <!-- Твой основной контент -->
+    <div class="top-bar">...</div>
+    <div class="main-content">...</div>
     <script src="app.js"></script>
 </body>
 </html>
