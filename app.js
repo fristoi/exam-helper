@@ -196,12 +196,22 @@ function loadQuestions() {
         : allQuestions.filter(q => q.source === currentFilter);
     
     let search = document.getElementById('searchInput').value.toLowerCase().trim();
+    
     if (search) {
-        filtered = filtered.filter(q => 
-            (q.punkt && q.punkt.toLowerCase().includes(search)) ||
-            (q.question && q.question.toLowerCase().includes(search)) ||
-            (q.source && q.source.toLowerCase().includes(search))
-        );
+        // Разбиваем поисковый запрос на отдельные слова
+        let searchWords = search.split(/\s+/).filter(word => word.length > 0);
+        
+        filtered = filtered.filter(q => {
+            // Собираем весь текст вопроса в одну строку
+            let textToSearch = (
+                (q.punkt || '') + ' ' + 
+                (q.question || '') + ' ' + 
+                (q.source || '')
+            ).toLowerCase();
+            
+            // Проверяем, что ВСЕ слова из запроса есть в тексте (в любом порядке)
+            return searchWords.every(word => textToSearch.includes(word));
+        });
     }
     
     document.getElementById('questionCount').textContent = filtered.length;
