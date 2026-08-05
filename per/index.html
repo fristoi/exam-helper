@@ -61,7 +61,7 @@
             border-color: #0b3b5c;
         }
 
-        /* СЧЁТЧИК — СПРАВА, СЕРЫЙ */
+        /* СЧЁТЧИК */
         .count-badge {
             background: #d1d5db;
             color: #1f2937;
@@ -195,6 +195,15 @@
         }
         .hidden {
             display: none !important;
+        }
+
+        /* ===== ПОДСВЕТКА ===== */
+        .highlight {
+            background: #fbbf24;
+            padding: 0 2px;
+            border-radius: 3px;
+            font-weight: 600;
+            color: #1f2937;
         }
 
         /* ===== АДАПТИВ ===== */
@@ -405,25 +414,57 @@
             filterBar.innerHTML = html;
         }
 
-        function formatAnswer(question) {
+        // ===== ФОРМАТИРОВАНИЕ ОТВЕТОВ =====
+        function formatAnswer(question, highlightWords) {
             if (!question) return '';
             let html = '';
+
             if (question.all_answers) {
                 question.all_answers.forEach(a => {
-                    html += `<div class="${a.correct ? 'answer-correct' : 'answer-wrong'}">${a.correct ? '✅' : '❌'} ${a.text}</div>`;
+                    let text = a.text;
+                    if (highlightWords && highlightWords.length > 0) {
+                        text = highlightText(text, highlightWords);
+                    }
+                    html += `<div class="${a.correct ? 'answer-correct' : 'answer-wrong'}">${a.correct ? '✅' : '❌'} ${text}</div>`;
                 });
             } else if (question.answer) {
+                let text = question.answer;
+                if (highlightWords && highlightWords.length > 0) {
+                    text = highlightText(text, highlightWords);
+                }
                 if (question.answer.includes('++')) {
                     question.answer.split('\n').forEach(line => {
                         if (line.trim().startsWith('++')) {
-                            html += `<div class="answer-correct">✅ ${line.replace('++', '').trim()}</div>`;
+                            let cleanText = line.replace('++', '').trim();
+                            if (highlightWords && highlightWords.length > 0) {
+                                cleanText = highlightText(cleanText, highlightWords);
+                            }
+                            html += `<div class="answer-correct">✅ ${cleanText}</div>`;
                         }
                     });
                 } else {
-                    html += `<div class="answer-correct">✅ ${question.answer}</div>`;
+                    html += `<div class="answer-correct">✅ ${text}</div>`;
                 }
             }
             return html;
+        }
+
+        // ===== ПОДСВЕТКА ТЕКСТА =====
+        function highlightText(text, words) {
+            if (!text || !words || words.length === 0) return text;
+
+            let result = text;
+            // Сортируем по длине (от длинных к коротким), чтобы не было конфликтов
+            let sortedWords = [...words].sort((a, b) => b.length - a.length);
+
+            for (let word of sortedWords) {
+                if (word.length < 1) continue;
+                // Экранируем спецсимволы
+                let escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                let regex = new RegExp('(' + escaped + ')', 'gi');
+                result = result.replace(regex, '<span class="highlight">$1</span>');
+            }
+            return result;
         }
 
         function getDeclension(count) {
@@ -432,16 +473,18 @@
             return 'вопросов';
         }
 
+        // ===== ОСНОВНАЯ ФУНКЦИЯ ЗАГРУЗКИ ВОПРОСОВ =====
         function loadQuestions() {
+            let search = document.getElementById('searchInput').value.toLowerCase().trim();
+            let searchWords = search ? search.split(/\s+/).filter(word => word.length > 0) : [];
+
             let filtered = currentFilter === 'all'
                 ? allQuestions
                 : allQuestions.filter(q => q.source === currentFilter);
 
-            let search = document.getElementById('searchInput').value.toLowerCase().trim();
-            if (search) {
-                let searchWords = search.split(/\s+/).filter(word => word.length > 0);
+            // ФИЛЬТРАЦИЯ
+            if (searchWords.length > 0) {
                 filtered = filtered.filter(q => {
-                    // Собираем текст для поиска: пункт, вопрос, источник, ответы
                     let answersText = '';
                     if (q.all_answers) {
                         answersText = q.all_answers.map(a => a.text).join(' ');
@@ -460,25 +503,45 @@
                 });
             }
 
+            // СЧЁТЧИК
             const count = filtered.length;
             document.getElementById('countBadge').textContent = `${count} ${getDeclension(count)}`;
 
             let container = document.getElementById('questionsContainer');
+
             if (filtered.length === 0) {
                 container.innerHTML = '<div class="no-results">📭 Нет вопросов</div>';
                 return;
             }
 
+            // ОТОБРАЖЕНИЕ С ПОДСВЕТКОЙ
             let html = '';
             filtered.forEach(q => {
+                let punktText = q.punkt || '';
+                let questionText = q.question || '';
+                let sourceText = q.source || '';
+
+                // Подсветка в пункте и вопросе
+                if (searchWords.length > 0) {
+                    punktText = highlightText(punktText, searchWords);
+                    questionText = highlightText(questionText, searchWords);
+                }
+
                 html += `<div class="question-item">`;
-                html += `<div class="punkt">📌 ${q.punkt || ''}`;
-                if (q.source) html += `<span style="color:#b0b8c4;font-size:9px;margin-left:8px;">[${q.source}]</span>`;
+                html += `<div class="punkt">📌 ${punktText}`;
+                if (sourceText) {
+                    let sourceDisplay = sourceText;
+                    if (searchWords.length > 0) {
+                        sourceDisplay = highlightText(sourceDisplay, searchWords);
+                    }
+                    html += `<span style="color:#b0b8c4;font-size:9px;margin-left:8px;">[${sourceDisplay}]</span>`;
+                }
                 html += `</div>`;
-                html += `<div class="question">❓ ${q.question}</div>`;
-                html += `<div class="answers">${formatAnswer(q)}</div>`;
+                html += `<div class="question">❓ ${questionText}</div>`;
+                html += `<div class="answers">${formatAnswer(q, searchWords)}</div>`;
                 html += `</div>`;
             });
+
             container.innerHTML = html;
         }
     </script>
