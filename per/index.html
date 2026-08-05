@@ -454,12 +454,10 @@
             if (!text || !words || words.length === 0) return text;
 
             let result = text;
-            // Сортируем по длине (от длинных к коротким), чтобы не было конфликтов
             let sortedWords = [...words].sort((a, b) => b.length - a.length);
 
             for (let word of sortedWords) {
                 if (word.length < 1) continue;
-                // Экранируем спецсимволы
                 let escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 let regex = new RegExp('(' + escaped + ')', 'gi');
                 result = result.replace(regex, '<span class="highlight">$1</span>');
@@ -482,7 +480,7 @@
                 ? allQuestions
                 : allQuestions.filter(q => q.source === currentFilter);
 
-            // ФИЛЬТРАЦИЯ
+            // ФИЛЬТРАЦИЯ (source НЕ участвует)
             if (searchWords.length > 0) {
                 filtered = filtered.filter(q => {
                     let answersText = '';
@@ -495,7 +493,6 @@
                     let textToSearch = (
                         (q.punkt || '') + ' ' +
                         (q.question || '') + ' ' +
-                        (q.source || '') + ' ' +
                         answersText
                     ).toLowerCase();
 
@@ -514,14 +511,12 @@
                 return;
             }
 
-            // ОТОБРАЖЕНИЕ С ПОДСВЕТКОЙ
+            // ОТОБРАЖЕНИЕ
             let html = '';
             filtered.forEach(q => {
                 let punktText = q.punkt || '';
                 let questionText = q.question || '';
-                let sourceText = q.source || '';
 
-                // Подсветка в пункте и вопросе
                 if (searchWords.length > 0) {
                     punktText = highlightText(punktText, searchWords);
                     questionText = highlightText(questionText, searchWords);
@@ -529,12 +524,9 @@
 
                 html += `<div class="question-item">`;
                 html += `<div class="punkt">📌 ${punktText}`;
-                if (sourceText) {
-                    let sourceDisplay = sourceText;
-                    if (searchWords.length > 0) {
-                        sourceDisplay = highlightText(sourceDisplay, searchWords);
-                    }
-                    html += `<span style="color:#b0b8c4;font-size:9px;margin-left:8px;">[${sourceDisplay}]</span>`;
+                if (q.source) {
+                    // source выводится, но НЕ подсвечивается
+                    html += `<span style="color:#b0b8c4;font-size:9px;margin-left:8px;">[${q.source}]</span>`;
                 }
                 html += `</div>`;
                 html += `<div class="question">❓ ${questionText}</div>`;
