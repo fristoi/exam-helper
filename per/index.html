@@ -61,16 +61,15 @@
             border-color: #0b3b5c;
         }
 
-        /* СЧЁТЧИК — СПРАВА, КАК КНОПКА */
+        /* СЧЁТЧИК — СПРАВА, СЕРЫЙ (как фон) */
         .count-badge {
-            background: #7c3aed;
-            color: white;
+            background: #d1d5db;
+            color: #1f2937;
             padding: 8px 18px;
             border-radius: 30px;
             font-weight: 600;
             font-size: 14px;
             white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
             flex-shrink: 0;
             border: none;
             display: inline-block;
@@ -139,9 +138,9 @@
             border-color: #0b3b5c;
         }
 
-        /* ===== ОБЛАСТЬ С ВОПРОСАМИ ===== */
+        /* ===== ОБЛАСТЬ С ВОПРОСАМИ — МЯГКИЙ СЕРЫЙ ФОН ===== */
         .questions-wrapper {
-            background: linear-gradient(145deg, #d4c4f7 0%, #a8c8f0 50%, #b8d4f5 100%);
+            background: #e5e7eb;
             padding: 16px 12px;
             min-height: 100vh;
         }
@@ -151,22 +150,22 @@
             padding: 0;
         }
 
-        /* ===== КАРТОЧКИ ВОПРОСОВ — МАКСИМАЛЬНО ШИРОКИЕ ===== */
+        /* ===== КАРТОЧКИ ВОПРОСОВ — БЕЛЫЕ ===== */
         .question-item {
             background: white;
             border-radius: 14px;
             padding: 16px 18px;
             margin-bottom: 12px;
-            box-shadow: 0 2px 12px rgba(74, 44, 122, 0.08);
-            border: 1px solid rgba(196, 181, 212, 0.2);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.04);
             transition: box-shadow 0.2s;
             width: 100%;
         }
         .question-item:hover {
-            box-shadow: 0 4px 20px rgba(74, 44, 122, 0.12);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
         .punkt {
-            color: #7c3aed;
+            color: #4b5563;
             font-weight: 600;
             font-size: 13px;
             margin-bottom: 4px;
@@ -190,7 +189,7 @@
         }
         .no-results {
             text-align: center;
-            color: #4a3a5e;
+            color: #6b7280;
             padding: 40px 0;
             font-size: 16px;
         }
@@ -280,7 +279,7 @@
             <input type="text" id="searchInput" placeholder="🔍 Найти вопрос...">
         </div>
 
-        <!-- ===== ОБЛАСТЬ С ВОПРОСАМИ (ГРАДИЕНТ) ===== -->
+        <!-- ===== ОБЛАСТЬ С ВОПРОСАМИ (МЯГКИЙ СЕРЫЙ) ===== -->
         <div class="questions-wrapper">
             <div class="questions-list">
                 <div id="questionsContainer"></div>
@@ -464,7 +463,7 @@
             filtered.forEach(q => {
                 html += `<div class="question-item">`;
                 html += `<div class="punkt">📌 ${q.punkt || ''}`;
-                if (q.source) html += `<span style="color:#8a7a9e;font-size:11px;margin-left:8px;">[${q.source}]</span>`;
+                if (q.source) html += `<span style="color:#9ca3af;font-size:11px;margin-left:8px;">[${q.source}]</span>`;
                 html += `</div>`;
                 html += `<div class="question">❓ ${q.question}</div>`;
                 html += `<div class="answers">${formatAnswer(q)}</div>`;
