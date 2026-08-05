@@ -13,38 +13,18 @@
         body {
             font-family: 'Segoe UI', sans-serif;
             background: #f0f2f5;
-            padding: 20px;
+            padding: 12px 16px;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .header {
+
+        /* ШАПКА ТОЛЬКО С КНОПКАМИ */
+        .header-buttons {
             display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 16px;
+            gap: 10px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
         }
-        .logo {
-            font-size: 28px;
-        }
-        .header-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #0b3b5c;
-            margin-right: auto;
-        }
-        .top-buttons {
-            display: flex;
-            gap: 8px;
-        }
         .top-btn {
-            padding: 10px 24px;
+            padding: 10px 28px;
             border: 2px solid #0b3b5c;
             border-radius: 30px;
             background: white;
@@ -112,7 +92,7 @@
             background: #f8fafc;
             border-radius: 12px;
             padding: 12px;
-            max-height: 500px;
+            max-height: 600px;
             overflow-y: auto;
         }
         .list-header {
@@ -154,53 +134,51 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Шапка -->
-        <div class="header">
-            <span class="logo">📚</span>
-            <span class="header-title">Экзамены</span>
-            <div class="top-buttons">
-                <button class="top-btn active" data-base="ПТБ">ПТБ</button>
-                <button class="top-btn" data-base="ППБ">ППБ</button>
-                <button class="top-btn" data-base="ПТЭ">ПТЭ</button>
-            </div>
-        </div>
 
-        <!-- Фильтры по источникам -->
-        <div class="filter-bar" id="filterBar">
-            <button class="filter-btn active" data-source="all">📋 Все</button>
-        </div>
+    <!-- ===== ТОЛЬКО 3 КНОПКИ ===== -->
+    <div class="header-buttons">
+        <button class="top-btn active" data-base="ПТБ">ПТБ</button>
+        <button class="top-btn" data-base="ППБ">ППБ</button>
+        <button class="top-btn" data-base="ПТЭ">ПТЭ</button>
+    </div>
 
-        <!-- Выпадающий список -->
-        <div class="section-dropdown">
-            <select id="baseSelect"></select>
-        </div>
+    <!-- Фильтры по источникам -->
+    <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-source="all">📋 Все</button>
+    </div>
 
-        <!-- Поиск -->
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 Найти вопрос...">
-        </div>
+    <!-- Выпадающий список (ТОЛЬКО ДОПОЛНИТЕЛЬНЫЕ БАЗЫ) -->
+    <div class="section-dropdown" id="extraBasesContainer">
+        <select id="baseSelect">
+            <option value="">➕ Дополнительные базы</option>
+        </select>
+    </div>
 
-        <!-- Список вопросов -->
-        <div class="questions-list">
-            <div class="list-header">
-                <span>Вопросы</span>
-                <span class="count-badge" id="questionCount">0</span>
-            </div>
-            <div id="questionsContainer"></div>
+    <!-- Поиск -->
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 Найти вопрос...">
+    </div>
+
+    <!-- Список вопросов -->
+    <div class="questions-list">
+        <div class="list-header">
+            <span>Вопросы</span>
+            <span class="count-badge" id="questionCount">0</span>
         </div>
+        <div id="questionsContainer"></div>
     </div>
 
     <script>
         // ============================================================
-        // ПЕРСОНАЛЬНАЯ СТРАНИЦА - 3 КНОПКИ + ВЫПАДАЮЩИЙ СПИСОК
-        // Поиск работает ТОЛЬКО по текущей открытой базе
+        // 3 КНОПКИ + ДОПОЛНИТЕЛЬНЫЕ БАЗЫ В ВЫПАДАЮЩЕМ СПИСКЕ
         // ============================================================
 
         let currentBase = 'ПТБ';
         let allQuestions = [];
         let currentFilter = 'all';
-        let extraBases = []; // для выпадающего списка
+        let extraBases = [];
+
+        const MAIN_BASES = ['ПТБ', 'ППБ', 'ПТЭ'];
 
         document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
@@ -208,33 +186,31 @@
         });
 
         function setupEventListeners() {
-            // Кнопки ПТБ/ППБ/ПТЭ
+            // КНОПКИ ПТБ/ППБ/ПТЭ
             document.querySelectorAll('.top-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.top-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     currentBase = this.dataset.base;
-                    document.getElementById('baseSelect').value = currentBase;
+                    document.getElementById('baseSelect').value = '';
                     loadQuestionsForBase(currentBase);
                 });
             });
 
-            // Выпадающий список
+            // ВЫПАДАЮЩИЙ СПИСОК (только доп. базы)
             document.getElementById('baseSelect').addEventListener('change', function() {
                 let val = this.value;
-                if (val === 'ПТБ' || val === 'ППБ' || val === 'ПТЭ') {
-                    document.querySelectorAll('.top-btn').forEach(b => {
-                        b.classList.toggle('active', b.dataset.base === val);
-                    });
-                }
+                if (!val) return;
+                // Снимаем активность с кнопок
+                document.querySelectorAll('.top-btn').forEach(b => b.classList.remove('active'));
                 currentBase = val;
                 loadQuestionsForBase(val);
             });
 
-            // Поиск
+            // ПОИСК
             document.getElementById('searchInput').addEventListener('input', loadQuestions);
 
-            // Фильтры по источникам
+            // ФИЛЬТРЫ
             document.getElementById('filterBar').addEventListener('click', function(e) {
                 if (e.target.classList.contains('filter-btn')) {
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -246,41 +222,29 @@
         }
 
         function loadBaseList() {
-            // Загружаем список доступных баз из index.json
             fetch('bases/index.json')
                 .then(r => r.json())
                 .then(data => {
                     extraBases = data.bases || [];
+                    // Убираем основные базы из списка (чтобы не дублировались)
+                    extraBases = extraBases.filter(b => !MAIN_BASES.includes(b));
+
                     let select = document.getElementById('baseSelect');
-                    select.innerHTML = '';
-                    
-                    // Добавляем основные базы, если их нет в списке
-                    let all = ['ПТБ', 'ППБ', 'ПТЭ'];
-                    all.forEach(b => {
-                        if (!extraBases.includes(b)) extraBases.unshift(b);
-                    });
-                    
+                    select.innerHTML = '<option value="">➕ Дополнительные базы</option>';
                     extraBases.forEach(b => {
                         let opt = document.createElement('option');
                         opt.value = b;
                         opt.textContent = b;
                         select.appendChild(opt);
                     });
-                    
-                    select.value = currentBase;
+
+                    // Загружаем первую основную базу (ПТБ)
                     loadQuestionsForBase(currentBase);
                 })
                 .catch(() => {
-                    // Если index.json нет — загружаем только ПТБ/ППБ/ПТЭ
+                    // Если index.json нет — работаем только с 3 кнопками
                     let select = document.getElementById('baseSelect');
-                    select.innerHTML = '';
-                    ['ПТБ', 'ППБ', 'ПТЭ'].forEach(b => {
-                        let opt = document.createElement('option');
-                        opt.value = b;
-                        opt.textContent = b;
-                        select.appendChild(opt);
-                    });
-                    select.value = currentBase;
+                    select.innerHTML = '<option value="">➕ Дополнительные базы</option>';
                     loadQuestionsForBase(currentBase);
                 });
         }
@@ -314,12 +278,12 @@
         function renderSourceFilter() {
             let sources = getAllSources();
             let filterBar = document.getElementById('filterBar');
-            
+
             if (sources.length === 0) {
                 filterBar.innerHTML = `<button class="filter-btn active" data-source="all">📋 Все</button>`;
                 return;
             }
-            
+
             let html = `<button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" data-source="all">📋 Все</button>`;
             sources.forEach(source => {
                 let displayName = source.length > 25 ? source.substring(0, 22) + '...' : source;
@@ -350,31 +314,31 @@
         }
 
         function loadQuestions() {
-            let filtered = currentFilter === 'all' 
-                ? allQuestions 
+            let filtered = currentFilter === 'all'
+                ? allQuestions
                 : allQuestions.filter(q => q.source === currentFilter);
-            
+
             let search = document.getElementById('searchInput').value.toLowerCase().trim();
             if (search) {
                 let searchWords = search.split(/\s+/).filter(word => word.length > 0);
                 filtered = filtered.filter(q => {
                     let textToSearch = (
-                        (q.punkt || '') + ' ' + 
-                        (q.question || '') + ' ' + 
+                        (q.punkt || '') + ' ' +
+                        (q.question || '') + ' ' +
                         (q.source || '')
                     ).toLowerCase();
                     return searchWords.every(word => textToSearch.includes(word));
                 });
             }
-            
+
             document.getElementById('questionCount').textContent = filtered.length;
-            
+
             let container = document.getElementById('questionsContainer');
             if (filtered.length === 0) {
                 container.innerHTML = '<div class="no-results">📭 Нет вопросов</div>';
                 return;
             }
-            
+
             let html = '';
             filtered.forEach(q => {
                 html += `<div class="question-item">`;
