@@ -13,23 +13,32 @@
         body {
             font-family: 'Segoe UI', sans-serif;
             background: #f0f2f5;
-            padding: 12px 16px;
+            padding: 0;
         }
-
-        /* ШАПКА ТОЛЬКО С КНОПКАМИ */
-        .header-buttons {
+        .container {
+            max-width: 100%;
+            margin: 0;
+            background: white;
+            border-radius: 0;
+            padding: 0;
+            box-shadow: none;
+        }
+        .header {
             display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
             flex-wrap: wrap;
         }
         .top-btn {
-            padding: 10px 28px;
+            padding: 8px 20px;
             border: 2px solid #0b3b5c;
             border-radius: 30px;
             background: white;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -41,11 +50,29 @@
             color: white;
         }
 
+        .section-dropdown {
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .section-dropdown select {
+            padding: 8px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+        }
+
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            margin: 8px 0 12px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
         }
         .filter-btn {
             padding: 6px 14px;
@@ -65,48 +92,43 @@
             border-color: #28a745;
         }
 
-        .section-dropdown {
-            margin: 8px 0 12px;
+        .search-box {
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
         }
-        .section-dropdown select {
-            padding: 8px 16px;
+        .search-box input {
+            width: 100%;
+            padding: 10px 16px;
             border: 1px solid #e2e8f0;
             border-radius: 30px;
             font-size: 14px;
-            background: white;
-            cursor: pointer;
-            width: 100%;
-            max-width: 300px;
+            outline: none;
         }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #e2e8f0;
-            border-radius: 40px;
-            font-size: 14px;
-            margin-bottom: 12px;
+        .search-box input:focus {
+            border-color: #0b3b5c;
         }
 
         .questions-list {
             background: #f8fafc;
-            border-radius: 12px;
-            padding: 12px;
-            max-height: 600px;
-            overflow-y: auto;
+            padding: 8px 12px;
         }
         .list-header {
             display: flex;
             justify-content: space-between;
             font-size: 14px;
             color: #64748b;
-            margin-bottom: 8px;
+            padding: 4px 0 8px;
+        }
+        .count-badge {
+            font-weight: 600;
+            color: #0b3b5c;
         }
         .question-item {
             background: white;
             border: 1px solid #e9edf2;
             border-radius: 10px;
-            padding: 12px;
+            padding: 12px 16px;
             margin-bottom: 8px;
         }
         .punkt {
@@ -123,60 +145,68 @@
         .answers {
             font-size: 13px;
         }
-        .answer-correct { color: #28a745; }
-        .answer-wrong { color: #dc3545; }
+        .answer-correct {
+            color: #28a745;
+        }
+        .answer-wrong {
+            color: #dc3545;
+        }
         .no-results {
             text-align: center;
             color: #94a3b8;
-            padding: 40px;
+            padding: 40px 0;
         }
-        .hidden { display: none !important; }
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
-
-    <!-- ===== ТОЛЬКО 3 КНОПКИ ===== -->
-    <div class="header-buttons">
-        <button class="top-btn active" data-base="ПТБ">ПТБ</button>
-        <button class="top-btn" data-base="ППБ">ППБ</button>
-        <button class="top-btn" data-base="ПТЭ">ПТЭ</button>
-    </div>
-
-    <!-- Фильтры по источникам -->
-    <div class="filter-bar" id="filterBar">
-        <button class="filter-btn active" data-source="all">📋 Все</button>
-    </div>
-
-    <!-- Выпадающий список (ТОЛЬКО ДОПОЛНИТЕЛЬНЫЕ БАЗЫ) -->
-    <div class="section-dropdown" id="extraBasesContainer">
-        <select id="baseSelect">
-            <option value="">➕ Дополнительные базы</option>
-        </select>
-    </div>
-
-    <!-- Поиск -->
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="🔍 Найти вопрос...">
-    </div>
-
-    <!-- Список вопросов -->
-    <div class="questions-list">
-        <div class="list-header">
-            <span>Вопросы</span>
-            <span class="count-badge" id="questionCount">0</span>
+    <div class="container">
+        <!-- ШАПКА: только 3 кнопки -->
+        <div class="header">
+            <button class="top-btn active" data-base="ПТБ">ПТБ</button>
+            <button class="top-btn" data-base="ППБ">ППБ</button>
+            <button class="top-btn" data-base="ПТЭ">ПТЭ</button>
         </div>
-        <div id="questionsContainer"></div>
+
+        <!-- ВЫПАДАЮЩИЙ СПИСОК (только дополнительные базы) -->
+        <div class="section-dropdown" id="extraBasesContainer">
+            <select id="baseSelect">
+                <option value="">📁 Дополнительные базы</option>
+            </select>
+        </div>
+
+        <!-- ФИЛЬТР ПО ИСТОЧНИКАМ -->
+        <div class="filter-bar" id="filterBar">
+            <button class="filter-btn active" data-source="all">📋 Все</button>
+        </div>
+
+        <!-- ПОИСК -->
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Найти вопрос...">
+        </div>
+
+        <!-- СПИСОК ВОПРОСОВ -->
+        <div class="questions-list">
+            <div class="list-header">
+                <span>Вопросы</span>
+                <span class="count-badge" id="questionCount">0</span>
+            </div>
+            <div id="questionsContainer"></div>
+        </div>
     </div>
 
     <script>
         // ============================================================
-        // 3 КНОПКИ + ДОПОЛНИТЕЛЬНЫЕ БАЗЫ В ВЫПАДАЮЩЕМ СПИСКЕ
+        // ПЕРСОНАЛЬНАЯ СТРАНИЦА - 3 КНОПКИ + ВЫПАДАЮЩИЙ СПИСОК
+        // В выпадающем списке ТОЛЬКО дополнительные базы (не ПТБ/ППБ/ПТЭ)
         // ============================================================
 
         let currentBase = 'ПТБ';
         let allQuestions = [];
         let currentFilter = 'all';
-        let extraBases = [];
+        let extraBases = []; // только дополнительные базы
 
         const MAIN_BASES = ['ПТБ', 'ППБ', 'ПТЭ'];
 
@@ -186,31 +216,33 @@
         });
 
         function setupEventListeners() {
-            // КНОПКИ ПТБ/ППБ/ПТЭ
+            // Кнопки ПТБ/ППБ/ПТЭ
             document.querySelectorAll('.top-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.top-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     currentBase = this.dataset.base;
+                    // Сбрасываем выпадающий список
                     document.getElementById('baseSelect').value = '';
                     loadQuestionsForBase(currentBase);
                 });
             });
 
-            // ВЫПАДАЮЩИЙ СПИСОК (только доп. базы)
+            // Выпадающий список (только дополнительные базы)
             document.getElementById('baseSelect').addEventListener('change', function() {
                 let val = this.value;
-                if (!val) return;
-                // Снимаем активность с кнопок
-                document.querySelectorAll('.top-btn').forEach(b => b.classList.remove('active'));
-                currentBase = val;
-                loadQuestionsForBase(val);
+                if (val) {
+                    // Снимаем активность с основных кнопок
+                    document.querySelectorAll('.top-btn').forEach(b => b.classList.remove('active'));
+                    currentBase = val;
+                    loadQuestionsForBase(val);
+                }
             });
 
-            // ПОИСК
+            // Поиск
             document.getElementById('searchInput').addEventListener('input', loadQuestions);
 
-            // ФИЛЬТРЫ
+            // Фильтры по источникам
             document.getElementById('filterBar').addEventListener('click', function(e) {
                 if (e.target.classList.contains('filter-btn')) {
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -225,28 +257,27 @@
             fetch('bases/index.json')
                 .then(r => r.json())
                 .then(data => {
-                    extraBases = data.bases || [];
-                    // Убираем основные базы из списка (чтобы не дублировались)
-                    extraBases = extraBases.filter(b => !MAIN_BASES.includes(b));
-
-                    let select = document.getElementById('baseSelect');
-                    select.innerHTML = '<option value="">➕ Дополнительные базы</option>';
-                    extraBases.forEach(b => {
-                        let opt = document.createElement('option');
-                        opt.value = b;
-                        opt.textContent = b;
-                        select.appendChild(opt);
-                    });
-
-                    // Загружаем первую основную базу (ПТБ)
+                    extraBases = (data.bases || []).filter(b => !MAIN_BASES.includes(b));
+                    renderExtraBases();
+                    // Загружаем ПТБ по умолчанию
                     loadQuestionsForBase(currentBase);
                 })
                 .catch(() => {
-                    // Если index.json нет — работаем только с 3 кнопками
-                    let select = document.getElementById('baseSelect');
-                    select.innerHTML = '<option value="">➕ Дополнительные базы</option>';
+                    extraBases = [];
+                    renderExtraBases();
                     loadQuestionsForBase(currentBase);
                 });
+        }
+
+        function renderExtraBases() {
+            let select = document.getElementById('baseSelect');
+            select.innerHTML = '<option value="">📁 Дополнительные базы</option>';
+            extraBases.forEach(b => {
+                let opt = document.createElement('option');
+                opt.value = b;
+                opt.textContent = b;
+                select.appendChild(opt);
+            });
         }
 
         function loadQuestionsForBase(baseName) {
@@ -278,12 +309,12 @@
         function renderSourceFilter() {
             let sources = getAllSources();
             let filterBar = document.getElementById('filterBar');
-
+            
             if (sources.length === 0) {
                 filterBar.innerHTML = `<button class="filter-btn active" data-source="all">📋 Все</button>`;
                 return;
             }
-
+            
             let html = `<button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" data-source="all">📋 Все</button>`;
             sources.forEach(source => {
                 let displayName = source.length > 25 ? source.substring(0, 22) + '...' : source;
@@ -314,31 +345,31 @@
         }
 
         function loadQuestions() {
-            let filtered = currentFilter === 'all'
-                ? allQuestions
+            let filtered = currentFilter === 'all' 
+                ? allQuestions 
                 : allQuestions.filter(q => q.source === currentFilter);
-
+            
             let search = document.getElementById('searchInput').value.toLowerCase().trim();
             if (search) {
                 let searchWords = search.split(/\s+/).filter(word => word.length > 0);
                 filtered = filtered.filter(q => {
                     let textToSearch = (
-                        (q.punkt || '') + ' ' +
-                        (q.question || '') + ' ' +
+                        (q.punkt || '') + ' ' + 
+                        (q.question || '') + ' ' + 
                         (q.source || '')
                     ).toLowerCase();
                     return searchWords.every(word => textToSearch.includes(word));
                 });
             }
-
+            
             document.getElementById('questionCount').textContent = filtered.length;
-
+            
             let container = document.getElementById('questionsContainer');
             if (filtered.length === 0) {
                 container.innerHTML = '<div class="no-results">📭 Нет вопросов</div>';
                 return;
             }
-
+            
             let html = '';
             filtered.forEach(q => {
                 html += `<div class="question-item">`;
