@@ -24,12 +24,12 @@
             box-shadow: none;
         }
 
-        /* ШАПКА (светлая) */
+        /* ===== ШАПКА ===== */
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
+            gap: 10px;
             padding: 10px 16px;
             background: white;
             border-bottom: 1px solid #e2e8f0;
@@ -50,6 +50,7 @@
             cursor: pointer;
             transition: all 0.2s;
             color: #0b3b5c;
+            white-space: nowrap;
         }
         .top-btn:hover {
             background: #e2e8f0;
@@ -60,19 +61,23 @@
             border-color: #0b3b5c;
         }
 
-        /* СЧЁТЧИК */
+        /* СЧЁТЧИК — СПРАВА, КАК КНОПКА */
         .count-badge {
             background: #7c3aed;
             color: white;
-            padding: 6px 18px;
-            border-radius: 40px;
+            padding: 8px 18px;
+            border-radius: 30px;
             font-weight: 600;
             font-size: 14px;
             white-space: nowrap;
             box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+            flex-shrink: 0;
+            border: none;
+            display: inline-block;
+            text-align: center;
+            min-width: 80px;
         }
 
-        /* ВЫПАДАЮЩИЙ СПИСОК */
         .section-dropdown {
             padding: 8px 16px;
             background: white;
@@ -89,7 +94,6 @@
             max-width: 400px;
         }
 
-        /* ФИЛЬТР */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -117,7 +121,6 @@
             border-color: #28a745;
         }
 
-        /* ПОИСК */
         .search-box {
             padding: 8px 16px;
             background: white;
@@ -136,24 +139,28 @@
             border-color: #0b3b5c;
         }
 
-        /* ОБЛАСТЬ С ВОПРОСАМИ — ГРАДИЕНТ ТОЛЬКО ЗДЕСЬ */
+        /* ===== ОБЛАСТЬ С ВОПРОСАМИ ===== */
         .questions-wrapper {
             background: linear-gradient(145deg, #d4c4f7 0%, #a8c8f0 50%, #b8d4f5 100%);
-            padding: 12px 16px;
+            padding: 16px 12px;
             min-height: 100vh;
         }
         .questions-list {
             max-width: 100%;
             margin: 0;
+            padding: 0;
         }
+
+        /* ===== КАРТОЧКИ ВОПРОСОВ — МАКСИМАЛЬНО ШИРОКИЕ ===== */
         .question-item {
             background: white;
-            border-radius: 16px;
-            padding: 16px 20px;
+            border-radius: 14px;
+            padding: 16px 18px;
             margin-bottom: 12px;
             box-shadow: 0 2px 12px rgba(74, 44, 122, 0.08);
-            border: 1px solid rgba(196, 181, 212, 0.25);
+            border: 1px solid rgba(196, 181, 212, 0.2);
             transition: box-shadow 0.2s;
+            width: 100%;
         }
         .question-item:hover {
             box-shadow: 0 4px 20px rgba(74, 44, 122, 0.12);
@@ -191,11 +198,42 @@
             display: none !important;
         }
 
+        /* ===== АДАПТИВ ===== */
         @media (max-width: 600px) {
+            .header {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .header-left {
+                flex: 1;
+                justify-content: flex-start;
+            }
+            .count-badge {
+                font-size: 13px;
+                padding: 6px 14px;
+                min-width: 60px;
+            }
+            .top-btn {
+                padding: 6px 14px;
+                font-size: 13px;
+            }
+            .section-dropdown select {
+                max-width: 100%;
+            }
+            .question-item {
+                padding: 12px 14px;
+            }
+            .questions-wrapper {
+                padding: 12px 8px;
+            }
+        }
+
+        @media (max-width: 400px) {
             .header {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 8px;
+                gap: 6px;
             }
             .header-left {
                 justify-content: center;
@@ -206,14 +244,8 @@
             .top-btn {
                 flex: 1;
                 text-align: center;
-                padding: 8px 12px;
-                font-size: 13px;
-            }
-            .section-dropdown select {
-                max-width: 100%;
-            }
-            .question-item {
-                padding: 12px 14px;
+                padding: 6px 10px;
+                font-size: 12px;
             }
         }
     </style>
@@ -221,7 +253,7 @@
 <body>
     <div class="container">
 
-        <!-- ШАПКА -->
+        <!-- ===== ШАПКА ===== -->
         <div class="header">
             <div class="header-left">
                 <button class="top-btn active" data-base="ПТБ">ПТБ</button>
@@ -231,24 +263,24 @@
             <div class="count-badge" id="countBadge">0 вопросов</div>
         </div>
 
-        <!-- ВЫПАДАЮЩИЙ СПИСОК -->
+        <!-- ===== ВЫПАДАЮЩИЙ СПИСОК ===== -->
         <div class="section-dropdown" id="extraBasesContainer">
             <select id="baseSelect">
                 <option value="">📁 Дополнительные базы</option>
             </select>
         </div>
 
-        <!-- ФИЛЬТР -->
+        <!-- ===== ФИЛЬТР ===== -->
         <div class="filter-bar" id="filterBar">
             <button class="filter-btn active" data-source="all">📋 Все</button>
         </div>
 
-        <!-- ПОИСК -->
+        <!-- ===== ПОИСК ===== -->
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="🔍 Найти вопрос...">
         </div>
 
-        <!-- ОБЛАСТЬ С ВОПРОСАМИ (ГРАДИЕНТ) -->
+        <!-- ===== ОБЛАСТЬ С ВОПРОСАМИ (ГРАДИЕНТ) ===== -->
         <div class="questions-wrapper">
             <div class="questions-list">
                 <div id="questionsContainer"></div>
@@ -258,7 +290,7 @@
 
     <script>
         // ============================================================
-        // ЛОГИКА (без изменений)
+        // ЛОГИКА
         // ============================================================
 
         let currentBase = 'ПТБ';
