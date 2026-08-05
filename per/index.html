@@ -137,6 +137,11 @@
         .search-box input:focus {
             border-color: #0b3b5c;
         }
+        /* Крестик всегда виден */
+        .search-box input::-webkit-search-cancel-button {
+            display: block;
+            cursor: pointer;
+        }
 
         /* ===== ОБЛАСТЬ С ВОПРОСАМИ ===== */
         .questions-wrapper {
@@ -285,7 +290,7 @@
 
         <!-- ===== ПОИСК ===== -->
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 Найти вопрос...">
+            <input type="search" id="searchInput" placeholder="🔍 Найти вопрос...">
         </div>
 
         <!-- ===== ОБЛАСТЬ С ВОПРОСАМИ ===== -->
