@@ -255,30 +255,39 @@ function loadQuestions() {
     
     let html = '';
     
-    // Объект для отслеживания уникальных источников на текущем экране
-    let shownSources = {}; 
-    let sourceCounter = 0;
+    // Объект для отслеживания УЖЕ ПОКАЗАННЫХ базовых документов
+    let shownDocuments = {}; 
+    let documentCounter = 0;
 
     filtered.forEach(q => {
         html += `<div class="question-item">`;
         
         let sourceContent = '';
         if (q.source) {
-            // Если источник встретился впервые на странице
-            if (!shownSources[q.source]) {
-                sourceCounter++;
-                shownSources[q.source] = sourceCounter;
-                // Рендерим полное название документа
+            // ОЧИЩАЕМ ИСТОЧНИК: убираем из проверки ", п. X.X" на конце, чтобы сгруппировать их
+            // Скрипт возьмет только название: "1. Правила пожарной безопасности..."
+            let baseDocName = q.source.split(', п.')[0].trim(); 
+            
+            // Если такой документ встретился впервые на экране
+            if (!shownDocuments[baseDocName]) {
+                documentCounter++;
+                shownDocuments[baseDocName] = documentCounter;
+                // Первый вопрос выводим ПОЛНОСТЬЮ со всеми пунктами
                 sourceContent = `<span class="source">[${q.source}]</span>`;
             } else {
-                // Если источник уже выводился выше — рендерим компактную кликабельную кнопку
+                // Все последующие вопросы этого же документа сокращаем до красивой интерактивной кнопки
                 sourceContent = `<span class="source short-source" 
                                        data-full="${q.source}" 
-                                       data-index="${shownSources[q.source]}"
-                                       onclick="toggleSource(this)">[Источник ${shownSources[q.source]} ↩]</span>`;
+                                       data-index="${shownDocuments[baseDocName]}"
+                                       onclick="toggleSource(this)">[Источник ${shownDocuments[baseDocName]} ↩]</span>`;
             }
         }
         
         html += `<div class="punkt">📌 ${q.punkt || ''} ${sourceContent}</div>`;
         html += `<div class="question">❓ ${q.question}</div>`;
         html += `<div class="answers">${formatAnswer(q)}</div>`;
+        html += `</div>`;
+    });
+    
+    container.innerHTML = html;
+}
