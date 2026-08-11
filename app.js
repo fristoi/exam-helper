@@ -227,11 +227,6 @@ function loadQuestions() {
         ? allQuestions 
         : allQuestions.filter(q => q.source === currentFilter);
     
-function loadQuestions() {
-    let filtered = currentFilter === 'all' 
-        ? allQuestions 
-        : allQuestions.filter(q => q.source === currentFilter);
-    
     let search = document.getElementById('searchInput').value.toLowerCase().trim();
     
     if (search) {
@@ -260,30 +255,25 @@ function loadQuestions() {
     
     let html = '';
     
-    // Объект для отслеживания уникальных источников
-    let shownSources = {}; 
-    let sourceCounter = 0;
+    // Простой счетчик вопросов на экране
+    let itemIndex = 0;
 
     filtered.forEach(q => {
         html += `<div class="question-item">`;
         
         let sourceContent = '';
         if (q.source) {
-            // Защита от лишних пробелов в начале/конце названия из JSON
-            let cleanSource = q.source.trim(); 
-            
-            if (!shownSources[cleanSource]) {
-                sourceCounter++;
-                shownSources[cleanSource] = sourceCounter;
-                // Первый раз выводим полное название документа
+            if (itemIndex === 0) {
+                // Самый первый вопрос на странице всегда показывает полный текст
                 sourceContent = `<span class="source">[${q.source}]</span>`;
             } else {
-                // Все следующие разы заменяем на компактную кликабельную кнопку
+                // Все последующие вопросы скрывают источник под короткую кнопку
                 sourceContent = `<span class="source short-source" 
                                        data-full="${q.source}" 
-                                       data-index="${shownSources[cleanSource]}"
-                                       onclick="toggleSource(this)">[Источник ${shownSources[cleanSource]} ↩]</span>`;
+                                       data-index="1"
+                                       onclick="toggleSource(this)">[Источник 1 ↩]</span>`;
             }
+            itemIndex++; // Увеличиваем счетчик
         }
         
         html += `<div class="punkt">📌 ${q.punkt || ''} ${sourceContent}</div>`;
