@@ -227,6 +227,11 @@ function loadQuestions() {
         ? allQuestions 
         : allQuestions.filter(q => q.source === currentFilter);
     
+function loadQuestions() {
+    let filtered = currentFilter === 'all' 
+        ? allQuestions 
+        : allQuestions.filter(q => q.source === currentFilter);
+    
     let search = document.getElementById('searchInput').value.toLowerCase().trim();
     
     if (search) {
@@ -255,31 +260,29 @@ function loadQuestions() {
     
     let html = '';
     
-    // Объект для отслеживания УЖЕ ПОКАЗАННЫХ базовых документов
-    let shownDocuments = {}; 
-    let documentCounter = 0;
+    // Объект для отслеживания уникальных источников
+    let shownSources = {}; 
+    let sourceCounter = 0;
 
     filtered.forEach(q => {
         html += `<div class="question-item">`;
         
         let sourceContent = '';
         if (q.source) {
-            // ОЧИЩАЕМ ИСТОЧНИК: убираем из проверки ", п. X.X" на конце, чтобы сгруппировать их
-            // Скрипт возьмет только название: "1. Правила пожарной безопасности..."
-            let baseDocName = q.source.split(', п.')[0].trim(); 
+            // Защита от лишних пробелов в начале/конце названия из JSON
+            let cleanSource = q.source.trim(); 
             
-            // Если такой документ встретился впервые на экране
-            if (!shownDocuments[baseDocName]) {
-                documentCounter++;
-                shownDocuments[baseDocName] = documentCounter;
-                // Первый вопрос выводим ПОЛНОСТЬЮ со всеми пунктами
+            if (!shownSources[cleanSource]) {
+                sourceCounter++;
+                shownSources[cleanSource] = sourceCounter;
+                // Первый раз выводим полное название документа
                 sourceContent = `<span class="source">[${q.source}]</span>`;
             } else {
-                // Все последующие вопросы этого же документа сокращаем до красивой интерактивной кнопки
+                // Все следующие разы заменяем на компактную кликабельную кнопку
                 sourceContent = `<span class="source short-source" 
                                        data-full="${q.source}" 
-                                       data-index="${shownDocuments[baseDocName]}"
-                                       onclick="toggleSource(this)">[Источник ${shownDocuments[baseDocName]} ↩]</span>`;
+                                       data-index="${shownSources[cleanSource]}"
+                                       onclick="toggleSource(this)">[Источник ${shownSources[cleanSource]} ↩]</span>`;
             }
         }
         
