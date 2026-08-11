@@ -377,29 +377,64 @@
         }
 
         function loadQuestionsForBase(baseName) {
-            fetch(`bases/${baseName}.json`)
-                .then(r => r.json())
-                .then(data => {
-                    allQuestions = data.map(q => ({
-                        ...q,
-                        source: q.source || baseName
-                    }));
-                    renderSourceFilter();
-                    loadQuestions();
-                })
-                .catch(() => {
-                    allQuestions = [];
-                    renderSourceFilter();
-                    loadQuestions();
-                });
-        }
+    let filtered = currentFilter === 'all' 
+        ? allQuestions 
+        : allQuestions.filter(q => q.source && q.source.trim() === currentFilter);
+    
+    let search = document.getElementById('searchInput').value.toLowerCase().trim();
+    if (search) {
+        let searchWords = search.split(/\s+/);
+        filtered = filtered.filter(q => {
+            let txt = ((q.punkt || '') + ' ' + (q.question || '') + ' ' + (q.source || '')).toLowerCase();
+            return searchWords.every(word => txt.includes(word));
+        });
+    }
+    
+    let container = document.getElementById('questionsContainer');
+    if (!container) return;
+    if (filtered.length === 0) {
+        container.innerHTML = '<div class="no-results">📭 Вопросов нет</div>';
+        return;
+    }
+    
+    let html = '';
+    let shownSources = {}; 
+    let sourceCounter = 0;
 
-        function getAllSources() {
-            let sources = new Set();
-            allQuestions.forEach(q => {
-                if (q.source) sources.add(q.source);
-            });
-            return Array.from(sources).sort();
+    filtered.forEach(q => {
+        html += `<div class="question-item">`;
+        let sourceContent = '';
+        if (q.source) {
+            let cleanSource = q.source.trim(); 
+            if (!shownSources[cleanSource]) {
+                sourceCounter++; 
+                shownSources[cleanSource] = sourceCounter;
+                sourceContent = `<span class="source">[${q.source}]</span>`;
+            } else {
+                sourceContent = `<span class="source short-source" data-full="${q.source}" data-index="${shownSources[cleanSource]}" onclick="toggleSource(this)">[Источник ${shownSources[cleanSource]} ↩]</span>`;
+            }
+        }
+        html += `<div class="punkt">📌 ${q.punkt || ''} ${sourceContent}</div>`;
+        html += `<div class="question">❓ ${q.question}</div>`;
+        html += `<div class="answers">${formatAnswer(q)}</div>`;
+        html += `</div>`;
+    });
+    container.innerHTML = html;
+}
+
+// Добавляем функцию для клика по источнику
+function toggleSource(element) {
+    const fullText = element.getAttribute('data-full');
+    const indexNum = element.getAttribute('data-index');
+    if (element.classList.contains('short-source')) {
+        element.textContent = `[${fullText}]`;
+        element.classList.remove('short-source');
+    } else {
+        element.textContent = `[Источник ${indexNum} ↩]`;
+        element.classList.add('short-source');
+    }
+}
+
         }
 
         function renderSourceFilter() {
