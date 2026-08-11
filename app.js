@@ -30,23 +30,63 @@ function setupEventListeners() {
             document.getElementById('infoModal').style.display = 'none';
         }
     });
+
+    // =============================================
+    // ФИЧА: КНОПКА ПАНИКИ (PANIC BUTTON)
+    // =============================================
+    // Активация на клавишу Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            activatePanicButton();
+        }
+    });
+
+    // Активация на двойной тап по экрану смартфона (защита на экзамене)
+    let lastTap = 0;
+    document.addEventListener('touchend', function (e) {
+        let currentTime = new Date().getTime();
+        let tapLength = currentTime - lastTap;
+        if (tapLength < 300 && tapLength > 0) {
+            activatePanicButton();
+            e.preventDefault();
+        }
+        lastTap = currentTime;
+    });
+}
+
+function activatePanicButton() {
+    // Мгновенный уход на нейтральную страницу
+    window.location.href = 'https://google.com';
+}
+
+// Функция разворачивания/сворачивания полного названия источника при клике
+function toggleSource(element) {
+    const fullText = element.getAttribute('data-full');
+    const indexNum = element.getAttribute('data-index');
+    
+    if (element.classList.contains('short-source')) {
+        // Разворачиваем: показываем полный текст
+        element.textContent = `[${fullText}]`;
+        element.classList.remove('short-source');
+    } else {
+        // Сворачиваем обратно при повторном клике
+        element.textContent = `[Источник ${indexNum} ↩]`;
+        element.classList.add('short-source');
+    }
 }
 
 async function loadBasesFromGitHub() {
     try {
-        // Загружаем список баз из index.json
         let indexResponse = await fetch('bases/index.json');
         let index = await indexResponse.json();
         
         allBases = [];
         
-        // Загружаем каждую базу
         for (let baseName of index.bases) {
             try {
                 let response = await fetch(`bases/${baseName}.json`);
                 let questions = await response.json();
                 
-                // Сохраняем в localStorage для быстрого доступа
                 localStorage.setItem(`base_${baseName}`, JSON.stringify(questions));
                 allBases.push(baseName);
                 console.log(`✅ Загружена база: ${baseName} (${questions.length} вопросов)`);
@@ -55,14 +95,12 @@ async function loadBasesFromGitHub() {
             }
         }
         
-        // СОРТИРУЕМ БАЗЫ ПО АЛФАВИТУ
         allBases.sort((a, b) => {
             return a.localeCompare(b, 'ru');
         });
         
         if (allBases.length > 0) {
             currentBase = allBases[0];
-            // Загружаем вопросы для текущей базы
             const saved = localStorage.getItem(`base_${currentBase}`);
             allQuestions = saved ? JSON.parse(saved) : [];
             loadQuestions();
@@ -72,7 +110,6 @@ async function loadBasesFromGitHub() {
         
     } catch(e) {
         console.log('❌ Ошибка загрузки списка баз:', e);
-        // Если что-то пошло не так, показываем тестовую базу
         allBases = ['ПТБ'];
         renderBaseSelect();
     }
@@ -93,14 +130,9 @@ function renderBaseSelect() {
 
 function switchBase(baseName) {
     currentBase = baseName;
-    
-    // Загружаем вопросы для выбранной базы
     const saved = localStorage.getItem(`base_${currentBase}`);
     allQuestions = saved ? JSON.parse(saved) : [];
-    
     loadQuestions();
-    
-    // Прокручиваем страницу вверх
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
@@ -198,18 +230,15 @@ function loadQuestions() {
     let search = document.getElementById('searchInput').value.toLowerCase().trim();
     
     if (search) {
-        // Разбиваем поисковый запрос на отдельные слова
         let searchWords = search.split(/\s+/).filter(word => word.length > 0);
         
         filtered = filtered.filter(q => {
-            // Собираем весь текст вопроса в одну строку
             let textToSearch = (
                 (q.punkt || '') + ' ' + 
                 (q.question || '') + ' ' + 
                 (q.source || '')
             ).toLowerCase();
             
-            // Проверяем, что ВСЕ слова из запроса есть в тексте (в любом порядке)
             return searchWords.every(word => textToSearch.includes(word));
         });
     }
@@ -225,15 +254,31 @@ function loadQuestions() {
     }
     
     let html = '';
+    
+    // Объект для отслеживания уникальных источников на текущем экране
+    let shownSources = {}; 
+    let sourceCounter = 0;
+
     filtered.forEach(q => {
         html += `<div class="question-item">`;
-        html += `<div class="punkt">📌 ${q.punkt || ''}`;
-        if (q.source) html += `<span class="source">[${q.source}]</span>`;
-        html += `</div>`;
+        
+        let sourceContent = '';
+        if (q.source) {
+            // Если источник встретился впервые на странице
+            if (!shownSources[q.source]) {
+                sourceCounter++;
+                shownSources[q.source] = sourceCounter;
+                // Рендерим полное название документа
+                sourceContent = `<span class="source">[${q.source}]</span>`;
+            } else {
+                // Если источник уже выводился выше — рендерим компактную кликабельную кнопку
+                sourceContent = `<span class="source short-source" 
+                                       data-full="${q.source}" 
+                                       data-index="${shownSources[q.source]}"
+                                       onclick="toggleSource(this)">[Источник ${shownSources[q.source]} ↩]</span>`;
+            }
+        }
+        
+        html += `<div class="punkt">📌 ${q.punkt || ''} ${sourceContent}</div>`;
         html += `<div class="question">❓ ${q.question}</div>`;
         html += `<div class="answers">${formatAnswer(q)}</div>`;
-        html += `</div>`;
-    });
-    
-    container.innerHTML = html;
-}
