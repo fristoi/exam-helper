@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильтрация базы по ID</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        h1 {
+            color: #1a237e;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .subtitle {
+            color: #78909c;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        .upload-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .upload-box {
+            border: 2px dashed #b0bec5;
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+            transition: all 0.3s;
+            background: #fafafa;
+            cursor: pointer;
+        }
+        .upload-box:hover { border-color: #42a5f5; background: #f5faff; }
+        .upload-box.dragover { border-color: #66bb6a; background: #f1f8e9; }
+        .upload-box.loaded { border-color: #66bb6a; background: #f1f8e9; }
+        .upload-box input[type="file"] { display: none; }
+        .upload-box .icon { font-size: 32px; display: block; margin-bottom: 4px; }
+        .upload-box .title { font-weight: 600; font-size: 14px; margin-bottom: 2px; color: #37474f; }
+        .upload-box .hint { font-size: 11px; color: #90a4ae; }
+        .upload-box .file-info { font-size: 12px; color: #2e7d32; font-weight: 500; margin-top: 4px; }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 16px 0 20px;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px 16px;
+            text-align: center;
+            border-left: 4px solid #42a5f5;
+        }
+        .stat-card .number { font-size: 26px; font-weight: 700; color: #1a237e; }
+        .stat-card .label { font-size: 11px; color: #78909c; margin-top: 2px; }
+        .stat-card.success { border-left-color: #66bb6a; }
+        .stat-card.success .number { color: #2e7d32; }
+        .stat-card.danger { border-left-color: #ef5350; }
+        .stat-card.danger .number { color: #c62828; }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .btn-primary { background: #1a237e; color: white; }
+        .btn-primary:hover:not(:disabled) { background: #0d1445; transform: translateY(-1px); }
+        .btn-success { background: #2e7d32; color: white; }
+        .btn-success:hover:not(:disabled) { background: #1b5e20; transform: translateY(-1px); }
+        .btn-danger { background: #c62828; color: white; }
+        .btn-danger:hover:not(:disabled) { background: #b71c1c; transform: translateY(-1px); }
+        
+        .search-box {
+            padding: 6px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 13px;
+            flex: 1;
+            min-width: 160px;
+            transition: border-color 0.3s;
+        }
+        .search-box:focus { outline: none; border-color: #1a237e; }
+        
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: #e8eaf6;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 4px 0 16px;
+            display: none;
+        }
+        .progress-container .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1a237e, #42a5f5);
+            transition: width 0.4s;
+            width: 0%;
+        }
+        
+        .results { margin-top: 16px; }
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            background: #f5f7fa;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .results-header .count { font-weight: 600; color: #1a237e; font-size: 14px; }
+        
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-success { background: #c8e6c9; color: #1b5e20; }
+        .badge-danger { background: #ffcdd2; color: #b71c1c; }
+        .badge-info { background: #bbdefb; color: #0d47a1; }
+        
+        .question-list {
+            max-height: 550px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 0 0 8px 8px;
+        }
+        .question-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+        .question-item:hover { background: #fafafa; }
+        .question-item:last-child { border-bottom: none; }
+        
+        .question-item .q-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .question-item .q-number {
+            background: #1a237e;
+            color: white;
+            padding: 1px 10px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .question-item .q-ident {
+            background: #f5f5f5;
+            color: #78909c;
+            padding: 1px 8px;
+            border-radius: 16px;
+            font-size: 10px;
+            font-family: monospace;
+        }
+        .question-item .q-text {
+            font-weight: 500;
+            font-size: 14px;
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+        .question-item .q-answer {
+            background: #f1f8e9;
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-top: 6px;
+            border-left: 4px solid #43a047;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .question-item .q-answer .label {
+            font-size: 10px;
+            color: #558b2f;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .question-item .q-source {
+            font-size: 11px;
+            color: #78909c;
+            margin-top: 4px;
+        }
+        .question-item .q-punkt {
+            background: #fff3e0;
+            color: #e65100;
+            padding: 1px 10px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #b0bec5;
+        }
+        .empty-state .icon { font-size: 48px; display: block; margin-bottom: 12px; }
+        .empty-state h3 { color: #78909c; margin-bottom: 6px; font-size: 16px; }
+        .empty-state p { color: #b0bec5; font-size: 13px; }
+        
+        .json-preview {
+            background: #263238;
+            color: #aed581;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 11px;
+            max-height: 250px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-top: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .upload-section { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: 1fr 1fr; }
+            .container { padding: 12px; }
+            .controls { flex-direction: column; }
+            .search-box { width: 100%; }
+            .btn { width: 100%; justify-content: center; }
+        }
+        
+        .question-list::-webkit-scrollbar { width: 6px; }
+        .question-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 3px; }
+        .question-list::-webkit-scrollbar-thumb { background: #c5cae9; border-radius: 3px; }
+        .question-list::-webkit-scrollbar-thumb:hover { background: #9fa8da; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧯 Фильтрация базы по ID</h1>
+        <p class="subtitle">Загрузите файл с вопросами и полную базу с ответами</p>
+        
+        <div class="upload-section">
+            <div class="upload-box" id="base1Upload">
+                <label for="base1File">
+                    <span class="icon">📋</span>
+                    <div class="title">Вопросы</div>
+                    <div class="hint">Нажмите или перетащите JSON файл</div>
+                    <div class="file-info" id="base1Info"></div>
+                </label>
+                <input type="file" id="base1File" accept=".json">
+            </div>
+            
+            <div class="upload-box" id="base2Upload">
+                <label for="base2File">
+                    <span class="icon">📚</span>
+                    <div class="title">База с ответами</div>
+                    <div class="hint">Нажмите или перетащите JSON файл</div>
+                    <div class="file-info" id="base2Info"></div>
+                </label>
+                <input type="file" id="base2File" accept=".json">
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number" id="base1Count">0</div>
+                <div class="label">Вопросов</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="base2Count">0</div>
+                <div class="label">В базе ответов</div>
+            </div>
+            <div class="stat-card success">
+                <div class="number" id="foundCount">0</div>
+                <div class="label">✅ Найдено</div>
+            </div>
+            <div class="stat-card danger">
+                <div class="number" id="notFoundCount">0</div>
+                <div class="label">❌ Не найдено</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-primary" id="compareBtn" disabled>
+                🔍 Найти ответы
+            </button>
+            <button class="btn btn-success" id="exportBtn" disabled>
+                📥 Скачать базу
+            </button>
+            <button class="btn btn-danger" id="clearBtn">
+                🗑️ Очистить
+            </button>
+            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Поиск по вопросу..." disabled>
+        </div>
+        
+        <div class="progress-container" id="progressContainer">
+            <div class="fill" id="progressFill"></div>
+        </div>
+        
+        <div class="results" id="resultsContainer">
+            <div class="empty-state">
+                <span class="icon">📂</span>
+                <h3>Нет данных</h3>
+                <p>Загрузите файл с вопросами и базу с ответами</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let filterIds = [];
+        let fullBase = [];
+        let filteredResults = [];
+        let filterFileName = '';
+        let fullBaseFileName = '';
+        
+        // Drag & Drop
+        ['base1Upload', 'base2Upload'].forEach(id => {
+            const box = document.getElementById(id);
+            const input = box.querySelector('input[type="file"]');
+            
+            box.addEventListener('dragover', e => {
+                e.preventDefault();
+                box.classList.add('dragover');
+            });
+            box.addEventListener('dragleave', () => {
+                box.classList.remove('dragover');
+            });
+            box.addEventListener('drop', e => {
+                e.preventDefault();
+                box.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    input.files = e.dataTransfer.files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+            
+            input.addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = event => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        const isFilter = id === 'base1Upload';
+                        const arrayData = Array.isArray(data) ? data : (data.questions || []);
+                        
+                        if (isFilter) {
+                            filterIds = arrayData;
+                            filterFileName = file.name;
+                            document.getElementById('base1Count').textContent = filterIds.length;
+                            document.getElementById('base1Info').textContent = `✅ ${file.name} (${filterIds.length})`;
+                            box.classList.add('loaded');
+                        } else {
+                            fullBase = arrayData;
+                            fullBaseFileName = file.name;
+                            document.getElementById('base2Count').textContent = fullBase.length;
+                            document.getElementById('base2Info').textContent = `✅ ${file.name} (${fullBase.length})`;
+                            box.classList.add('loaded');
+                        }
+                        updateButtons();
+                    } catch (error) {
+                        alert('❌ Ошибка при чтении файла: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            });
+        });
+        
+        function updateButtons() {
+            const compareBtn = document.getElementById('compareBtn');
+            const searchBox = document.getElementById('searchBox');
+            const canCompare = filterIds.length > 0 && fullBase.length > 0;
+            compareBtn.disabled = !canCompare;
+            searchBox.disabled = !canCompare;
+        }
+        
+        function getIdent(item) {
+            return item.ident || '';
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function filterBase() {
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            progressContainer.style.display = 'block';
+            
+            const indexById = new Map();
+            fullBase.forEach(item => {
+                const id = getIdent(item);
+                if (id) indexById.set(id, item);
+            });
+            
+            filteredResults = [];
+            let found = 0;
+            let notFound = 0;
+            
+            const total = filterIds.length;
+            
+            filterIds.forEach((item, idx) => {
+                const id = getIdent(item);
+                const match = id ? indexById.get(id) : null;
+                
+                if (match) {
+                    found++;
+                    filteredResults.push(match);
+                } else {
+                    notFound++;
+                }
+                progressFill.style.width = ((idx + 1) / total * 100) + '%';
+            });
+            
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+                progressFill.style.width = '0%';
+            }, 400);
+            
+            document.getElementById('foundCount').textContent = found;
+            document.getElementById('notFoundCount').textContent = notFound;
+            
+            renderResults(filteredResults);
+            document.getElementById('exportBtn').disabled = false;
+        }
+        
+        function renderResults(data) {
+            const container = document.getElementById('resultsContainer');
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase().trim();
+            
+            let filtered = data;
+            if (searchTerm) {
+                filtered = data.filter(item => {
+                    const q = (item.question || '').toLowerCase();
+                    return q.includes(searchTerm);
+                });
+            }
+            
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <span class="icon">🔍</span>
+                        <h3>Ничего не найдено</h3>
+                        <p>Попробуйте изменить поисковый запрос</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="results-header">
+                    <span class="count">📋 Найдено: ${filtered.length} (порядок как в файле с вопросами)</span>
+                    <span>
+                        <span class="badge badge-info">Формат: полная база</span>
+                    </span>
+                </div>
+                <div class="question-list">
+            `;
+            
+            filtered.forEach((item, index) => {
+                const ident = getIdent(item) || '—';
+                const punkt = item.punkt || '—';
+                const question = item.question || 'Вопрос не указан';
+                const answer = item.answer || 'Нет ответа';
+                const source = item.source || '';
+                
+                html += `
+                    <div class="question-item">
+                        <div class="q-header">
+                            <span class="q-number">#${index + 1}</span>
+                            ${punkt !== '—' ? `<span class="q-punkt">п. ${punkt}</span>` : ''}
+                            <span class="q-ident">🆔 ${ident}</span>
+                        </div>
+                        <div class="q-text">${escapeHtml(question)}</div>
+                        <div class="q-answer">
+                            <span class="label">📖 Ответ:</span>
+                            ${escapeHtml(answer)}
+                        </div>
+                        ${source ? `<div class="q-source">📌 Источник: ${escapeHtml(source)}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            
+            if (filtered.length > 0) {
+                html += `
+                    <div style="margin-top:12px;">
+                        <details>
+                            <summary style="cursor:pointer;font-weight:600;color:#1a237e;font-size:13px;">📄 Показать JSON (${filtered.length} записей)</summary>
+                            <div class="json-preview">${escapeHtml(JSON.stringify(filtered, null, 2))}</div>
+                        </details>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function exportFiltered() {
+            if (filteredResults.length === 0) return;
+            
+            let baseName = filterFileName.replace(/\.[^.]+$/, '');
+            let fileName = baseName + '_с_ответами.json';
+            
+            const blob = new Blob([JSON.stringify(filteredResults, null, 2)], {type: 'application/json;charset=utf-8'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        function clearAll() {
+            filterIds = [];
+            fullBase = [];
+            filteredResults = [];
+            
+            document.getElementById('base1Count').textContent = '0';
+            document.getElementById('base2Count').textContent = '0';
+            document.getElementById('foundCount').textContent = '0';
+            document.getElementById('notFoundCount').textContent = '0';
+            
+            document.getElementById('base1Upload').classList.remove('loaded');
+            document.getElementById('base1Info').textContent = '';
+            document.getElementById('base2Upload').classList.remove('loaded');
+            document.getElementById('base2Info').textContent = '';
+            
+            document.getElementById('base1File').value = '';
+            document.getElementById('base2File').value = '';
+            
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="empty-state">
+                    <span class="icon">📂</span>
+                    <h3>Нет данных</h3>
+                    <p>Загрузите файл с вопросами и базу с ответами</p>
+                </div>
+            `;
+            
+            document.getElementById('exportBtn').disabled = true;
+            document.getElementById('compareBtn').disabled = true;
+            document.getElementById('searchBox').disabled = true;
+            document.getElementById('searchBox').value = '';
+            document.getElementById('progressContainer').style.display = 'none';
+        }
+        
+        // Event listeners
+        document.getElementById('compareBtn').addEventListener('click', filterBase);
+        document.getElementById('exportBtn').addEventListener('click', exportFiltered);
+        document.getElementById('clearBtn').addEventListener('click', clearAll);
+        document.getElementById('searchBox').addEventListener('input', () => {
+            if (filteredResults.length > 0) renderResults(filteredResults);
+        });
+        
+        // Инициализация
+        updateButtons();
+        console.log('🚀 Инструмент фильтрации базы по ID готов!');
+    </script>
+</body>
+</html>
