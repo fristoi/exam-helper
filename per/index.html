@@ -90,6 +90,9 @@
             width: 100%;
             max-width: 400px;
         }
+        .section-dropdown select option[value=""] {
+            color: #6b7280;
+        }
 
         .filter-bar {
             display: flex;
@@ -264,6 +267,7 @@
                 <button class="top-btn active" data-base="ПТБ">ПТБ</button>
                 <button class="top-btn" data-base="ППБ">ППБ</button>
                 <button class="top-btn" data-base="ПТЭ">ПТЭ</button>
+                <button class="top-btn" data-base="ПЭП">ПЭП</button>
             </div>
             <div class="count-badge" id="countBadge">0 вопросов</div>
         </div>
@@ -300,7 +304,7 @@
         let currentFilter = 'all';
         let extraBases = [];
 
-        const MAIN_BASES = ['ПТБ', 'ППБ', 'ПТЭ'];
+        const MAIN_BASES = ['ПТБ', 'ППБ', 'ПТЭ', 'ПЭП'];
 
         document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
@@ -340,7 +344,6 @@
         }
 
         function loadBaseList() {
-            // Загружаем список баз из папки per/bases/
             fetch('bases/index.json')
                 .then(r => r.json())
                 .then(data => {
@@ -377,7 +380,6 @@
         }
 
         function loadQuestionsForBase(baseName) {
-            // Загружаем конкретную базу из папки per/bases/
             fetch(`bases/${baseName}.json`)
                 .then(r => r.json())
                 .then(data => {
