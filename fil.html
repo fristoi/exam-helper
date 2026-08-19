@@ -9,65 +9,97 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f0f2f5;
-            padding: 20px;
+            padding: 10px;
             color: #333;
         }
-        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); padding: 24px; }
-        h1 { color: #1a237e; font-size: 24px; display: flex; align-items: center; gap: 10px; }
-        .subtitle { color: #78909c; margin-bottom: 20px; font-size: 13px; }
-        
-        .upload-section { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 14px;
+        }
+        h1 {
+            color: #1a237e;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .subtitle {
+            color: #78909c;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        /* ===== ЗАГРУЗКА ФАЙЛОВ — В ОДНУ СТРОКУ ===== */
+        .upload-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
         .upload-box {
-            border: 2px dashed #b0bec5; border-radius: 10px; padding: 14px; text-align: center;
-            transition: all 0.3s; background: #fafafa; cursor: pointer;
+            flex: 1;
+            min-width: 120px;
+            border: 2px dashed #b0bec5;
+            border-radius: 8px;
+            padding: 8px 12px;
+            text-align: center;
+            transition: all 0.3s;
+            background: #fafafa;
+            cursor: pointer;
         }
         .upload-box:hover { border-color: #42a5f5; background: #f5faff; }
         .upload-box.dragover { border-color: #66bb6a; background: #f1f8e9; }
         .upload-box.loaded { border-color: #66bb6a; background: #f1f8e9; }
         .upload-box input[type="file"] { display: none; }
-        .upload-box .icon { font-size: 32px; display: block; margin-bottom: 4px; }
-        .upload-box .title { font-weight: 600; font-size: 14px; margin-bottom: 2px; color: #37474f; }
-        .upload-box .hint { font-size: 11px; color: #90a4ae; }
-        .upload-box .file-info { font-size: 12px; color: #2e7d32; font-weight: 500; margin-top: 4px; }
-        
+        .upload-box .icon { font-size: 22px; display: block; }
+        .upload-box .title { font-weight: 600; font-size: 12px; color: #37474f; }
+        .upload-box .hint { font-size: 10px; color: #90a4ae; }
+        .upload-box .file-info { font-size: 11px; color: #2e7d32; font-weight: 500; margin-top: 2px; }
+
+        /* ===== СТАТИСТИКА — УМЕНЬШЕНА ===== */
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin: 16px 0 20px;
+            gap: 8px;
+            margin: 10px 0 12px;
         }
         .stat-card {
             background: #f8f9fa;
-            border-radius: 8px;
-            padding: 10px 16px;
+            border-radius: 6px;
+            padding: 6px 10px;
             text-align: center;
-            border-left: 4px solid #42a5f5;
+            border-left: 3px solid #42a5f5;
         }
-        .stat-card .number { font-size: 26px; font-weight: 700; color: #1a237e; }
-        .stat-card .label { font-size: 11px; color: #78909c; margin-top: 2px; }
+        .stat-card .number { font-size: 18px; font-weight: 700; color: #1a237e; }
+        .stat-card .label { font-size: 10px; color: #78909c; margin-top: 1px; }
         .stat-card.success { border-left-color: #66bb6a; }
         .stat-card.success .number { color: #2e7d32; }
         .stat-card.danger { border-left-color: #ef5350; }
         .stat-card.danger .number { color: #c62828; }
-        
+
+        /* ===== КНОПКИ ===== */
         .controls {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
         .btn {
-            padding: 6px 16px;
+            padding: 5px 12px;
             border: none;
-            border-radius: 6px;
+            border-radius: 5px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 11px;
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
         .btn-primary { background: #1a237e; color: white; }
@@ -76,25 +108,32 @@
         .btn-success:hover:not(:disabled) { background: #1b5e20; transform: translateY(-1px); }
         .btn-danger { background: #c62828; color: white; }
         .btn-danger:hover:not(:disabled) { background: #b71c1c; transform: translateY(-1px); }
-        
+        .btn-github { background: #24292e; color: white; }
+        .btn-github:hover:not(:disabled) { background: #1a1e22; transform: translateY(-1px); }
+        .btn-edit { background: #6c63ff; color: white; }
+        .btn-edit:hover:not(:disabled) { background: #5a52e0; transform: translateY(-1px); }
+        .btn-delete-small { background: #dc2626; color: white; border: none; padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+        .btn-delete-small:hover { background: #b91c1c; }
+
         .search-box {
-            padding: 6px 12px;
+            padding: 5px 10px;
             border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 13px;
+            border-radius: 5px;
+            font-size: 12px;
             flex: 1;
-            min-width: 160px;
+            min-width: 120px;
             transition: border-color 0.3s;
+            outline: none;
         }
-        .search-box:focus { outline: none; border-color: #1a237e; }
-        
+        .search-box:focus { border-color: #1a237e; }
+
         .progress-container {
             width: 100%;
-            height: 4px;
+            height: 3px;
             background: #e8eaf6;
             border-radius: 2px;
             overflow: hidden;
-            margin: 4px 0 16px;
+            margin: 3px 0 10px;
             display: none;
         }
         .progress-container .fill {
@@ -103,212 +142,275 @@
             transition: width 0.4s;
             width: 0%;
         }
-        
-        .results { margin-top: 16px; }
+
+        /* ===== РЕЗУЛЬТАТЫ ===== */
+        .results { margin-top: 10px; }
         .results-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 16px;
+            padding: 8px 12px;
             background: #f5f7fa;
-            border-radius: 8px 8px 0 0;
+            border-radius: 6px 6px 0 0;
             border-bottom: 2px solid #e0e0e0;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
         }
-        .results-header .count { font-weight: 600; color: #1a237e; font-size: 14px; }
-        
+        .results-header .count { font-weight: 600; color: #1a237e; font-size: 13px; }
+
         .badge {
             display: inline-block;
-            padding: 2px 10px;
-            border-radius: 16px;
-            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: 600;
         }
         .badge-success { background: #c8e6c9; color: #1b5e20; }
         .badge-danger { background: #ffcdd2; color: #b71c1c; }
         .badge-info { background: #bbdefb; color: #0d47a1; }
-        
+
         .question-list {
-            max-height: 550px;
+            max-height: 400px;
             overflow-y: auto;
             border: 1px solid #e0e0e0;
-            border-radius: 0 0 8px 8px;
+            border-radius: 0 0 6px 6px;
         }
         .question-item {
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-bottom: 1px solid #f0f0f0;
             transition: background 0.2s;
         }
         .question-item:hover { background: #fafafa; }
         .question-item:last-child { border-bottom: none; }
-        
+
         .question-item .q-header {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 5px;
             align-items: center;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
         .question-item .q-number {
             background: #1a237e;
             color: white;
-            padding: 1px 10px;
-            border-radius: 16px;
-            font-size: 12px;
+            padding: 1px 8px;
+            border-radius: 12px;
+            font-size: 11px;
             font-weight: 600;
         }
         .question-item .q-ident {
             background: #f5f5f5;
             color: #78909c;
-            padding: 1px 8px;
-            border-radius: 16px;
-            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 12px;
+            font-size: 9px;
             font-family: monospace;
         }
         .question-item .q-text {
             font-weight: 500;
-            font-size: 14px;
-            margin: 4px 0;
-            line-height: 1.5;
+            font-size: 13px;
+            margin: 3px 0;
+            line-height: 1.4;
         }
         .question-item .q-answer {
             background: #f1f8e9;
-            padding: 10px 14px;
-            border-radius: 6px;
-            margin-top: 6px;
-            border-left: 4px solid #43a047;
-            font-size: 13px;
-            line-height: 1.6;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-top: 4px;
+            border-left: 3px solid #43a047;
+            font-size: 12px;
+            line-height: 1.5;
             white-space: pre-wrap;
             word-break: break-word;
         }
         .question-item .q-answer .label {
-            font-size: 10px;
+            font-size: 9px;
             color: #558b2f;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
         .question-item .q-source {
-            font-size: 11px;
+            font-size: 10px;
             color: #78909c;
-            margin-top: 4px;
+            margin-top: 3px;
         }
         .question-item .q-punkt {
             background: #fff3e0;
             color: #e65100;
-            padding: 1px 10px;
-            border-radius: 16px;
-            font-size: 12px;
+            padding: 1px 8px;
+            border-radius: 12px;
+            font-size: 11px;
             font-weight: 600;
         }
-        
+
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 20px;
             color: #b0bec5;
         }
-        .empty-state .icon { font-size: 48px; display: block; margin-bottom: 12px; }
-        .empty-state h3 { color: #78909c; margin-bottom: 6px; font-size: 16px; }
-        .empty-state p { color: #b0bec5; font-size: 13px; }
-        
+        .empty-state .icon { font-size: 36px; display: block; margin-bottom: 8px; }
+        .empty-state h3 { color: #78909c; margin-bottom: 4px; font-size: 14px; }
+        .empty-state p { color: #b0bec5; font-size: 12px; }
+
         .json-preview {
             background: #263238;
             color: #aed581;
-            padding: 12px;
-            border-radius: 6px;
+            padding: 10px;
+            border-radius: 5px;
             font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 11px;
-            max-height: 250px;
+            font-size: 10px;
+            max-height: 200px;
             overflow: auto;
             white-space: pre-wrap;
             word-break: break-all;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
+        /* ===== GITHUB БЛОК ===== */
         .github-section {
-            margin-top: 20px;
-            padding: 16px;
+            margin-top: 14px;
+            padding: 12px;
             border: 1px dashed #e2e8f0;
-            border-radius: 12px;
+            border-radius: 10px;
             background: #fafafa;
         }
         .github-section .row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .github-section .row-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
         .github-section input {
             flex: 1;
-            min-width: 150px;
-            padding: 8px 14px;
+            min-width: 120px;
+            padding: 6px 12px;
             border: 1px solid #e2e8f0;
-            border-radius: 30px;
-            font-size: 13px;
+            border-radius: 20px;
+            font-size: 12px;
             outline: none;
         }
         .github-section input:focus { border-color: #1a237e; }
         .github-section .btn-github-full {
             flex: 1;
-            min-width: 140px;
-            padding: 10px 16px;
+            min-width: 100px;
+            padding: 6px 14px;
             background: #24292e;
             color: white;
             border: none;
-            border-radius: 30px;
+            border-radius: 20px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
         }
         .github-section .btn-github-full:hover { background: #1a1e22; }
         .github-section .btn-github-full:disabled { opacity: 0.5; cursor: not-allowed; }
         .github-section .btn-upload-phone {
             flex: 1;
-            min-width: 140px;
-            padding: 10px 16px;
+            min-width: 100px;
+            padding: 6px 14px;
             background: #e65100;
             color: white;
             border: none;
-            border-radius: 30px;
+            border-radius: 20px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
         }
         .github-section .btn-upload-phone:hover { background: #bf360c; }
-        .github-section .btn-upload-phone:disabled { opacity: 0.5; cursor: not-allowed; }
+        .github-section .btn-edit-list {
+            flex: 1;
+            min-width: 100px;
+            padding: 6px 14px;
+            background: #6c63ff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .github-section .btn-edit-list:hover { background: #5a52e0; }
         .github-section input[type="file"] { display: none; }
         #gh-status {
-            margin-top: 8px;
-            font-size: 12px;
+            margin-top: 6px;
+            font-size: 11px;
             text-align: center;
             font-weight: 500;
             color: #6b7280;
             line-height: 1.4;
         }
-        
+
+        /* ===== СПИСОК БАЗ ===== */
+        .bases-list {
+            margin-top: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+            display: none;
+        }
+        .bases-list.active { display: block; }
+        .bases-list .base-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 14px;
+            border-bottom: 1px solid #f0f0f0;
+            background: white;
+        }
+        .bases-list .base-item:last-child { border-bottom: none; }
+        .bases-list .base-item .name {
+            font-weight: 500;
+            font-size: 13px;
+        }
+        .bases-list .base-item .actions {
+            display: flex;
+            gap: 6px;
+        }
+        .bases-list .base-item .actions .btn-delete-small {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 3px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .bases-list .base-item .actions .btn-delete-small:hover { background: #b91c1c; }
+        .bases-list .base-item .actions .btn-delete-small:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .bases-list .list-header {
+            padding: 8px 14px;
+            background: #f5f7fa;
+            font-weight: 600;
+            font-size: 12px;
+            color: #1a237e;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
         @media (max-width: 768px) {
-            .upload-section { grid-template-columns: 1fr; }
+            .upload-section { flex-direction: column; }
+            .upload-box { min-width: unset; }
             .stats { grid-template-columns: 1fr 1fr; }
-            .container { padding: 12px; }
+            .container { padding: 10px; }
             .controls { flex-direction: column; }
             .search-box { width: 100%; }
             .btn { width: 100%; justify-content: center; }
             .github-section .row { flex-direction: column; }
             .github-section .row-buttons { flex-direction: column; }
             .github-section .btn-github-full,
-            .github-section .btn-upload-phone { width: 100%; }
+            .github-section .btn-upload-phone,
+            .github-section .btn-edit-list { width: 100%; }
         }
-        
-        .question-list::-webkit-scrollbar { width: 6px; }
+
+        .question-list::-webkit-scrollbar { width: 5px; }
         .question-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 3px; }
         .question-list::-webkit-scrollbar-thumb { background: #c5cae9; border-radius: 3px; }
         .question-list::-webkit-scrollbar-thumb:hover { background: #9fa8da; }
@@ -317,30 +419,32 @@
 <body>
     <div class="container">
         <h1>🧯 Создание базы → per/bases/</h1>
-        <p class="subtitle">Загрузите файл с вопросами и полную базу с ответами — результат сохранится в <strong>per/bases/</strong></p>
-        
+        <p class="subtitle">Загрузите файл с вопросами и полную базу с ответами</p>
+
+        <!-- ===== ЗАГРУЗКА ФАЙЛОВ - В ОДНУ СТРОКУ ===== -->
         <div class="upload-section">
             <div class="upload-box" id="base1Upload">
                 <label for="base1File">
                     <span class="icon">📋</span>
                     <div class="title">Вопросы</div>
-                    <div class="hint">Нажмите или перетащите JSON файл</div>
+                    <div class="hint">Нажмите или перетащите</div>
                     <div class="file-info" id="base1Info"></div>
                 </label>
                 <input type="file" id="base1File" accept=".json">
             </div>
-            
+
             <div class="upload-box" id="base2Upload">
                 <label for="base2File">
                     <span class="icon">📚</span>
-                    <div class="title">База с ответами (полная)</div>
-                    <div class="hint">Нажмите или перетащите JSON файл</div>
+                    <div class="title">База с ответами</div>
+                    <div class="hint">Нажмите или перетащите</div>
                     <div class="file-info" id="base2Info"></div>
                 </label>
                 <input type="file" id="base2File" accept=".json">
             </div>
         </div>
-        
+
+        <!-- ===== СТАТИСТИКА - УМЕНЬШЕНА ===== -->
         <div class="stats">
             <div class="stat-card">
                 <div class="number" id="base1Count">0</div>
@@ -359,67 +463,69 @@
                 <div class="label">❌ Не найдено</div>
             </div>
         </div>
-        
+
+        <!-- ===== КНОПКИ ===== -->
         <div class="controls">
-            <button class="btn btn-primary" id="compareBtn" disabled>
-                🔍 Найти ответы
-            </button>
-            <button class="btn btn-success" id="exportBtn" disabled>
-                📥 Скачать базу
-            </button>
-            <button class="btn btn-danger" id="clearBtn">
-                🗑️ Очистить
-            </button>
-            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Поиск по вопросу..." disabled>
+            <button class="btn btn-primary" id="compareBtn" disabled>🔍 Найти ответы</button>
+            <button class="btn btn-success" id="exportBtn" disabled>📥 Скачать</button>
+            <button class="btn btn-danger" id="clearBtn">🗑️ Очистить</button>
+            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Поиск..." disabled>
         </div>
-        
+
         <div class="progress-container" id="progressContainer">
             <div class="fill" id="progressFill"></div>
         </div>
-        
+
+        <!-- ===== РЕЗУЛЬТАТЫ ===== -->
         <div class="results" id="resultsContainer">
             <div class="empty-state">
                 <span class="icon">📂</span>
                 <h3>Нет данных</h3>
-                <p>Загрузите файл с вопросами и базу с ответами</p>
+                <p>Загрузите файлы и нажмите «Найти ответы»</p>
             </div>
         </div>
 
-        <!-- БЛОК ЗАГРУЗКИ НА GITHUB (в папку per/bases/) -->
+        <!-- ===== БЛОК ЗАГРУЗКИ НА GITHUB + РЕДАКТИРОВАНИЕ ===== -->
         <div class="github-section" id="github-upload-section">
             <div class="row">
-                <input type="password" id="gh-token" placeholder="🔑 Введите GitHub Token (ghp_...)" style="flex: 2;">
-                <input type="text" id="new-base-name" placeholder="✍️ Название базы (например: ПТБ)" style="flex: 1;">
+                <input type="password" id="gh-token" placeholder="🔑 GitHub Token (ghp_...)" style="flex: 2;">
+                <input type="text" id="new-base-name" placeholder="✍️ Название базы" style="flex: 1;">
             </div>
             <div class="row-buttons">
-                <button class="btn-github-full" id="gh-upload-btn" disabled>
-                    🚀 Загрузить в per/bases/
-                </button>
-                <button class="btn-upload-phone" id="gh-upload-phone-btn">
-                    📤 Загрузить с телефона
-                </button>
+                <button class="btn-github-full" id="gh-upload-btn" disabled>🚀 Загрузить в per/bases/</button>
+                <button class="btn-upload-phone" id="gh-upload-phone-btn">📤 Загрузить с телефона</button>
+                <button class="btn-edit-list" id="gh-edit-list-btn">✏️ Редактировать список</button>
                 <input type="file" id="phone-file-input" accept=".json">
             </div>
             <div id="gh-status">Ожидание действий...</div>
+
+            <!-- ===== СПИСОК БАЗ ДЛЯ РЕДАКТИРОВАНИЯ ===== -->
+            <div class="bases-list" id="basesList">
+                <div class="list-header">📋 Список баз в per/bases/:</div>
+                <div id="basesListItems">
+                    <div style="padding: 12px; text-align: center; color: #90a4ae; font-size: 12px;">Загрузка...</div>
+                </div>
+            </div>
         </div>
     </div>
-    
+
     <script>
         // =============================================
         // ОСНОВНАЯ ЛОГИКА ФИЛЬТРАЦИИ
         // =============================================
-        
+
         let filterIds = [];
         let fullBase = [];
         let filteredResults = [];
         let filterFileName = '';
         let fullBaseFileName = '';
-        
+        let currentBasesList = [];
+
         // Drag & Drop для загрузки файлов
         ['base1Upload', 'base2Upload'].forEach(id => {
             const box = document.getElementById(id);
             const input = box.querySelector('input[type="file"]');
-            
+
             box.addEventListener('dragover', e => {
                 e.preventDefault();
                 box.classList.add('dragover');
@@ -435,18 +541,18 @@
                     input.dispatchEvent(new Event('change'));
                 }
             });
-            
+
             input.addEventListener('change', e => {
                 const file = e.target.files[0];
                 if (!file) return;
-                
+
                 const reader = new FileReader();
                 reader.onload = event => {
                     try {
                         const data = JSON.parse(event.target.result);
                         const isFilter = id === 'base1Upload';
                         const arrayData = Array.isArray(data) ? data : (data.questions || []);
-                        
+
                         if (isFilter) {
                             filterIds = arrayData;
                             filterFileName = file.name;
@@ -468,7 +574,7 @@
                 reader.readAsText(file);
             });
         });
-        
+
         function updateButtons() {
             const compareBtn = document.getElementById('compareBtn');
             const searchBox = document.getElementById('searchBox');
@@ -478,39 +584,39 @@
             searchBox.disabled = !canCompare;
             ghBtn.disabled = true;
         }
-        
+
         function getIdent(item) {
             return item.ident || '';
         }
-        
+
         function escapeHtml(text) {
             if (!text) return '';
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
-        
+
         function filterBase() {
             const progressContainer = document.getElementById('progressContainer');
             const progressFill = document.getElementById('progressFill');
             progressContainer.style.display = 'block';
-            
+
             const indexById = new Map();
             fullBase.forEach(item => {
                 const id = getIdent(item);
                 if (id) indexById.set(id, item);
             });
-            
+
             filteredResults = [];
             let found = 0;
             let notFound = 0;
-            
+
             const total = filterIds.length;
-            
+
             filterIds.forEach((item, idx) => {
                 const id = getIdent(item);
                 const match = id ? indexById.get(id) : null;
-                
+
                 if (match) {
                     found++;
                     filteredResults.push(match);
@@ -519,18 +625,18 @@
                 }
                 progressFill.style.width = ((idx + 1) / total * 100) + '%';
             });
-            
+
             setTimeout(() => {
                 progressContainer.style.display = 'none';
                 progressFill.style.width = '0%';
             }, 400);
-            
+
             document.getElementById('foundCount').textContent = found;
             document.getElementById('notFoundCount').textContent = notFound;
-            
+
             renderResults(filteredResults);
             document.getElementById('exportBtn').disabled = false;
-            
+
             const ghBtn = document.getElementById('gh-upload-btn');
             if (filteredResults.length > 0) {
                 ghBtn.disabled = false;
@@ -542,11 +648,11 @@
                 document.getElementById('gh-status').style.color = '#dc2626';
             }
         }
-        
+
         function renderResults(data) {
             const container = document.getElementById('resultsContainer');
             const searchTerm = document.getElementById('searchBox').value.toLowerCase().trim();
-            
+
             let filtered = data;
             if (searchTerm) {
                 filtered = data.filter(item => {
@@ -554,7 +660,7 @@
                     return q.includes(searchTerm);
                 });
             }
-            
+
             if (filtered.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
@@ -565,17 +671,17 @@
                 `;
                 return;
             }
-            
+
             let html = `
                 <div class="results-header">
-                    <span class="count">📋 Найдено: ${filtered.length} (порядок как в файле с вопросами)</span>
+                    <span class="count">📋 Найдено: ${filtered.length}</span>
                     <span>
                         <span class="badge badge-info">Полная структура</span>
                     </span>
                 </div>
                 <div class="question-list">
             `;
-            
+
             filtered.forEach((item, index) => {
                 const ident = getIdent(item) || '—';
                 const punkt = item.punkt || '—';
@@ -584,7 +690,7 @@
                 const source = item.source || '';
                 const correct = item.correct || [];
                 const wrong = item.wrong || [];
-                
+
                 html += `
                     <div class="question-item">
                         <div class="q-header">
@@ -596,36 +702,36 @@
                         <div class="q-answer">
                             <span class="label">📖 Ответ:</span>
                             ${escapeHtml(answer)}
-                            ${correct.length > 0 ? `<div style="margin-top:4px;font-size:12px;color:#2e7d32;">✅ Правильные: ${correct.join('; ')}</div>` : ''}
-                            ${wrong.length > 0 ? `<div style="margin-top:2px;font-size:12px;color:#c62828;">❌ Неправильные: ${wrong.join('; ')}</div>` : ''}
+                            ${correct.length > 0 ? `<div style="margin-top:3px;font-size:11px;color:#2e7d32;">✅ Правильные: ${correct.join('; ')}</div>` : ''}
+                            ${wrong.length > 0 ? `<div style="margin-top:2px;font-size:11px;color:#c62828;">❌ Неправильные: ${wrong.join('; ')}</div>` : ''}
                         </div>
                         ${source ? `<div class="q-source">📌 Источник: ${escapeHtml(source)}</div>` : ''}
                     </div>
                 `;
             });
-            
+
             html += '</div>';
-            
+
             if (filtered.length > 0) {
                 html += `
-                    <div style="margin-top:12px;">
+                    <div style="margin-top:8px;">
                         <details>
-                            <summary style="cursor:pointer;font-weight:600;color:#1a237e;font-size:13px;">📄 Показать JSON (${filtered.length} записей, полная структура)</summary>
+                            <summary style="cursor:pointer;font-weight:600;color:#1a237e;font-size:12px;">📄 Показать JSON (${filtered.length} записей)</summary>
                             <div class="json-preview">${escapeHtml(JSON.stringify(filtered, null, 2))}</div>
                         </details>
                     </div>
                 `;
             }
-            
+
             container.innerHTML = html;
         }
-        
+
         function exportFiltered() {
             if (filteredResults.length === 0) return;
-            
+
             let baseName = filterFileName.replace(/\.[^.]+$/, '');
             let fileName = baseName + '_с_ответами.json';
-            
+
             const blob = new Blob([JSON.stringify(filteredResults, null, 2)], {type: 'application/json;charset=utf-8'});
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -634,33 +740,33 @@
             link.click();
             document.body.removeChild(link);
         }
-        
+
         function clearAll() {
             filterIds = [];
             fullBase = [];
             filteredResults = [];
-            
+
             document.getElementById('base1Count').textContent = '0';
             document.getElementById('base2Count').textContent = '0';
             document.getElementById('foundCount').textContent = '0';
             document.getElementById('notFoundCount').textContent = '0';
-            
+
             document.getElementById('base1Upload').classList.remove('loaded');
             document.getElementById('base1Info').textContent = '';
             document.getElementById('base2Upload').classList.remove('loaded');
             document.getElementById('base2Info').textContent = '';
-            
+
             document.getElementById('base1File').value = '';
             document.getElementById('base2File').value = '';
-            
+
             document.getElementById('resultsContainer').innerHTML = `
                 <div class="empty-state">
                     <span class="icon">📂</span>
                     <h3>Нет данных</h3>
-                    <p>Загрузите файл с вопросами и базу с ответами</p>
+                    <p>Загрузите файлы и нажмите «Найти ответы»</p>
                 </div>
             `;
-            
+
             document.getElementById('exportBtn').disabled = true;
             document.getElementById('compareBtn').disabled = true;
             document.getElementById('searchBox').disabled = true;
@@ -670,11 +776,11 @@
             document.getElementById('gh-status').textContent = 'Ожидание действий...';
             document.getElementById('gh-status').style.color = '#6b7280';
         }
-        
+
         // =============================================
         // ЗАГРУЗКА НА GITHUB (в папку per/bases/)
         // =============================================
-        
+
         document.addEventListener('DOMContentLoaded', () => {
             const savedToken = localStorage.getItem('admin_gh_token');
             if (savedToken) {
@@ -682,7 +788,7 @@
             }
         });
 
-        // --- Кнопка "Загрузить с телефона" → открывает файловый менеджер ---
+        // --- Кнопка "Загрузить с телефона" ---
         document.getElementById('gh-upload-phone-btn').addEventListener('click', function() {
             document.getElementById('phone-file-input').click();
         });
@@ -691,16 +797,15 @@
         document.getElementById('phone-file-input').addEventListener('change', async function(e) {
             const file = e.target.files[0];
             if (!file) return;
-            
+
             const status = document.getElementById('gh-status');
             status.textContent = `📖 Читаем файл: ${file.name}...`;
             status.style.color = '#1f2937';
-            
+
             const reader = new FileReader();
             reader.onload = async function(event) {
                 try {
                     const data = JSON.parse(event.target.result);
-                    // Проверяем, что это массив (база вопросов)
                     if (!Array.isArray(data) || data.length === 0) {
                         throw new Error('Файл должен содержать массив вопросов (не пустой)');
                     }
@@ -711,7 +816,7 @@
                 }
             };
             reader.readAsText(file);
-            e.target.value = ''; // сброс, чтобы можно было выбрать тот же файл повторно
+            e.target.value = '';
         });
 
         // --- Загрузка готовой базы (из filteredResults) ---
@@ -752,7 +857,7 @@
 
                 const filePath = `${BASE_PATH}/${baseName}.json`;
                 status.textContent = `📡 Отправка базы ${filePath} на GitHub...`;
-                
+
                 let fileSha = '';
                 try {
                     let res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`, {
@@ -789,7 +894,7 @@
                     let indexGet = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
                         headers: { 'Authorization': `token ${token}` }
                     });
-                    
+
                     if (indexGet.status === 200) {
                         let indexData = await indexGet.json();
                         indexSha = indexData.sha;
@@ -816,7 +921,7 @@
                 });
 
                 if (indexPut.ok) {
-                    status.innerHTML = `🎉 <strong>База "${baseName}" загружена в per/bases/!</strong><br><span style="font-size:11px; color:#6b7280;">Обновите страницу per.html чтобы увидеть базу</span>`;
+                    status.innerHTML = `🎉 <strong>База "${baseName}" загружена в per/bases/!</strong><br><span style="font-size:10px; color:#6b7280;">Обновите per.html чтобы увидеть базу</span>`;
                     status.style.color = '#16a34a';
                     document.getElementById('new-base-name').value = '';
                 } else {
@@ -831,21 +936,203 @@
         }
 
         // =============================================
+        // РЕДАКТИРОВАНИЕ СПИСКА БАЗ (УДАЛЕНИЕ)
+        // =============================================
+
+        async function loadBasesList() {
+            const listContainer = document.getElementById('basesListItems');
+            const status = document.getElementById('gh-status');
+            const token = document.getElementById('gh-token').value.trim();
+            const OWNER = 'fristoi';
+            const REPO = 'exam-helper';
+            const BASE_PATH = 'per/bases';
+
+            if (!token) {
+                listContainer.innerHTML = `<div style="padding: 12px; text-align: center; color: #dc2626; font-size: 12px;">❌ Введите GitHub Token</div>`;
+                return;
+            }
+
+            listContainer.innerHTML = `<div style="padding: 12px; text-align: center; color: #90a4ae; font-size: 12px;">⏳ Загрузка...</div>`;
+
+            try {
+                const indexPath = `${BASE_PATH}/index.json`;
+                let basesList = [];
+
+                try {
+                    let indexGet = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+
+                    if (indexGet.status === 200) {
+                        let indexData = await indexGet.json();
+                        let parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
+                        if (parsedIndex.bases) basesList = parsedIndex.bases;
+                    }
+                } catch(e) {
+                    basesList = [];
+                }
+
+                currentBasesList = basesList;
+
+                if (basesList.length === 0) {
+                    listContainer.innerHTML = `<div style="padding: 12px; text-align: center; color: #90a4ae; font-size: 12px;">📭 Нет загруженных баз</div>`;
+                    return;
+                }
+
+                let html = '';
+                for (let base of basesList) {
+                    html += `
+                        <div class="base-item" id="base-item-${base}">
+                            <span class="name">📄 ${base}</span>
+                            <div class="actions">
+                                <button class="btn-delete-small" onclick="deleteBase('${base}')">🗑️ Удалить</button>
+                            </div>
+                        </div>
+                    `;
+                }
+                listContainer.innerHTML = html;
+
+            } catch (err) {
+                listContainer.innerHTML = `<div style="padding: 12px; text-align: center; color: #dc2626; font-size: 12px;">❌ Ошибка: ${err.message}</div>`;
+            }
+        }
+
+        // Удаление базы
+        async function deleteBase(baseName) {
+            if (!confirm(`🗑️ Удалить базу "${baseName}" из per/bases/ ?`)) return;
+
+            const token = document.getElementById('gh-token').value.trim();
+            const status = document.getElementById('gh-status');
+            const OWNER = 'fristoi';
+            const REPO = 'exam-helper';
+            const BASE_PATH = 'per/bases';
+
+            if (!token) {
+                status.textContent = '❌ Введите GitHub Token';
+                status.style.color = '#dc2626';
+                return;
+            }
+
+            const btn = document.querySelector(`#base-item-${baseName} .btn-delete-small`);
+            if (btn) btn.disabled = true;
+
+            status.textContent = `🗑️ Удаляем базу "${baseName}" из per/bases/...`;
+            status.style.color = '#1f2937';
+
+            try {
+                // 1. Получаем SHA файла
+                const filePath = `${BASE_PATH}/${baseName}.json`;
+                let sha = '';
+                try {
+                    let res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`, {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+                    if (res.status === 200) {
+                        let d = await res.json();
+                        sha = d.sha;
+                    } else {
+                        throw new Error('Файл не найден на GitHub');
+                    }
+                } catch(e) {
+                    throw new Error(`Файл ${baseName}.json не найден`);
+                }
+
+                // 2. Удаляем файл
+                let deleteRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `🗑️ Удаление базы из per: ${baseName}`,
+                        sha: sha
+                    })
+                });
+
+                if (!deleteRes.ok) {
+                    const errData = await deleteRes.json();
+                    throw new Error(`Ошибка удаления: ${errData.message}`);
+                }
+
+                // 3. Обновляем per/bases/index.json
+                status.textContent = '🔄 Обновляем per/bases/index.json...';
+                const indexPath = `${BASE_PATH}/index.json`;
+                let indexSha = '';
+                let currentList = [...currentBasesList];
+
+                try {
+                    let indexGet = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+
+                    if (indexGet.status === 200) {
+                        let indexData = await indexGet.json();
+                        indexSha = indexData.sha;
+                        let parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
+                        if (parsedIndex.bases) currentList = parsedIndex.bases;
+                    }
+                } catch(e) {}
+
+                // Удаляем из списка
+                const newList = currentList.filter(name => name !== baseName);
+                const newIndexContent = JSON.stringify({ bases: newList }, null, 2);
+                const base64Index = btoa(unescape(encodeURIComponent(newIndexContent)));
+
+                let indexPut = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `🗑️ Удаление базы из списка per: ${baseName}`,
+                        content: base64Index,
+                        sha: indexSha
+                    })
+                });
+
+                if (indexPut.ok) {
+                    status.innerHTML = `✅ <strong>База "${baseName}" удалена из per/bases/!</strong>`;
+                    status.style.color = '#16a34a';
+                    await loadBasesList();
+                } else {
+                    const errData = await indexPut.json();
+                    throw new Error(`Ошибка обновления индекса: ${errData.message}`);
+                }
+
+            } catch (err) {
+                status.textContent = `❌ Ошибка: ${err.message}`;
+                status.style.color = '#dc2626';
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        // Кнопка редактирования списка
+        document.getElementById('gh-edit-list-btn').addEventListener('click', async () => {
+            const listEl = document.getElementById('basesList');
+            if (listEl.classList.contains('active')) {
+                listEl.classList.remove('active');
+                document.getElementById('gh-edit-list-btn').textContent = '✏️ Редактировать список';
+                return;
+            }
+
+            listEl.classList.add('active');
+            document.getElementById('gh-edit-list-btn').textContent = '❌ Закрыть список';
+            await loadBasesList();
+        });
+
+        // =============================================
         // EVENT LISTENERS
         // =============================================
-        
+
         document.getElementById('compareBtn').addEventListener('click', filterBase);
         document.getElementById('exportBtn').addEventListener('click', exportFiltered);
         document.getElementById('clearBtn').addEventListener('click', clearAll);
         document.getElementById('searchBox').addEventListener('input', () => {
             if (filteredResults.length > 0) renderResults(filteredResults);
         });
-        
+
         updateButtons();
         console.log('🚀 Инструмент готов!');
-        console.log('📖 Загрузите файл с вопросами и базу с ответами.');
-        console.log('📤 Или нажмите "Загрузить с телефона" чтобы выбрать готовый JSON-файл.');
+        console.log('📖 Загрузите файлы и нажмите «Найти ответы»');
+        console.log('📤 Или нажмите «Загрузить с телефона» чтобы выбрать готовый JSON-файл');
         console.log('💡 Базы загружаются в папку per/bases/');
+        console.log('✏️ Кнопка «Редактировать список» показывает все базы и позволяет удалять их');
     </script>
 </body>
 </html>
