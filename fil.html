@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Создание базы ответов + загрузка на GitHub</title>
+    <title>Управление базами на GitHub</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -78,6 +78,12 @@
         .btn-danger:hover:not(:disabled) { background: #b71c1c; transform: translateY(-1px); }
         .btn-github { background: #24292e; color: white; }
         .btn-github:hover:not(:disabled) { background: #1a1e22; transform: translateY(-1px); }
+        .btn-orange { background: #e65100; color: white; }
+        .btn-orange:hover:not(:disabled) { background: #bf360c; transform: translateY(-1px); }
+        .btn-edit { background: #6c63ff; color: white; }
+        .btn-edit:hover:not(:disabled) { background: #5a52e0; transform: translateY(-1px); }
+        .btn-delete-small { background: #dc2626; color: white; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .btn-delete-small:hover { background: #b91c1c; }
         
         .search-box {
             padding: 6px 12px;
@@ -244,6 +250,11 @@
             flex-wrap: wrap;
             margin-bottom: 10px;
         }
+        .github-section .row-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
         .github-section input {
             flex: 1;
             min-width: 150px;
@@ -255,8 +266,9 @@
         }
         .github-section input:focus { border-color: #1a237e; }
         .github-section .btn-github-full {
-            width: 100%;
-            padding: 10px;
+            flex: 1;
+            min-width: 140px;
+            padding: 10px 16px;
             background: #24292e;
             color: white;
             border: none;
@@ -267,6 +279,34 @@
         }
         .github-section .btn-github-full:hover { background: #1a1e22; }
         .github-section .btn-github-full:disabled { opacity: 0.5; cursor: not-allowed; }
+        .github-section .btn-upload-phone {
+            flex: 1;
+            min-width: 140px;
+            padding: 10px 16px;
+            background: #e65100;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .github-section .btn-upload-phone:hover { background: #bf360c; }
+        .github-section .btn-upload-phone:disabled { opacity: 0.5; cursor: not-allowed; }
+        .github-section .btn-edit-list {
+            flex: 1;
+            min-width: 140px;
+            padding: 10px 16px;
+            background: #6c63ff;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .github-section .btn-edit-list:hover { background: #5a52e0; }
+        .github-section input[type="file"] { display: none; }
         #gh-status {
             margin-top: 8px;
             font-size: 12px;
@@ -275,6 +315,44 @@
             color: #6b7280;
             line-height: 1.4;
         }
+
+        /* Список баз для редактирования */
+        .bases-list {
+            margin-top: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none;
+        }
+        .bases-list.active { display: block; }
+        .bases-list .base-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            background: white;
+        }
+        .bases-list .base-item:last-child { border-bottom: none; }
+        .bases-list .base-item .name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .bases-list .base-item .actions {
+            display: flex;
+            gap: 8px;
+        }
+        .bases-list .base-item .actions .btn-delete-small {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .bases-list .base-item .actions .btn-delete-small:hover { background: #b91c1c; }
+        .bases-list .base-item .actions .btn-delete-small:disabled { opacity: 0.5; cursor: not-allowed; }
         
         @media (max-width: 768px) {
             .upload-section { grid-template-columns: 1fr; }
@@ -284,7 +362,10 @@
             .search-box { width: 100%; }
             .btn { width: 100%; justify-content: center; }
             .github-section .row { flex-direction: column; }
-            .github-section input { width: 100%; }
+            .github-section .row-buttons { flex-direction: column; }
+            .github-section .btn-github-full,
+            .github-section .btn-upload-phone,
+            .github-section .btn-edit-list { width: 100%; }
         }
         
         .question-list::-webkit-scrollbar { width: 6px; }
@@ -295,7 +376,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🧯 Создание базы ответов + загрузка на GitHub</h1>
+        <h1>🧯 Управление базами на GitHub</h1>
         <p class="subtitle">Загрузите файл с вопросами и полную базу с ответами</p>
         
         <div class="upload-section">
@@ -370,10 +451,31 @@
                 <input type="password" id="gh-token" placeholder="🔑 Введите GitHub Token (ghp_...)" style="flex: 2;">
                 <input type="text" id="new-base-name" placeholder="✍️ Название базы (например: ППБ)" style="flex: 1;">
             </div>
-            <button class="btn-github-full" id="gh-upload-btn" disabled>
-                🚀 Загрузить готовую базу на GitHub
-            </button>
+            <div class="row-buttons">
+                <button class="btn-github-full" id="gh-upload-btn" disabled>
+                    🚀 Загрузить готовую базу
+                </button>
+                <button class="btn-upload-phone" id="gh-upload-phone-btn" disabled>
+                    📤 Загрузить с телефона
+                </button>
+                <button class="btn-edit-list" id="gh-edit-list-btn">
+                    ✏️ Редактировать список баз
+                </button>
+                <input type="file" id="phone-file-input" accept=".json">
+            </div>
             <div id="gh-status">Ожидание действий...</div>
+            
+            <!-- Список баз для редактирования -->
+            <div class="bases-list" id="basesList">
+                <div style="padding: 10px 16px; background: #f5f7fa; font-weight: 600; font-size: 13px; color: #1a237e; border-bottom: 1px solid #e0e0e0;">
+                    📋 Список баз на GitHub:
+                </div>
+                <div id="basesListItems">
+                    <div style="padding: 16px; text-align: center; color: #90a4ae; font-size: 13px;">
+                        Загрузка...
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -387,6 +489,7 @@
         let filteredResults = [];
         let filterFileName = '';
         let fullBaseFileName = '';
+        let currentBasesList = [];
         
         // Drag & Drop
         ['base1Upload', 'base2Upload'].forEach(id => {
@@ -446,10 +549,12 @@
             const compareBtn = document.getElementById('compareBtn');
             const searchBox = document.getElementById('searchBox');
             const ghBtn = document.getElementById('gh-upload-btn');
+            const phoneBtn = document.getElementById('gh-upload-phone-btn');
             const canCompare = filterIds.length > 0 && fullBase.length > 0;
             compareBtn.disabled = !canCompare;
             searchBox.disabled = !canCompare;
             ghBtn.disabled = true;
+            phoneBtn.disabled = true;
         }
         
         function getIdent(item) {
@@ -486,7 +591,6 @@
                 
                 if (match) {
                     found++;
-                    // СОХРАНЯЕМ ВЕСЬ ОБЪЕКТ целиком (со всеми полями)
                     filteredResults.push(match);
                 } else {
                     notFound++;
@@ -506,12 +610,15 @@
             document.getElementById('exportBtn').disabled = false;
             
             const ghBtn = document.getElementById('gh-upload-btn');
+            const phoneBtn = document.getElementById('gh-upload-phone-btn');
             if (filteredResults.length > 0) {
                 ghBtn.disabled = false;
+                phoneBtn.disabled = false;
                 document.getElementById('gh-status').textContent = '✅ База сформирована, можно загружать на GitHub!';
                 document.getElementById('gh-status').style.color = '#16a34a';
             } else {
                 ghBtn.disabled = true;
+                phoneBtn.disabled = true;
                 document.getElementById('gh-status').textContent = '❌ База пуста!';
                 document.getElementById('gh-status').style.color = '#dc2626';
             }
@@ -600,7 +707,6 @@
             let baseName = filterFileName.replace(/\.[^.]+$/, '');
             let fileName = baseName + '_с_ответами.json';
             
-            // Экспортируем ПОЛНЫЙ объект (со всеми полями)
             const blob = new Blob([JSON.stringify(filteredResults, null, 2)], {type: 'application/json;charset=utf-8'});
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -642,12 +748,13 @@
             document.getElementById('searchBox').value = '';
             document.getElementById('progressContainer').style.display = 'none';
             document.getElementById('gh-upload-btn').disabled = true;
+            document.getElementById('gh-upload-phone-btn').disabled = true;
             document.getElementById('gh-status').textContent = 'Ожидание действий...';
             document.getElementById('gh-status').style.color = '#6b7280';
         }
         
         // =============================================
-        // ЗАГРУЗКА НА GITHUB (СОХРАНЯЕТ ПОЛНУЮ СТРУКТУРУ)
+        // ЗАГРУЗКА НА GITHUB
         // =============================================
         
         document.addEventListener('DOMContentLoaded', () => {
@@ -657,7 +764,36 @@
             }
         });
 
+        // --- Загрузка готовой базы (из filteredResults) ---
         document.getElementById('gh-upload-btn').addEventListener('click', async () => {
+            await uploadToGitHub(filteredResults, 'готовую базу');
+        });
+
+        // --- Загрузка с телефона ---
+        document.getElementById('gh-upload-phone-btn').addEventListener('click', () => {
+            document.getElementById('phone-file-input').click();
+        });
+
+        document.getElementById('phone-file-input').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    await uploadToGitHub(data, `файл ${file.name}`);
+                } catch (error) {
+                    document.getElementById('gh-status').textContent = `❌ Ошибка чтения файла: ${error.message}`;
+                    document.getElementById('gh-status').style.color = '#dc2626';
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+        // --- Универсальная функция загрузки ---
+        async function uploadToGitHub(dataToUpload, sourceName) {
             const token = document.getElementById('gh-token').value.trim();
             let baseName = document.getElementById('new-base-name').value.trim().replace('.json', '');
             const status = document.getElementById('gh-status');
@@ -665,11 +801,8 @@
             const OWNER = 'fristoi';
             const REPO = 'exam-helper';
 
-            // Берем ПОЛНЫЕ данные из filteredResults (со всеми полями)
-            let dataToUpload = filteredResults;
-
             if (!dataToUpload || dataToUpload.length === 0) {
-                status.textContent = '❌ Сначала нажмите «Найти ответы», чтобы сформировать базу!';
+                status.textContent = `❌ Нет данных для загрузки (${sourceName})`;
                 status.style.color = '#dc2626';
                 return;
             }
@@ -682,11 +815,10 @@
 
             localStorage.setItem('admin_gh_token', token);
 
-            status.textContent = '⏳ Подготовка данных...';
+            status.textContent = `⏳ Загрузка ${sourceName}...`;
             status.style.color = '#1f2937';
 
             try {
-                // СОХРАНЯЕМ ПОЛНУЮ СТРУКТУРУ — ничего не обрезаем!
                 const fileContent = JSON.stringify(dataToUpload, null, 2);
                 const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
 
@@ -758,6 +890,8 @@
                     status.innerHTML = `🎉 <strong>База "${baseName}" успешно загружена на GitHub!</strong><br><span style="font-size:11px; color:#6b7280;">Через 1-2 минуты обновится на сайте exam-helper</span>`;
                     status.style.color = '#16a34a';
                     document.getElementById('new-base-name').value = '';
+                    // Обновляем список баз
+                    await loadBasesList();
                 } else {
                     const errData = await indexPut.json();
                     throw new Error(`Ошибка индекса: ${errData.message}`);
@@ -767,6 +901,190 @@
                 status.textContent = `❌ Ошибка: ${err.message}`;
                 status.style.color = '#dc2626';
             }
+        }
+
+        // =============================================
+        // РЕДАКТИРОВАНИЕ СПИСКА БАЗ
+        // =============================================
+        
+        async function loadBasesList() {
+            const listContainer = document.getElementById('basesListItems');
+            const status = document.getElementById('gh-status');
+            const token = document.getElementById('gh-token').value.trim();
+            const OWNER = 'fristoi';
+            const REPO = 'exam-helper';
+
+            if (!token) {
+                listContainer.innerHTML = `<div style="padding: 16px; text-align: center; color: #dc2626; font-size: 13px;">❌ Введите GitHub Token</div>`;
+                return;
+            }
+
+            listContainer.innerHTML = `<div style="padding: 16px; text-align: center; color: #90a4ae; font-size: 13px;">⏳ Загрузка...</div>`;
+
+            try {
+                // Получаем index.json
+                const indexPath = 'bases/index.json';
+                let basesList = [];
+
+                try {
+                    let indexGet = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+                    
+                    if (indexGet.status === 200) {
+                        let indexData = await indexGet.json();
+                        let parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
+                        if (parsedIndex.bases) basesList = parsedIndex.bases;
+                    } else {
+                        basesList = ["ПТБ", "ППБ", "ПТЭ"];
+                    }
+                } catch(e) {
+                    basesList = ["ПТБ", "ППБ", "ПТЭ"];
+                }
+
+                currentBasesList = basesList;
+
+                if (basesList.length === 0) {
+                    listContainer.innerHTML = `<div style="padding: 16px; text-align: center; color: #90a4ae; font-size: 13px;">📭 Нет загруженных баз</div>`;
+                    return;
+                }
+
+                let html = '';
+                for (let base of basesList) {
+                    html += `
+                        <div class="base-item" id="base-item-${base}">
+                            <span class="name">📄 ${base}</span>
+                            <div class="actions">
+                                <button class="btn-delete-small" onclick="deleteBase('${base}')">🗑️ Удалить</button>
+                            </div>
+                        </div>
+                    `;
+                }
+                listContainer.innerHTML = html;
+
+            } catch (err) {
+                listContainer.innerHTML = `<div style="padding: 16px; text-align: center; color: #dc2626; font-size: 13px;">❌ Ошибка: ${err.message}</div>`;
+            }
+        }
+
+        // Удаление базы
+        async function deleteBase(baseName) {
+            if (!confirm(`🗑️ Удалить базу "${baseName}" с GitHub?`)) return;
+
+            const token = document.getElementById('gh-token').value.trim();
+            const status = document.getElementById('gh-status');
+            const OWNER = 'fristoi';
+            const REPO = 'exam-helper';
+
+            if (!token) {
+                status.textContent = '❌ Введите GitHub Token';
+                status.style.color = '#dc2626';
+                return;
+            }
+
+            // Отключаем кнопку
+            const btn = document.querySelector(`#base-item-${baseName} .btn-delete-small`);
+            if (btn) btn.disabled = true;
+
+            status.textContent = `🗑️ Удаляем базу "${baseName}"...`;
+            status.style.color = '#1f2937';
+
+            try {
+                // 1. Получаем SHA файла
+                const basePath = `bases/${baseName}.json`;
+                let sha = '';
+                try {
+                    let res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${basePath}`, {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+                    if (res.status === 200) {
+                        let d = await res.json();
+                        sha = d.sha;
+                    } else {
+                        throw new Error('Файл не найден на GitHub');
+                    }
+                } catch(e) {
+                    throw new Error(`Файл ${baseName}.json не найден`);
+                }
+
+                // 2. Удаляем файл
+                let deleteRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${basePath}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `🗑️ Удаление базы: ${baseName}`,
+                        sha: sha
+                    })
+                });
+
+                if (!deleteRes.ok) {
+                    const errData = await deleteRes.json();
+                    throw new Error(`Ошибка удаления: ${errData.message}`);
+                }
+
+                // 3. Обновляем index.json
+                status.textContent = '🔄 Обновляем index.json...';
+                const indexPath = 'bases/index.json';
+                let indexSha = '';
+                let currentList = [...currentBasesList];
+
+                try {
+                    let indexGet = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+                    
+                    if (indexGet.status === 200) {
+                        let indexData = await indexGet.json();
+                        indexSha = indexData.sha;
+                        let parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
+                        if (parsedIndex.bases) currentList = parsedIndex.bases;
+                    }
+                } catch(e) {}
+
+                // Удаляем из списка
+                const newList = currentList.filter(name => name !== baseName);
+                const newIndexContent = JSON.stringify({ bases: newList }, null, 2);
+                const base64Index = btoa(unescape(encodeURIComponent(newIndexContent)));
+
+                let indexPut = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `🗑️ Удаление базы из списка: ${baseName}`,
+                        content: base64Index,
+                        sha: indexSha
+                    })
+                });
+
+                if (indexPut.ok) {
+                    status.innerHTML = `✅ <strong>База "${baseName}" удалена!</strong>`;
+                    status.style.color = '#16a34a';
+                    // Обновляем список
+                    await loadBasesList();
+                } else {
+                    const errData = await indexPut.json();
+                    throw new Error(`Ошибка обновления индекса: ${errData.message}`);
+                }
+
+            } catch (err) {
+                status.textContent = `❌ Ошибка: ${err.message}`;
+                status.style.color = '#dc2626';
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        // Кнопка редактирования списка
+        document.getElementById('gh-edit-list-btn').addEventListener('click', async () => {
+            const listEl = document.getElementById('basesList');
+            if (listEl.classList.contains('active')) {
+                listEl.classList.remove('active');
+                document.getElementById('gh-edit-list-btn').textContent = '✏️ Редактировать список баз';
+                return;
+            }
+            
+            listEl.classList.add('active');
+            document.getElementById('gh-edit-list-btn').textContent = '❌ Закрыть список';
+            await loadBasesList();
         });
 
         // =============================================
@@ -781,7 +1099,9 @@
         });
         
         updateButtons();
-        console.log('🚀 Инструмент готов! Сохраняет ПОЛНУЮ структуру базы.');
+        console.log('🚀 Инструмент готов!');
+        console.log('📖 Загрузите файл с вопросами и базу с ответами.');
+        console.log('💡 Кнопка "Редактировать список баз" позволяет удалять базы.');
     </script>
 </body>
 </html>
