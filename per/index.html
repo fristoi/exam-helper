@@ -24,7 +24,6 @@
             box-shadow: none;
         }
 
-        /* ===== ШАПКА ===== */
         .header {
             display: flex;
             align-items: center;
@@ -90,9 +89,6 @@
             cursor: pointer;
             width: 100%;
             max-width: 400px;
-        }
-        .section-dropdown select option[value=""] {
-            color: #6b7280;
         }
 
         .filter-bar {
@@ -263,7 +259,6 @@
 <body>
     <div class="container">
 
-        <!-- ===== ШАПКА ===== -->
         <div class="header">
             <div class="header-left">
                 <button class="top-btn active" data-base="ПТБ">ПТБ</button>
@@ -273,24 +268,20 @@
             <div class="count-badge" id="countBadge">0 вопросов</div>
         </div>
 
-        <!-- ===== ВЫПАДАЮЩИЙ СПИСОК ===== -->
         <div class="section-dropdown" id="extraBasesContainer">
             <select id="baseSelect">
                 <option value="">📁 Дополнительные базы</option>
             </select>
         </div>
 
-        <!-- ===== ФИЛЬТР ===== -->
         <div class="filter-bar" id="filterBar">
             <button class="filter-btn active" data-source="all">📋 Все</button>
         </div>
 
-        <!-- ===== ПОИСК ===== -->
         <div class="search-box">
             <input type="search" id="searchInput" placeholder="🔍 Найти вопрос...">
         </div>
 
-        <!-- ===== ОБЛАСТЬ С ВОПРОСАМИ ===== -->
         <div class="questions-wrapper">
             <div class="questions-list">
                 <div id="questionsContainer"></div>
@@ -300,7 +291,8 @@
 
     <script>
         // ============================================================
-        // ЛОГИКА (ПЕРСОНАЛЬНАЯ СТРАНИЦА — per/bases/)
+        // ПЕРСОНАЛЬНАЯ СТРАНИЦА — /per/index.html
+        // Базы лежат в /per/bases/
         // ============================================================
 
         let currentBase = 'ПТБ';
@@ -348,15 +340,15 @@
         }
 
         function loadBaseList() {
-            fetch('per/bases/index.json')
+            // Загружаем список баз из папки per/bases/
+            fetch('bases/index.json')
                 .then(r => r.json())
                 .then(data => {
-                    // Сохраняем ВСЕ базы, но для выпадающего списка фильтруем
                     const allBases = data.bases || [];
+                    // Исключаем основные базы из выпадающего списка
                     extraBases = allBases.filter(b => !MAIN_BASES.includes(b));
                     renderExtraBases();
-                    
-                    // Загружаем текущую базу (ПТБ по умолчанию)
+                    // Загружаем текущую базу
                     loadQuestionsForBase(currentBase);
                 })
                 .catch(() => {
@@ -385,7 +377,8 @@
         }
 
         function loadQuestionsForBase(baseName) {
-            fetch(`per/bases/${baseName}.json`)
+            // Загружаем конкретную базу из папки per/bases/
+            fetch(`bases/${baseName}.json`)
                 .then(r => r.json())
                 .then(data => {
                     allQuestions = data.map(q => ({
