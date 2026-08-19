@@ -61,7 +61,6 @@
             border-color: #0b3b5c;
         }
 
-        /* СЧЁТЧИК */
         .count-badge {
             background: #d1d5db;
             color: #1f2937;
@@ -145,7 +144,6 @@
             cursor: pointer;
         }
 
-        /* ===== ОБЛАСТЬ С ВОПРОСАМИ ===== */
         .questions-wrapper {
             background: #e5e7eb;
             padding: 16px 12px;
@@ -157,7 +155,6 @@
             padding: 0;
         }
 
-        /* ===== КАРТОЧКИ ВОПРОСОВ ===== */
         .question-item {
             background: white;
             border-radius: 14px;
@@ -204,7 +201,6 @@
             display: none !important;
         }
 
-        /* ===== ПОДСВЕТКА ===== */
         .highlight {
             background: #fbbf24;
             padding: 0 2px;
@@ -213,7 +209,6 @@
             color: #1f2937;
         }
 
-        /* ===== АДАПТИВ ===== */
         @media (max-width: 600px) {
             .header {
                 flex-direction: row;
@@ -356,8 +351,12 @@
             fetch('per/bases/index.json')
                 .then(r => r.json())
                 .then(data => {
-                    extraBases = (data.bases || []).filter(b => !MAIN_BASES.includes(b));
+                    // Сохраняем ВСЕ базы, но для выпадающего списка фильтруем
+                    const allBases = data.bases || [];
+                    extraBases = allBases.filter(b => !MAIN_BASES.includes(b));
                     renderExtraBases();
+                    
+                    // Загружаем текущую базу (ПТБ по умолчанию)
                     loadQuestionsForBase(currentBase);
                 })
                 .catch(() => {
@@ -367,20 +366,17 @@
                 });
         }
 
-        // ===== ИЗМЕНЕНО: основные базы НЕ показываются в выпадающем списке =====
         function renderExtraBases() {
             let select = document.getElementById('baseSelect');
-            // Исключаем основные базы из выпадающего списка
-            const filteredBases = extraBases.filter(b => !MAIN_BASES.includes(b));
             
-            if (filteredBases.length === 0) {
+            if (extraBases.length === 0) {
                 select.style.display = 'none';
                 return;
             }
             
             select.style.display = 'block';
             select.innerHTML = '<option value="">📁 Дополнительные базы</option>';
-            filteredBases.forEach(b => {
+            extraBases.forEach(b => {
                 let opt = document.createElement('option');
                 opt.value = b;
                 opt.textContent = b;
@@ -431,7 +427,6 @@
             filterBar.innerHTML = html;
         }
 
-        // ===== ФОРМАТИРОВАНИЕ ОТВЕТОВ =====
         function formatAnswer(question, highlightWords) {
             if (!question) return '';
             let html = '';
@@ -466,7 +461,6 @@
             return html;
         }
 
-        // ===== ПОДСВЕТКА ТЕКСТА =====
         function highlightText(text, words) {
             if (!text || !words || words.length === 0) return text;
 
@@ -488,7 +482,6 @@
             return 'вопросов';
         }
 
-        // ===== ОСНОВНАЯ ФУНКЦИЯ ЗАГРУЗКИ ВОПРОСОВ =====
         function loadQuestions() {
             let search = document.getElementById('searchInput').value.toLowerCase().trim();
             let searchWords = search ? search.split(/\s+/).filter(word => word.length > 0) : [];
