@@ -312,7 +312,7 @@
             <div class="upload-box" id="base2Upload">
                 <label for="base2File">
                     <span class="icon">📚</span>
-                    <div class="title">База с ответами</div>
+                    <div class="title">База с ответами (полная)</div>
                     <div class="hint">Нажмите или перетащите JSON файл</div>
                     <div class="file-info" id="base2Info"></div>
                 </label>
@@ -449,7 +449,7 @@
             const canCompare = filterIds.length > 0 && fullBase.length > 0;
             compareBtn.disabled = !canCompare;
             searchBox.disabled = !canCompare;
-            ghBtn.disabled = true; // включается только после нажатия "Найти ответы"
+            ghBtn.disabled = true;
         }
         
         function getIdent(item) {
@@ -486,6 +486,7 @@
                 
                 if (match) {
                     found++;
+                    // СОХРАНЯЕМ ВЕСЬ ОБЪЕКТ целиком (со всеми полями)
                     filteredResults.push(match);
                 } else {
                     notFound++;
@@ -504,7 +505,6 @@
             renderResults(filteredResults);
             document.getElementById('exportBtn').disabled = false;
             
-            // Включаем кнопку загрузки на GitHub
             const ghBtn = document.getElementById('gh-upload-btn');
             if (filteredResults.length > 0) {
                 ghBtn.disabled = false;
@@ -544,7 +544,7 @@
                 <div class="results-header">
                     <span class="count">📋 Найдено: ${filtered.length} (порядок как в файле с вопросами)</span>
                     <span>
-                        <span class="badge badge-info">Формат: полная база</span>
+                        <span class="badge badge-info">Полная структура</span>
                     </span>
                 </div>
                 <div class="question-list">
@@ -556,6 +556,8 @@
                 const question = item.question || 'Вопрос не указан';
                 const answer = item.answer || 'Нет ответа';
                 const source = item.source || '';
+                const correct = item.correct || [];
+                const wrong = item.wrong || [];
                 
                 html += `
                     <div class="question-item">
@@ -568,6 +570,8 @@
                         <div class="q-answer">
                             <span class="label">📖 Ответ:</span>
                             ${escapeHtml(answer)}
+                            ${correct.length > 0 ? `<div style="margin-top:4px;font-size:12px;color:#2e7d32;">✅ Правильные: ${correct.join('; ')}</div>` : ''}
+                            ${wrong.length > 0 ? `<div style="margin-top:2px;font-size:12px;color:#c62828;">❌ Неправильные: ${wrong.join('; ')}</div>` : ''}
                         </div>
                         ${source ? `<div class="q-source">📌 Источник: ${escapeHtml(source)}</div>` : ''}
                     </div>
@@ -580,7 +584,7 @@
                 html += `
                     <div style="margin-top:12px;">
                         <details>
-                            <summary style="cursor:pointer;font-weight:600;color:#1a237e;font-size:13px;">📄 Показать JSON (${filtered.length} записей)</summary>
+                            <summary style="cursor:pointer;font-weight:600;color:#1a237e;font-size:13px;">📄 Показать JSON (${filtered.length} записей, полная структура)</summary>
                             <div class="json-preview">${escapeHtml(JSON.stringify(filtered, null, 2))}</div>
                         </details>
                     </div>
@@ -596,6 +600,7 @@
             let baseName = filterFileName.replace(/\.[^.]+$/, '');
             let fileName = baseName + '_с_ответами.json';
             
+            // Экспортируем ПОЛНЫЙ объект (со всеми полями)
             const blob = new Blob([JSON.stringify(filteredResults, null, 2)], {type: 'application/json;charset=utf-8'});
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -642,10 +647,9 @@
         }
         
         // =============================================
-        // ЗАГРУЗКА НА GITHUB (ИСПРАВЛЕННАЯ)
+        // ЗАГРУЗКА НА GITHUB (СОХРАНЯЕТ ПОЛНУЮ СТРУКТУРУ)
         // =============================================
         
-        // Автоматическая подгрузка сохраненного токена
         document.addEventListener('DOMContentLoaded', () => {
             const savedToken = localStorage.getItem('admin_gh_token');
             if (savedToken) {
@@ -661,7 +665,7 @@
             const OWNER = 'fristoi';
             const REPO = 'exam-helper';
 
-            // Берем данные из filteredResults (глобальная переменная)
+            // Берем ПОЛНЫЕ данные из filteredResults (со всеми полями)
             let dataToUpload = filteredResults;
 
             if (!dataToUpload || dataToUpload.length === 0) {
@@ -676,25 +680,16 @@
                 return;
             }
 
-            // Сохраняем токен
             localStorage.setItem('admin_gh_token', token);
 
             status.textContent = '⏳ Подготовка данных...';
             status.style.color = '#1f2937';
 
             try {
-                // Формируем данные для сайта
-                let finalQuestions = dataToUpload.map(q => ({
-                    punkt: q.punkt || "📌",
-                    question: q.question || "",
-                    answer: q.answer || q.all_answers || "",
-                    source: baseName
-                }));
-
-                const fileContent = JSON.stringify(finalQuestions, null, 2);
+                // СОХРАНЯЕМ ПОЛНУЮ СТРУКТУРУ — ничего не обрезаем!
+                const fileContent = JSON.stringify(dataToUpload, null, 2);
                 const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
 
-                // Шаг 1: Загружаем файл базы
                 status.textContent = `📡 Отправка базы bases/${baseName}.json на GitHub...`;
                 const basePath = `bases/${baseName}.json`;
                 
@@ -724,7 +719,6 @@
                     throw new Error(`Ошибка GitHub: ${errData.message}`);
                 }
 
-                // Шаг 2: Обновляем index.json
                 status.textContent = '🔄 Обновляем список баз в index.json...';
                 const indexPath = 'bases/index.json';
                 let indexSha = '';
@@ -786,11 +780,8 @@
             if (filteredResults.length > 0) renderResults(filteredResults);
         });
         
-        // Инициализация
         updateButtons();
-        console.log('🚀 Инструмент готов!');
-        console.log('📖 Загрузите файл с вопросами и базу с ответами.');
-        console.log('💡 После нажатия "Найти ответы" появится кнопка загрузки на GitHub.');
+        console.log('🚀 Инструмент готов! Сохраняет ПОЛНУЮ структуру базы.');
     </script>
 </body>
 </html>
