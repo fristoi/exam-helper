@@ -92,6 +92,9 @@
             width: 100%;
             max-width: 400px;
         }
+        .section-dropdown select option[value=""] {
+            color: #6b7280;
+        }
 
         .filter-bar {
             display: flex;
@@ -137,7 +140,6 @@
         .search-box input:focus {
             border-color: #0b3b5c;
         }
-        /* Крестик всегда виден */
         .search-box input::-webkit-search-cancel-button {
             display: block;
             cursor: pointer;
@@ -303,7 +305,7 @@
 
     <script>
         // ============================================================
-        // ЛОГИКА
+        // ЛОГИКА (ПЕРСОНАЛЬНАЯ СТРАНИЦА — per/bases/)
         // ============================================================
 
         let currentBase = 'ПТБ';
@@ -351,7 +353,7 @@
         }
 
         function loadBaseList() {
-            fetch('bases/index.json')
+            fetch('per/bases/index.json')
                 .then(r => r.json())
                 .then(data => {
                     extraBases = (data.bases || []).filter(b => !MAIN_BASES.includes(b));
@@ -365,10 +367,20 @@
                 });
         }
 
+        // ===== ИЗМЕНЕНО: основные базы НЕ показываются в выпадающем списке =====
         function renderExtraBases() {
             let select = document.getElementById('baseSelect');
+            // Исключаем основные базы из выпадающего списка
+            const filteredBases = extraBases.filter(b => !MAIN_BASES.includes(b));
+            
+            if (filteredBases.length === 0) {
+                select.style.display = 'none';
+                return;
+            }
+            
+            select.style.display = 'block';
             select.innerHTML = '<option value="">📁 Дополнительные базы</option>';
-            extraBases.forEach(b => {
+            filteredBases.forEach(b => {
                 let opt = document.createElement('option');
                 opt.value = b;
                 opt.textContent = b;
@@ -377,7 +389,7 @@
         }
 
         function loadQuestionsForBase(baseName) {
-            fetch(`bases/${baseName}.json`)
+            fetch(`per/bases/${baseName}.json`)
                 .then(r => r.json())
                 .then(data => {
                     allQuestions = data.map(q => ({
@@ -485,7 +497,6 @@
                 ? allQuestions
                 : allQuestions.filter(q => q.source === currentFilter);
 
-            // ФИЛЬТРАЦИЯ (source НЕ участвует)
             if (searchWords.length > 0) {
                 filtered = filtered.filter(q => {
                     let answersText = '';
@@ -505,7 +516,6 @@
                 });
             }
 
-            // СЧЁТЧИК
             const count = filtered.length;
             document.getElementById('countBadge').textContent = `${count} ${getDeclension(count)}`;
 
@@ -516,7 +526,6 @@
                 return;
             }
 
-            // ОТОБРАЖЕНИЕ
             let html = '';
             filtered.forEach(q => {
                 let punktText = q.punkt || '';
@@ -530,7 +539,6 @@
                 html += `<div class="question-item">`;
                 html += `<div class="punkt">📌 ${punktText}`;
                 if (q.source) {
-                    // source выводится, но НЕ подсвечивается
                     html += `<span style="color:#b0b8c4;font-size:9px;margin-left:8px;">[${q.source}]</span>`;
                 }
                 html += `</div>`;
