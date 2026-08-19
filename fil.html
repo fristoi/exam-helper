@@ -33,7 +33,6 @@
             font-size: 12px;
         }
 
-        /* ===== ЗАГРУЗКА ФАЙЛОВ — В ОДНУ СТРОКУ ===== */
         .upload-section {
             display: flex;
             gap: 10px;
@@ -60,7 +59,6 @@
         .upload-box .hint { font-size: 10px; color: #90a4ae; }
         .upload-box .file-info { font-size: 11px; color: #2e7d32; font-weight: 500; margin-top: 2px; }
 
-        /* ===== СТАТИСТИКА — УМЕНЬШЕНА ===== */
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -81,7 +79,6 @@
         .stat-card.danger { border-left-color: #ef5350; }
         .stat-card.danger .number { color: #c62828; }
 
-        /* ===== КНОПКИ ===== */
         .controls {
             display: flex;
             gap: 8px;
@@ -143,7 +140,6 @@
             width: 0%;
         }
 
-        /* ===== РЕЗУЛЬТАТЫ ===== */
         .results { margin-top: 10px; }
         .results-header {
             display: flex;
@@ -269,7 +265,6 @@
             margin-top: 6px;
         }
 
-        /* ===== GITHUB БЛОК ===== */
         .github-section {
             margin-top: 14px;
             padding: 12px;
@@ -348,7 +343,6 @@
             line-height: 1.4;
         }
 
-        /* ===== СПИСОК БАЗ ===== */
         .bases-list {
             margin-top: 10px;
             border: 1px solid #e2e8f0;
@@ -421,7 +415,6 @@
         <h1>🧯 Создание базы → per/bases/</h1>
         <p class="subtitle">Загрузите файл с вопросами и полную базу с ответами</p>
 
-        <!-- ===== ЗАГРУЗКА ФАЙЛОВ - В ОДНУ СТРОКУ ===== -->
         <div class="upload-section">
             <div class="upload-box" id="base1Upload">
                 <label for="base1File">
@@ -444,7 +437,6 @@
             </div>
         </div>
 
-        <!-- ===== СТАТИСТИКА - УМЕНЬШЕНА ===== -->
         <div class="stats">
             <div class="stat-card">
                 <div class="number" id="base1Count">0</div>
@@ -464,7 +456,6 @@
             </div>
         </div>
 
-        <!-- ===== КНОПКИ ===== -->
         <div class="controls">
             <button class="btn btn-primary" id="compareBtn" disabled>🔍 Найти ответы</button>
             <button class="btn btn-success" id="exportBtn" disabled>📥 Скачать</button>
@@ -476,7 +467,6 @@
             <div class="fill" id="progressFill"></div>
         </div>
 
-        <!-- ===== РЕЗУЛЬТАТЫ ===== -->
         <div class="results" id="resultsContainer">
             <div class="empty-state">
                 <span class="icon">📂</span>
@@ -485,11 +475,10 @@
             </div>
         </div>
 
-        <!-- ===== БЛОК ЗАГРУЗКИ НА GITHUB + РЕДАКТИРОВАНИЕ ===== -->
         <div class="github-section" id="github-upload-section">
             <div class="row">
                 <input type="password" id="gh-token" placeholder="🔑 GitHub Token (ghp_...)" style="flex: 2;">
-                <input type="text" id="new-base-name" placeholder="✍️ Название базы" style="flex: 1;">
+                <input type="text" id="new-base-name" placeholder="✍️ Название базы (для ручной загрузки)" style="flex: 1;">
             </div>
             <div class="row-buttons">
                 <button class="btn-github-full" id="gh-upload-btn" disabled>🚀 Загрузить в per/bases/</button>
@@ -499,7 +488,6 @@
             </div>
             <div id="gh-status">Ожидание действий...</div>
 
-            <!-- ===== СПИСОК БАЗ ДЛЯ РЕДАКТИРОВАНИЯ ===== -->
             <div class="bases-list" id="basesList">
                 <div class="list-header">📋 Список баз в per/bases/:</div>
                 <div id="basesListItems">
@@ -521,7 +509,6 @@
         let fullBaseFileName = '';
         let currentBasesList = [];
 
-        // Drag & Drop для загрузки файлов
         ['base1Upload', 'base2Upload'].forEach(id => {
             const box = document.getElementById(id);
             const input = box.querySelector('input[type="file"]');
@@ -793,7 +780,7 @@
             document.getElementById('phone-file-input').click();
         });
 
-        // --- Обработка выбранного файла ---
+        // --- Обработка выбранного файла (название ИЗ ИМЕНИ ФАЙЛА) ---
         document.getElementById('phone-file-input').addEventListener('change', async function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -809,7 +796,17 @@
                     if (!Array.isArray(data) || data.length === 0) {
                         throw new Error('Файл должен содержать массив вопросов (не пустой)');
                     }
-                    await uploadToPerBases(data, file.name);
+
+                    // ✅ Берём название базы ИЗ ИМЕНИ ФАЙЛА
+                    let baseName = file.name.replace('.json', '').trim();
+                    if (!baseName) {
+                        throw new Error('Не удалось определить название базы из имени файла');
+                    }
+
+                    // Автоматически подставляем в поле для наглядности
+                    document.getElementById('new-base-name').value = baseName;
+
+                    await uploadToPerBases(data, file.name, baseName);
                 } catch (error) {
                     document.getElementById('gh-status').textContent = `❌ Ошибка: ${error.message}`;
                     document.getElementById('gh-status').style.color = '#dc2626';
@@ -824,10 +821,12 @@
             await uploadToPerBases(filteredResults, 'готовую базу');
         });
 
-        // --- Универсальная функция загрузки в per/bases/ ---
-        async function uploadToPerBases(dataToUpload, sourceName) {
+        // --- Универсальная функция загрузки ---
+        async function uploadToPerBases(dataToUpload, sourceName, customBaseName) {
             const token = document.getElementById('gh-token').value.trim();
-            let baseName = document.getElementById('new-base-name').value.trim().replace('.json', '');
+            // Если передан customBaseName - используем его (для загрузки с телефона)
+            // Иначе берём из поля ввода (для ручной загрузки)
+            let baseName = customBaseName || document.getElementById('new-base-name').value.trim().replace('.json', '');
             const status = document.getElementById('gh-status');
 
             const OWNER = 'fristoi';
@@ -848,7 +847,7 @@
 
             localStorage.setItem('admin_gh_token', token);
 
-            status.textContent = `⏳ Загрузка ${sourceName} в per/bases/...`;
+            status.textContent = `⏳ Загрузка "${baseName}" в per/bases/...`;
             status.style.color = '#1f2937';
 
             try {
@@ -884,7 +883,6 @@
                     throw new Error(`Ошибка GitHub: ${errData.message}`);
                 }
 
-                // Обновляем index.json в папке per/bases/
                 status.textContent = '🔄 Обновляем per/bases/index.json...';
                 const indexPath = `${BASE_PATH}/index.json`;
                 let indexSha = '';
@@ -923,7 +921,10 @@
                 if (indexPut.ok) {
                     status.innerHTML = `🎉 <strong>База "${baseName}" загружена в per/bases/!</strong><br><span style="font-size:10px; color:#6b7280;">Обновите per.html чтобы увидеть базу</span>`;
                     status.style.color = '#16a34a';
-                    document.getElementById('new-base-name').value = '';
+                    // Если название было взято из файла — очищаем поле
+                    if (customBaseName) {
+                        document.getElementById('new-base-name').value = '';
+                    }
                 } else {
                     const errData = await indexPut.json();
                     throw new Error(`Ошибка индекса: ${errData.message}`);
@@ -936,7 +937,7 @@
         }
 
         // =============================================
-        // РЕДАКТИРОВАНИЕ СПИСКА БАЗ (УДАЛЕНИЕ)
+        // РЕДАКТИРОВАНИЕ СПИСКА БАЗ
         // =============================================
 
         async function loadBasesList() {
@@ -997,7 +998,6 @@
             }
         }
 
-        // Удаление базы
         async function deleteBase(baseName) {
             if (!confirm(`🗑️ Удалить базу "${baseName}" из per/bases/ ?`)) return;
 
@@ -1020,7 +1020,6 @@
             status.style.color = '#1f2937';
 
             try {
-                // 1. Получаем SHA файла
                 const filePath = `${BASE_PATH}/${baseName}.json`;
                 let sha = '';
                 try {
@@ -1037,7 +1036,6 @@
                     throw new Error(`Файл ${baseName}.json не найден`);
                 }
 
-                // 2. Удаляем файл
                 let deleteRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
@@ -1052,7 +1050,6 @@
                     throw new Error(`Ошибка удаления: ${errData.message}`);
                 }
 
-                // 3. Обновляем per/bases/index.json
                 status.textContent = '🔄 Обновляем per/bases/index.json...';
                 const indexPath = `${BASE_PATH}/index.json`;
                 let indexSha = '';
@@ -1071,7 +1068,6 @@
                     }
                 } catch(e) {}
 
-                // Удаляем из списка
                 const newList = currentList.filter(name => name !== baseName);
                 const newIndexContent = JSON.stringify({ bases: newList }, null, 2);
                 const base64Index = btoa(unescape(encodeURIComponent(newIndexContent)));
@@ -1102,7 +1098,6 @@
             }
         }
 
-        // Кнопка редактирования списка
         document.getElementById('gh-edit-list-btn').addEventListener('click', async () => {
             const listEl = document.getElementById('basesList');
             if (listEl.classList.contains('active')) {
@@ -1130,7 +1125,7 @@
         updateButtons();
         console.log('🚀 Инструмент готов!');
         console.log('📖 Загрузите файлы и нажмите «Найти ответы»');
-        console.log('📤 Или нажмите «Загрузить с телефона» чтобы выбрать готовый JSON-файл');
+        console.log('📤 Кнопка «Загрузить с телефона» берёт название базы ИЗ ИМЕНИ ФАЙЛА');
         console.log('💡 Базы загружаются в папку per/bases/');
         console.log('✏️ Кнопка «Редактировать список» показывает все базы и позволяет удалять их');
     </script>
