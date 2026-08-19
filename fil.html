@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Фильтрация базы по ID</title>
+    <title>Создание базы ответов + загрузка на GitHub</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -12,40 +12,14 @@
             padding: 20px;
             color: #333;
         }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
-            padding: 24px;
-        }
-        h1 {
-            color: #1a237e;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .subtitle {
-            color: #78909c;
-            margin-bottom: 20px;
-            font-size: 13px;
-        }
-        .upload-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); padding: 24px; }
+        h1 { color: #1a237e; font-size: 24px; display: flex; align-items: center; gap: 10px; }
+        .subtitle { color: #78909c; margin-bottom: 20px; font-size: 13px; }
+        
+        .upload-section { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
         .upload-box {
-            border: 2px dashed #b0bec5;
-            border-radius: 10px;
-            padding: 14px;
-            text-align: center;
-            transition: all 0.3s;
-            background: #fafafa;
-            cursor: pointer;
+            border: 2px dashed #b0bec5; border-radius: 10px; padding: 14px; text-align: center;
+            transition: all 0.3s; background: #fafafa; cursor: pointer;
         }
         .upload-box:hover { border-color: #42a5f5; background: #f5faff; }
         .upload-box.dragover { border-color: #66bb6a; background: #f1f8e9; }
@@ -102,6 +76,8 @@
         .btn-success:hover:not(:disabled) { background: #1b5e20; transform: translateY(-1px); }
         .btn-danger { background: #c62828; color: white; }
         .btn-danger:hover:not(:disabled) { background: #b71c1c; transform: translateY(-1px); }
+        .btn-github { background: #24292e; color: white; }
+        .btn-github:hover:not(:disabled) { background: #1a1e22; transform: translateY(-1px); }
         
         .search-box {
             padding: 6px 12px;
@@ -254,6 +230,51 @@
             word-break: break-all;
             margin-top: 8px;
         }
+
+        .github-section {
+            margin-top: 20px;
+            padding: 16px;
+            border: 1px dashed #e2e8f0;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+        .github-section .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .github-section input {
+            flex: 1;
+            min-width: 150px;
+            padding: 8px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 13px;
+            outline: none;
+        }
+        .github-section input:focus { border-color: #1a237e; }
+        .github-section .btn-github-full {
+            width: 100%;
+            padding: 10px;
+            background: #24292e;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .github-section .btn-github-full:hover { background: #1a1e22; }
+        .github-section .btn-github-full:disabled { opacity: 0.5; cursor: not-allowed; }
+        #gh-status {
+            margin-top: 8px;
+            font-size: 12px;
+            text-align: center;
+            font-weight: 500;
+            color: #6b7280;
+            line-height: 1.4;
+        }
         
         @media (max-width: 768px) {
             .upload-section { grid-template-columns: 1fr; }
@@ -262,6 +283,8 @@
             .controls { flex-direction: column; }
             .search-box { width: 100%; }
             .btn { width: 100%; justify-content: center; }
+            .github-section .row { flex-direction: column; }
+            .github-section input { width: 100%; }
         }
         
         .question-list::-webkit-scrollbar { width: 6px; }
@@ -272,7 +295,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🧯 Фильтрация базы по ID</h1>
+        <h1>🧯 Создание базы ответов + загрузка на GitHub</h1>
         <p class="subtitle">Загрузите файл с вопросами и полную базу с ответами</p>
         
         <div class="upload-section">
@@ -340,9 +363,25 @@
                 <p>Загрузите файл с вопросами и базу с ответами</p>
             </div>
         </div>
+
+        <!-- БЛОК ЗАГРУЗКИ НА GITHUB -->
+        <div class="github-section" id="github-upload-section">
+            <div class="row">
+                <input type="password" id="gh-token" placeholder="🔑 Введите GitHub Token (ghp_...)" style="flex: 2;">
+                <input type="text" id="new-base-name" placeholder="✍️ Название базы (например: ППБ)" style="flex: 1;">
+            </div>
+            <button class="btn-github-full" id="gh-upload-btn" disabled>
+                🚀 Загрузить готовую базу на GitHub
+            </button>
+            <div id="gh-status">Ожидание действий...</div>
+        </div>
     </div>
     
     <script>
+        // =============================================
+        // ОСНОВНАЯ ЛОГИКА ФИЛЬТРАЦИИ
+        // =============================================
+        
         let filterIds = [];
         let fullBase = [];
         let filteredResults = [];
@@ -406,9 +445,11 @@
         function updateButtons() {
             const compareBtn = document.getElementById('compareBtn');
             const searchBox = document.getElementById('searchBox');
+            const ghBtn = document.getElementById('gh-upload-btn');
             const canCompare = filterIds.length > 0 && fullBase.length > 0;
             compareBtn.disabled = !canCompare;
             searchBox.disabled = !canCompare;
+            ghBtn.disabled = true; // включается только после нажатия "Найти ответы"
         }
         
         function getIdent(item) {
@@ -462,6 +503,18 @@
             
             renderResults(filteredResults);
             document.getElementById('exportBtn').disabled = false;
+            
+            // Включаем кнопку загрузки на GitHub
+            const ghBtn = document.getElementById('gh-upload-btn');
+            if (filteredResults.length > 0) {
+                ghBtn.disabled = false;
+                document.getElementById('gh-status').textContent = '✅ База сформирована, можно загружать на GitHub!';
+                document.getElementById('gh-status').style.color = '#16a34a';
+            } else {
+                ghBtn.disabled = true;
+                document.getElementById('gh-status').textContent = '❌ База пуста!';
+                document.getElementById('gh-status').style.color = '#dc2626';
+            }
         }
         
         function renderResults(data) {
@@ -583,9 +636,149 @@
             document.getElementById('searchBox').disabled = true;
             document.getElementById('searchBox').value = '';
             document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('gh-upload-btn').disabled = true;
+            document.getElementById('gh-status').textContent = 'Ожидание действий...';
+            document.getElementById('gh-status').style.color = '#6b7280';
         }
         
-        // Event listeners
+        // =============================================
+        // ЗАГРУЗКА НА GITHUB (ИСПРАВЛЕННАЯ)
+        // =============================================
+        
+        // Автоматическая подгрузка сохраненного токена
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedToken = localStorage.getItem('admin_gh_token');
+            if (savedToken) {
+                document.getElementById('gh-token').value = savedToken;
+            }
+        });
+
+        document.getElementById('gh-upload-btn').addEventListener('click', async () => {
+            const token = document.getElementById('gh-token').value.trim();
+            let baseName = document.getElementById('new-base-name').value.trim().replace('.json', '');
+            const status = document.getElementById('gh-status');
+
+            const OWNER = 'fristoi';
+            const REPO = 'exam-helper';
+
+            // Берем данные из filteredResults (глобальная переменная)
+            let dataToUpload = filteredResults;
+
+            if (!dataToUpload || dataToUpload.length === 0) {
+                status.textContent = '❌ Сначала нажмите «Найти ответы», чтобы сформировать базу!';
+                status.style.color = '#dc2626';
+                return;
+            }
+
+            if (!token || !baseName) {
+                status.textContent = '❌ Введите токен GitHub и укажите имя базы!';
+                status.style.color = '#dc2626';
+                return;
+            }
+
+            // Сохраняем токен
+            localStorage.setItem('admin_gh_token', token);
+
+            status.textContent = '⏳ Подготовка данных...';
+            status.style.color = '#1f2937';
+
+            try {
+                // Формируем данные для сайта
+                let finalQuestions = dataToUpload.map(q => ({
+                    punkt: q.punkt || "📌",
+                    question: q.question || "",
+                    answer: q.answer || q.all_answers || "",
+                    source: baseName
+                }));
+
+                const fileContent = JSON.stringify(finalQuestions, null, 2);
+                const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
+
+                // Шаг 1: Загружаем файл базы
+                status.textContent = `📡 Отправка базы bases/${baseName}.json на GitHub...`;
+                const basePath = `bases/${baseName}.json`;
+                
+                let baseSha = '';
+                try {
+                    let res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${basePath}`, {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+                    if (res.status === 200) {
+                        let d = await res.json();
+                        baseSha = d.sha;
+                    }
+                } catch(e) {}
+
+                let uploadRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${basePath}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `📱 Авто-загрузка базы: ${baseName}`,
+                        content: base64Content,
+                        sha: baseSha
+                    })
+                });
+
+                if (!uploadRes.ok) {
+                    const errData = await uploadRes.json();
+                    throw new Error(`Ошибка GitHub: ${errData.message}`);
+                }
+
+                // Шаг 2: Обновляем index.json
+                status.textContent = '🔄 Обновляем список баз в index.json...';
+                const indexPath = 'bases/index.json';
+                let indexSha = '';
+                let currentBasesList = ["ПТБ", "ППБ", "ПТЭ"];
+
+                try {
+                    let indexGet = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+                    
+                    if (indexGet.status === 200) {
+                        let indexData = await indexGet.json();
+                        indexSha = indexData.sha;
+                        let parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
+                        if (parsedIndex.bases) currentBasesList = parsedIndex.bases;
+                    }
+                } catch(e) {}
+
+                if (!currentBasesList.includes(baseName)) {
+                    currentBasesList.push(baseName);
+                }
+
+                const newIndexContent = JSON.stringify({ bases: currentBasesList }, null, 2);
+                const base64Index = btoa(unescape(encodeURIComponent(newIndexContent)));
+
+                let indexPut = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `📱 Авто-регистрация базы: ${baseName}`,
+                        content: base64Index,
+                        sha: indexSha
+                    })
+                });
+
+                if (indexPut.ok) {
+                    status.innerHTML = `🎉 <strong>База "${baseName}" успешно загружена на GitHub!</strong><br><span style="font-size:11px; color:#6b7280;">Через 1-2 минуты обновится на сайте exam-helper</span>`;
+                    status.style.color = '#16a34a';
+                    document.getElementById('new-base-name').value = '';
+                } else {
+                    const errData = await indexPut.json();
+                    throw new Error(`Ошибка индекса: ${errData.message}`);
+                }
+
+            } catch (err) {
+                status.textContent = `❌ Ошибка: ${err.message}`;
+                status.style.color = '#dc2626';
+            }
+        });
+
+        // =============================================
+        // EVENT LISTENERS
+        // =============================================
+        
         document.getElementById('compareBtn').addEventListener('click', filterBase);
         document.getElementById('exportBtn').addEventListener('click', exportFiltered);
         document.getElementById('clearBtn').addEventListener('click', clearAll);
@@ -595,7 +788,9 @@
         
         // Инициализация
         updateButtons();
-        console.log('🚀 Инструмент фильтрации базы по ID готов!');
+        console.log('🚀 Инструмент готов!');
+        console.log('📖 Загрузите файл с вопросами и базу с ответами.');
+        console.log('💡 После нажатия "Найти ответы" появится кнопка загрузки на GitHub.');
     </script>
 </body>
 </html>
