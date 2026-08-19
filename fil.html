@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -76,8 +76,6 @@
         .btn-success:hover:not(:disabled) { background: #1b5e20; transform: translateY(-1px); }
         .btn-danger { background: #c62828; color: white; }
         .btn-danger:hover:not(:disabled) { background: #b71c1c; transform: translateY(-1px); }
-        .btn-github { background: #24292e; color: white; }
-        .btn-github:hover:not(:disabled) { background: #1a1e22; transform: translateY(-1px); }
         
         .search-box {
             padding: 6px 12px;
@@ -397,7 +395,7 @@
                 <button class="btn-github-full" id="gh-upload-btn" disabled>
                     🚀 Загрузить в per/bases/
                 </button>
-                <button class="btn-upload-phone" id="gh-upload-phone-btn" disabled>
+                <button class="btn-upload-phone" id="gh-upload-phone-btn">
                     📤 Загрузить с телефона
                 </button>
                 <input type="file" id="phone-file-input" accept=".json">
@@ -417,7 +415,7 @@
         let filterFileName = '';
         let fullBaseFileName = '';
         
-        // Drag & Drop
+        // Drag & Drop для загрузки файлов
         ['base1Upload', 'base2Upload'].forEach(id => {
             const box = document.getElementById(id);
             const input = box.querySelector('input[type="file"]');
@@ -475,12 +473,10 @@
             const compareBtn = document.getElementById('compareBtn');
             const searchBox = document.getElementById('searchBox');
             const ghBtn = document.getElementById('gh-upload-btn');
-            const phoneBtn = document.getElementById('gh-upload-phone-btn');
             const canCompare = filterIds.length > 0 && fullBase.length > 0;
             compareBtn.disabled = !canCompare;
             searchBox.disabled = !canCompare;
             ghBtn.disabled = true;
-            phoneBtn.disabled = true;
         }
         
         function getIdent(item) {
@@ -536,15 +532,12 @@
             document.getElementById('exportBtn').disabled = false;
             
             const ghBtn = document.getElementById('gh-upload-btn');
-            const phoneBtn = document.getElementById('gh-upload-phone-btn');
             if (filteredResults.length > 0) {
                 ghBtn.disabled = false;
-                phoneBtn.disabled = false;
                 document.getElementById('gh-status').textContent = '✅ База сформирована, можно загружать в per/bases/';
                 document.getElementById('gh-status').style.color = '#16a34a';
             } else {
                 ghBtn.disabled = true;
-                phoneBtn.disabled = true;
                 document.getElementById('gh-status').textContent = '❌ База пуста!';
                 document.getElementById('gh-status').style.color = '#dc2626';
             }
@@ -674,7 +667,6 @@
             document.getElementById('searchBox').value = '';
             document.getElementById('progressContainer').style.display = 'none';
             document.getElementById('gh-upload-btn').disabled = true;
-            document.getElementById('gh-upload-phone-btn').disabled = true;
             document.getElementById('gh-status').textContent = 'Ожидание действий...';
             document.getElementById('gh-status').style.color = '#6b7280';
         }
@@ -690,32 +682,41 @@
             }
         });
 
-        // --- Загрузка готовой базы (из filteredResults) ---
-        document.getElementById('gh-upload-btn').addEventListener('click', async () => {
-            await uploadToPerBases(filteredResults, 'готовую базу');
-        });
-
-        // --- Загрузка с телефона ---
-        document.getElementById('gh-upload-phone-btn').addEventListener('click', () => {
+        // --- Кнопка "Загрузить с телефона" → открывает файловый менеджер ---
+        document.getElementById('gh-upload-phone-btn').addEventListener('click', function() {
             document.getElementById('phone-file-input').click();
         });
 
-        document.getElementById('phone-file-input').addEventListener('change', async (e) => {
+        // --- Обработка выбранного файла ---
+        document.getElementById('phone-file-input').addEventListener('change', async function(e) {
             const file = e.target.files[0];
             if (!file) return;
             
+            const status = document.getElementById('gh-status');
+            status.textContent = `📖 Читаем файл: ${file.name}...`;
+            status.style.color = '#1f2937';
+            
             const reader = new FileReader();
-            reader.onload = async (event) => {
+            reader.onload = async function(event) {
                 try {
                     const data = JSON.parse(event.target.result);
-                    await uploadToPerBases(data, `файл ${file.name}`);
+                    // Проверяем, что это массив (база вопросов)
+                    if (!Array.isArray(data) || data.length === 0) {
+                        throw new Error('Файл должен содержать массив вопросов (не пустой)');
+                    }
+                    await uploadToPerBases(data, file.name);
                 } catch (error) {
-                    document.getElementById('gh-status').textContent = `❌ Ошибка чтения файла: ${error.message}`;
+                    document.getElementById('gh-status').textContent = `❌ Ошибка: ${error.message}`;
                     document.getElementById('gh-status').style.color = '#dc2626';
                 }
             };
             reader.readAsText(file);
-            e.target.value = '';
+            e.target.value = ''; // сброс, чтобы можно было выбрать тот же файл повторно
+        });
+
+        // --- Загрузка готовой базы (из filteredResults) ---
+        document.getElementById('gh-upload-btn').addEventListener('click', async () => {
+            await uploadToPerBases(filteredResults, 'готовую базу');
         });
 
         // --- Универсальная функция загрузки в per/bases/ ---
@@ -726,7 +727,7 @@
 
             const OWNER = 'fristoi';
             const REPO = 'exam-helper';
-            const BASE_PATH = 'per/bases'; // ← папка для персональных баз
+            const BASE_PATH = 'per/bases';
 
             if (!dataToUpload || dataToUpload.length === 0) {
                 status.textContent = `❌ Нет данных для загрузки (${sourceName})`;
@@ -843,6 +844,7 @@
         updateButtons();
         console.log('🚀 Инструмент готов!');
         console.log('📖 Загрузите файл с вопросами и базу с ответами.');
+        console.log('📤 Или нажмите "Загрузить с телефона" чтобы выбрать готовый JSON-файл.');
         console.log('💡 Базы загружаются в папку per/bases/');
     </script>
 </body>
