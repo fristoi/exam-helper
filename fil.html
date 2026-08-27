@@ -105,6 +105,8 @@
         .btn-success:hover:not(:disabled) { background: #1b5e20; transform: translateY(-1px); }
         .btn-danger { background: #c62828; color: white; }
         .btn-danger:hover:not(:disabled) { background: #b71c1c; transform: translateY(-1px); }
+        .btn-word { background: #1856a8; color: white; }
+        .btn-word:hover:not(:disabled) { background: #0d3d7a; transform: translateY(-1px); }
         .btn-github { background: #24292e; color: white; }
         .btn-github:hover:not(:disabled) { background: #1a1e22; transform: translateY(-1px); }
         .btn-edit { background: #6c63ff; color: white; }
@@ -459,6 +461,7 @@
         <div class="controls">
             <button class="btn btn-primary" id="compareBtn" disabled>🔍 Найти ответы</button>
             <button class="btn btn-success" id="exportBtn" disabled>📥 Скачать</button>
+            <button class="btn btn-word" id="exportDocxBtn" disabled>📄 Сохранить как DOCX</button>
             <button class="btn btn-danger" id="clearBtn">🗑️ Очистить</button>
             <input type="text" class="search-box" id="searchBox" placeholder="🔍 Поиск..." disabled>
         </div>
@@ -623,6 +626,7 @@
 
             renderResults(filteredResults);
             document.getElementById('exportBtn').disabled = false;
+            document.getElementById('exportDocxBtn').disabled = false;
 
             const ghBtn = document.getElementById('gh-upload-btn');
             if (filteredResults.length > 0) {
@@ -728,6 +732,181 @@
             document.body.removeChild(link);
         }
 
+        // =============================================
+        // ЭКСПОРТ В DOCX
+        // =============================================
+        function exportToDocx() {
+            if (filteredResults.length === 0) {
+                alert('❌ Сначала сформируйте базу!');
+                return;
+            }
+
+            // Загружаем библиотеку docx.js
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/docx@8.4.0/build/index.min.js';
+            script.onload = function() {
+                try {
+                    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, SectionType } = window.docx;
+
+                    let baseName = filterFileName.replace(/\.[^.]+$/, '');
+                    let fileName = baseName + '_вопросы_и_ответы.docx';
+
+                    const children = [];
+
+                    // Заголовок
+                    children.push(new Paragraph({
+                        children: [
+                            new TextRun({ text: `📋 ${baseName} — вопросы и ответы`, size: 32, bold: true, font: 'Times New Roman' })
+                        ],
+                        alignment: AlignmentType.CENTER,
+                        spacing: { before: 200, after: 400 }
+                    }));
+
+                    // Отделитель
+                    children.push(new Paragraph({
+                        children: [
+                            new TextRun({ text: '═══════════════════════════════════════════════════', size: 16, color: '1a237e' })
+                        ],
+                        alignment: AlignmentType.CENTER,
+                        spacing: { after: 200 }
+                    }));
+
+                    // Проходим по каждому вопросу
+                    filteredResults.forEach((item, index) => {
+                        const punkt = item.punkt || '';
+                        const question = item.question || 'Вопрос не указан';
+                        const answer = item.answer || 'Нет ответа';
+                        const correct = item.correct || [];
+                        const wrong = item.wrong || [];
+
+                        // Номер вопроса
+                        let headerText = `Вопрос №${index + 1}`;
+                        if (punkt) headerText += ` — п. ${punkt}`;
+
+                        children.push(new Paragraph({
+                            children: [
+                                new TextRun({ text: headerText, size: 24, bold: true, color: '1a237e', font: 'Times New Roman' })
+                            ],
+                            spacing: { before: 300, after: 100 }
+                        }));
+
+                        // Текст вопроса
+                        children.push(new Paragraph({
+                            children: [
+                                new TextRun({ text: question, size: 22, font: 'Times New Roman' })
+                            ],
+                            spacing: { before: 0, after: 100 }
+                        }));
+
+                        // Подпись "Ответы:"
+                        children.push(new Paragraph({
+                            children: [
+                                new TextRun({ text: 'Ответы:', size: 20, bold: true, color: '37474f', font: 'Times New Roman' })
+                            ],
+                            spacing: { before: 50, after: 50 }
+                        }));
+
+                        // Список ответов
+                        let answerTexts = [];
+
+                        if (item.all_answers && item.all_answers.length > 0) {
+                            item.all_answers.forEach(a => {
+                                if (a.correct) {
+                                    answerTexts.push({ text: `✅ ${a.text}`, correct: true });
+                                } else {
+                                    answerTexts.push({ text: `❌ ${a.text}`, correct: false });
+                                }
+                            });
+                        } else if (correct.length > 0 || wrong.length > 0) {
+                            correct.forEach(c => {
+                                answerTexts.push({ text: `✅ ${c}`, correct: true });
+                            });
+                            wrong.forEach(w => {
+                                answerTexts.push({ text: `❌ ${w}`, correct: false });
+                            });
+                        } else {
+                            let lines = answer.split('\n');
+                            lines.forEach(line => {
+                                let trimmed = line.trim();
+                                if (trimmed.startsWith('++')) {
+                                    let cleanText = trimmed.replace('++', '').trim();
+                                    answerTexts.push({ text: `✅ ${cleanText}`, correct: true });
+                                } else if (trimmed) {
+                                    answerTexts.push({ text: trimmed, correct: false });
+                                }
+                            });
+                        }
+
+                        if (answerTexts.length === 0) {
+                            answerTexts.push({ text: 'Нет ответа', correct: false });
+                        }
+
+                        answerTexts.forEach(a => {
+                            const color = a.correct ? '2e7d32' : 'c62828';
+                            children.push(new Paragraph({
+                                children: [
+                                    new TextRun({ text: a.text, size: 20, color: color, font: 'Times New Roman' })
+                                ],
+                                spacing: { before: 20, after: 20 }
+                            }));
+                        });
+
+                        // Отделитель между вопросами
+                        children.push(new Paragraph({
+                            children: [
+                                new TextRun({ text: '─────────────────────────────────────────────', size: 14, color: 'cccccc' })
+                            ],
+                            spacing: { before: 150, after: 50 }
+                        }));
+                    });
+
+                    // Подвал
+                    children.push(new Paragraph({
+                        children: [
+                            new TextRun({ text: `Всего вопросов: ${filteredResults.length}  |  Дата: ${new Date().toLocaleString('ru-RU')}`, size: 16, color: '78909c', font: 'Times New Roman' })
+                        ],
+                        alignment: AlignmentType.CENTER,
+                        spacing: { before: 200, after: 100 }
+                    }));
+
+                    const doc = new Document({
+                        sections: [{
+                            properties: {
+                                page: {
+                                    margin: {
+                                        top: 1000,
+                                        right: 1000,
+                                        bottom: 1000,
+                                        left: 1000
+                                    }
+                                }
+                            },
+                            children: children
+                        }]
+                    });
+
+                    Packer.toBlob(doc).then(blob => {
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    });
+
+                } catch (e) {
+                    alert('❌ Ошибка при создании DOCX: ' + e.message);
+                    console.error(e);
+                }
+            };
+            script.onerror = function() {
+                alert('❌ Не удалось загрузить библиотеку docx.js. Проверьте подключение к интернету.');
+            };
+            document.head.appendChild(script);
+        }
+
+        // =============================================
+
         function clearAll() {
             filterIds = [];
             fullBase = [];
@@ -755,6 +934,7 @@
             `;
 
             document.getElementById('exportBtn').disabled = true;
+            document.getElementById('exportDocxBtn').disabled = true;
             document.getElementById('compareBtn').disabled = true;
             document.getElementById('searchBox').disabled = true;
             document.getElementById('searchBox').value = '';
@@ -775,12 +955,10 @@
             }
         });
 
-        // --- Кнопка "Загрузить с телефона" ---
         document.getElementById('gh-upload-phone-btn').addEventListener('click', function() {
             document.getElementById('phone-file-input').click();
         });
 
-        // --- Обработка выбранного файла (название ИЗ ИМЕНИ ФАЙЛА) ---
         document.getElementById('phone-file-input').addEventListener('change', async function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -797,13 +975,11 @@
                         throw new Error('Файл должен содержать массив вопросов (не пустой)');
                     }
 
-                    // ✅ Берём название базы ИЗ ИМЕНИ ФАЙЛА
                     let baseName = file.name.replace('.json', '').trim();
                     if (!baseName) {
                         throw new Error('Не удалось определить название базы из имени файла');
                     }
 
-                    // Автоматически подставляем в поле для наглядности
                     document.getElementById('new-base-name').value = baseName;
 
                     await uploadToPerBases(data, file.name, baseName);
@@ -816,16 +992,12 @@
             e.target.value = '';
         });
 
-        // --- Загрузка готовой базы (из filteredResults) ---
         document.getElementById('gh-upload-btn').addEventListener('click', async () => {
             await uploadToPerBases(filteredResults, 'готовую базу');
         });
 
-        // --- Универсальная функция загрузки ---
         async function uploadToPerBases(dataToUpload, sourceName, customBaseName) {
             const token = document.getElementById('gh-token').value.trim();
-            // Если передан customBaseName - используем его (для загрузки с телефона)
-            // Иначе берём из поля ввода (для ручной загрузки)
             let baseName = customBaseName || document.getElementById('new-base-name').value.trim().replace('.json', '');
             const status = document.getElementById('gh-status');
 
@@ -921,7 +1093,6 @@
                 if (indexPut.ok) {
                     status.innerHTML = `🎉 <strong>База "${baseName}" загружена в per/bases/!</strong><br><span style="font-size:10px; color:#6b7280;">Обновите per.html чтобы увидеть базу</span>`;
                     status.style.color = '#16a34a';
-                    // Если название было взято из файла — очищаем поле
                     if (customBaseName) {
                         document.getElementById('new-base-name').value = '';
                     }
@@ -1117,6 +1288,7 @@
 
         document.getElementById('compareBtn').addEventListener('click', filterBase);
         document.getElementById('exportBtn').addEventListener('click', exportFiltered);
+        document.getElementById('exportDocxBtn').addEventListener('click', exportToDocx);
         document.getElementById('clearBtn').addEventListener('click', clearAll);
         document.getElementById('searchBox').addEventListener('input', () => {
             if (filteredResults.length > 0) renderResults(filteredResults);
@@ -1126,6 +1298,7 @@
         console.log('🚀 Инструмент готов!');
         console.log('📖 Загрузите файлы и нажмите «Найти ответы»');
         console.log('📤 Кнопка «Загрузить с телефона» берёт название базы ИЗ ИМЕНИ ФАЙЛА');
+        console.log('📄 Кнопка «Сохранить как DOCX» создаёт Word-документ (.docx)');
         console.log('💡 Базы загружаются в папку per/bases/');
         console.log('✏️ Кнопка «Редактировать список» показывает все базы и позволяет удалять их');
     </script>
