@@ -6,7 +6,11 @@
     <title>Создание базы → per/bases/</title>
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5/build/index.umd.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f0f2f5;
@@ -18,7 +22,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
             padding: 14px;
         }
         h1 {
@@ -33,6 +37,11 @@
             margin-bottom: 10px;
             font-size: 12px;
         }
+        hr {
+            margin: 16px 0;
+            border: 0;
+            border-top: 2px solid #e8eaf6;
+        }
 
         .upload-box {
             border: 2px dashed #b0bec5;
@@ -43,14 +52,40 @@
             background: #fafafa;
             cursor: pointer;
         }
-        .upload-box:hover { border-color: #42a5f5; background: #f5faff; }
-        .upload-box.dragover { border-color: #66bb6a; background: #f1f8e9; }
-        .upload-box.loaded { border-color: #66bb6a; background: #f1f8e9; }
-        .upload-box input[type="file"] { display: none; }
-        .upload-box .icon { font-size: 22px; display: block; }
-        .upload-box .title { font-weight: 600; font-size: 12px; color: #37474f; }
-        .upload-box .hint { font-size: 10px; color: #90a4ae; }
-        .upload-box .file-info { font-size: 11px; color: #2e7d32; font-weight: 500; margin-top: 2px; }
+        .upload-box:hover {
+            border-color: #42a5f5;
+            background: #f5faff;
+        }
+        .upload-box.dragover {
+            border-color: #66bb6a;
+            background: #f1f8e9;
+        }
+        .upload-box.loaded {
+            border-color: #66bb6a;
+            background: #f1f8e9;
+        }
+        .upload-box input[type="file"] {
+            display: none;
+        }
+        .upload-box .icon {
+            font-size: 22px;
+            display: block;
+        }
+        .upload-box .title {
+            font-weight: 600;
+            font-size: 12px;
+            color: #37474f;
+        }
+        .upload-box .hint {
+            font-size: 10px;
+            color: #90a4ae;
+        }
+        .upload-box .file-info {
+            font-size: 11px;
+            color: #2e7d32;
+            font-weight: 500;
+            margin-top: 2px;
+        }
         .upload-box .file-info .fname {
             display: inline-block;
             background: #e8f5e9;
@@ -73,12 +108,28 @@
             text-align: center;
             border-left: 3px solid #42a5f5;
         }
-        .stat-card .number { font-size: 18px; font-weight: 700; color: #1a237e; }
-        .stat-card .label { font-size: 10px; color: #78909c; margin-top: 1px; }
-        .stat-card.success { border-left-color: #66bb6a; }
-        .stat-card.success .number { color: #2e7d32; }
-        .stat-card.danger { border-left-color: #ef5350; }
-        .stat-card.danger .number { color: #c62828; }
+        .stat-card .number {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a237e;
+        }
+        .stat-card .label {
+            font-size: 10px;
+            color: #78909c;
+            margin-top: 1px;
+        }
+        .stat-card.success {
+            border-left-color: #66bb6a;
+        }
+        .stat-card.success .number {
+            color: #2e7d32;
+        }
+        .stat-card.danger {
+            border-left-color: #ef5350;
+        }
+        .stat-card.danger .number {
+            color: #c62828;
+        }
 
         .controls {
             display: flex;
@@ -99,19 +150,71 @@
             align-items: center;
             gap: 5px;
         }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
-        .btn-primary { background: #1a237e; color: white; }
-        .btn-primary:hover:not(:disabled) { background: #0d1445; transform: translateY(-1px); }
-        .btn-success { background: #2e7d32; color: white; }
-        .btn-success:hover:not(:disabled) { background: #1b5e20; transform: translateY(-1px); }
-        .btn-danger { background: #c62828; color: white; }
-        .btn-danger:hover:not(:disabled) { background: #b71c1c; transform: translateY(-1px); }
-        .btn-word { background: #1856a8; color: white; }
-        .btn-word:hover:not(:disabled) { background: #0d3d7a; transform: translateY(-1px); }
-        .btn-github { background: #24292e; color: white; }
-        .btn-github:hover:not(:disabled) { background: #1a1e22; transform: translateY(-1px); }
-        .btn-delete-small { background: #dc2626; color: white; border: none; padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
-        .btn-delete-small:hover { background: #b91c1c; }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .btn-primary {
+            background: #1a237e;
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #0d1445;
+            transform: translateY(-1px);
+        }
+        .btn-success {
+            background: #2e7d32;
+            color: white;
+        }
+        .btn-success:hover:not(:disabled) {
+            background: #1b5e20;
+            transform: translateY(-1px);
+        }
+        .btn-danger {
+            background: #c62828;
+            color: white;
+        }
+        .btn-danger:hover:not(:disabled) {
+            background: #b71c1c;
+            transform: translateY(-1px);
+        }
+        .btn-word {
+            background: #1856a8;
+            color: white;
+        }
+        .btn-word:hover:not(:disabled) {
+            background: #0d3d7a;
+            transform: translateY(-1px);
+        }
+        .btn-github {
+            background: #24292e;
+            color: white;
+        }
+        .btn-github:hover:not(:disabled) {
+            background: #1a1e22;
+            transform: translateY(-1px);
+        }
+        .btn-delete-small {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 3px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .btn-delete-small:hover {
+            background: #b91c1c;
+        }
+        .btn-purple {
+            background: #6c63ff;
+            color: white;
+        }
+        .btn-purple:hover:not(:disabled) {
+            background: #5a52e0;
+            transform: translateY(-1px);
+        }
 
         .progress-container {
             width: 100%;
@@ -129,7 +232,9 @@
             width: 0%;
         }
 
-        .results { margin-top: 10px; }
+        .results {
+            margin-top: 10px;
+        }
         .results-header {
             display: flex;
             justify-content: space-between;
@@ -141,7 +246,11 @@
             flex-wrap: wrap;
             gap: 6px;
         }
-        .results-header .count { font-weight: 600; color: #1a237e; font-size: 13px; }
+        .results-header .count {
+            font-weight: 600;
+            color: #1a237e;
+            font-size: 13px;
+        }
 
         .badge {
             display: inline-block;
@@ -150,9 +259,22 @@
             font-size: 10px;
             font-weight: 600;
         }
-        .badge-success { background: #c8e6c9; color: #1b5e20; }
-        .badge-danger { background: #ffcdd2; color: #b71c1c; }
-        .badge-info { background: #bbdefb; color: #0d47a1; }
+        .badge-success {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+        .badge-danger {
+            background: #ffcdd2;
+            color: #b71c1c;
+        }
+        .badge-info {
+            background: #bbdefb;
+            color: #0d47a1;
+        }
+        .badge-purple {
+            background: #e8eaf6;
+            color: #1a237e;
+        }
 
         .question-list {
             max-height: 400px;
@@ -165,8 +287,12 @@
             border-bottom: 1px solid #f0f0f0;
             transition: background 0.2s;
         }
-        .question-item:hover { background: #fafafa; }
-        .question-item:last-child { border-bottom: none; }
+        .question-item:hover {
+            background: #fafafa;
+        }
+        .question-item:last-child {
+            border-bottom: none;
+        }
 
         .question-item .q-header {
             display: flex;
@@ -240,15 +366,34 @@
             font-size: 10px;
             font-weight: 600;
         }
+        .question-item .q-section-tag {
+            background: #f3e5f5;
+            color: #6a1b9a;
+            padding: 1px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+        }
 
         .empty-state {
             text-align: center;
             padding: 30px 20px;
             color: #b0bec5;
         }
-        .empty-state .icon { font-size: 36px; display: block; margin-bottom: 8px; }
-        .empty-state h3 { color: #78909c; margin-bottom: 4px; font-size: 14px; }
-        .empty-state p { color: #b0bec5; font-size: 12px; }
+        .empty-state .icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .empty-state h3 {
+            color: #78909c;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        .empty-state p {
+            color: #b0bec5;
+            font-size: 12px;
+        }
 
         .json-preview {
             background: #263238;
@@ -291,7 +436,9 @@
             font-size: 12px;
             outline: none;
         }
-        .github-section input:focus { border-color: #1a237e; }
+        .github-section input:focus {
+            border-color: #1a237e;
+        }
         .github-section .btn-github-full {
             flex: 1;
             min-width: 100px;
@@ -304,8 +451,13 @@
             font-size: 12px;
             cursor: pointer;
         }
-        .github-section .btn-github-full:hover { background: #1a1e22; }
-        .github-section .btn-github-full:disabled { opacity: 0.5; cursor: not-allowed; }
+        .github-section .btn-github-full:hover {
+            background: #1a1e22;
+        }
+        .github-section .btn-github-full:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .github-section .btn-upload-phone {
             flex: 1;
             min-width: 100px;
@@ -318,7 +470,9 @@
             font-size: 12px;
             cursor: pointer;
         }
-        .github-section .btn-upload-phone:hover { background: #bf360c; }
+        .github-section .btn-upload-phone:hover {
+            background: #bf360c;
+        }
         .github-section .btn-edit-list {
             flex: 1;
             min-width: 100px;
@@ -331,8 +485,12 @@
             font-size: 12px;
             cursor: pointer;
         }
-        .github-section .btn-edit-list:hover { background: #5a52e0; }
-        .github-section input[type="file"] { display: none; }
+        .github-section .btn-edit-list:hover {
+            background: #5a52e0;
+        }
+        .github-section input[type="file"] {
+            display: none;
+        }
         #gh-status {
             margin-top: 6px;
             font-size: 11px;
@@ -349,7 +507,9 @@
             overflow: hidden;
             display: none;
         }
-        .bases-list.active { display: block; }
+        .bases-list.active {
+            display: block;
+        }
         .bases-list .base-item {
             display: flex;
             justify-content: space-between;
@@ -358,7 +518,9 @@
             border-bottom: 1px solid #f0f0f0;
             background: white;
         }
-        .bases-list .base-item:last-child { border-bottom: none; }
+        .bases-list .base-item:last-child {
+            border-bottom: none;
+        }
         .bases-list .base-item .name {
             font-weight: 500;
             font-size: 13px;
@@ -376,8 +538,13 @@
             cursor: pointer;
             font-size: 11px;
         }
-        .bases-list .base-item .actions .btn-delete-small:hover { background: #b91c1c; }
-        .bases-list .base-item .actions .btn-delete-small:disabled { opacity: 0.5; cursor: not-allowed; }
+        .bases-list .base-item .actions .btn-delete-small:hover {
+            background: #b91c1c;
+        }
+        .bases-list .base-item .actions .btn-delete-small:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .bases-list .list-header {
             padding: 8px 14px;
             background: #f5f7fa;
@@ -387,22 +554,165 @@
             border-bottom: 1px solid #e0e0e0;
         }
 
+        /* ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ */
+        .extra-section {
+            margin-top: 16px;
+            padding: 14px;
+            border: 2px solid #e8eaf6;
+            border-radius: 10px;
+            background: #fafbff;
+        }
+        .extra-section .section-title {
+            font-weight: 700;
+            color: #1a237e;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .extra-section .section-title .badge {
+            font-size: 10px;
+            background: #e8eaf6;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-weight: 400;
+            color: #5c6bc0;
+        }
+        .extra-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .extra-box {
+            border: 2px dashed #b0bec5;
+            border-radius: 8px;
+            padding: 8px 12px;
+            text-align: center;
+            transition: all 0.3s;
+            background: #fafafa;
+            cursor: pointer;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .extra-box:hover {
+            border-color: #6c63ff;
+            background: #f5f3ff;
+        }
+        .extra-box.dragover {
+            border-color: #6c63ff;
+            background: #f3f0ff;
+        }
+        .extra-box.loaded {
+            border-color: #6c63ff;
+            background: #f3f0ff;
+        }
+        .extra-box input[type="file"] {
+            display: none;
+        }
+        .extra-box .icon {
+            font-size: 20px;
+            display: block;
+        }
+        .extra-box .title {
+            font-weight: 600;
+            font-size: 12px;
+            color: #37474f;
+        }
+        .extra-box .hint {
+            font-size: 10px;
+            color: #90a4ae;
+        }
+        .extra-box .file-info {
+            font-size: 11px;
+            color: #4a148c;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .extra-box .file-info .fname {
+            display: inline-block;
+            background: #ede7f6;
+            padding: 1px 8px;
+            border-radius: 10px;
+            margin: 2px;
+            font-size: 10px;
+        }
+
+        .extra-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 8px 0 10px;
+        }
+        .extra-stats .stat-card {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 4px 8px;
+            text-align: center;
+            border-left: 3px solid #6c63ff;
+        }
+        .extra-stats .stat-card .number {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a237e;
+        }
+        .extra-stats .stat-card .label {
+            font-size: 9px;
+            color: #78909c;
+            margin-top: 1px;
+        }
+
         @media (max-width: 768px) {
-            .upload-box { min-width: unset; }
-            .stats { grid-template-columns: 1fr 1fr; }
-            .container { padding: 10px; }
-            .controls { flex-direction: column; }
-            .btn { width: 100%; justify-content: center; }
-            .github-section .row { flex-direction: column; }
-            .github-section .row-buttons { flex-direction: column; }
+            .upload-box {
+                min-width: unset;
+            }
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            .extra-grid {
+                grid-template-columns: 1fr;
+            }
+            .extra-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            .container {
+                padding: 10px;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .github-section .row {
+                flex-direction: column;
+            }
+            .github-section .row-buttons {
+                flex-direction: column;
+            }
             .github-section .btn-github-full,
             .github-section .btn-upload-phone,
-            .github-section .btn-edit-list { width: 100%; }
+            .github-section .btn-edit-list {
+                width: 100%;
+            }
         }
-        .question-list::-webkit-scrollbar { width: 5px; }
-        .question-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 3px; }
-        .question-list::-webkit-scrollbar-thumb { background: #c5cae9; border-radius: 3px; }
-        .question-list::-webkit-scrollbar-thumb:hover { background: #9fa8da; }
+        .question-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        .question-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        .question-list::-webkit-scrollbar-thumb {
+            background: #c5cae9;
+            border-radius: 3px;
+        }
+        .question-list::-webkit-scrollbar-thumb:hover {
+            background: #9fa8da;
+        }
     </style>
 </head>
 <body>
@@ -411,7 +721,7 @@
         <p class="subtitle">Загрузите базы с вопросами и базы с ответами</p>
 
         <!-- ========================================================== -->
-        <!-- ЗАГРУЗКА ФАЙЛОВ                                            -->
+        <!-- ОСНОВНОЙ БЛОК: загрузка нескольких баз → поиск → GitHub    -->
         <!-- ========================================================== -->
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
@@ -437,10 +747,22 @@
         </div>
 
         <div class="stats">
-            <div class="stat-card"><div class="number" id="multiQuestionsCount">0</div><div class="label">Вопросов</div></div>
-            <div class="stat-card"><div class="number" id="multiAnswersCount">0</div><div class="label">Ответов</div></div>
-            <div class="stat-card success"><div class="number" id="multiFoundCount">0</div><div class="label">✅ Найдено</div></div>
-            <div class="stat-card danger"><div class="number" id="multiNotFoundCount">0</div><div class="label">❌ Не найдено</div></div>
+            <div class="stat-card">
+                <div class="number" id="multiQuestionsCount">0</div>
+                <div class="label">Вопросов</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="multiAnswersCount">0</div>
+                <div class="label">Ответов</div>
+            </div>
+            <div class="stat-card success">
+                <div class="number" id="multiFoundCount">0</div>
+                <div class="label">✅ Найдено</div>
+            </div>
+            <div class="stat-card danger">
+                <div class="number" id="multiNotFoundCount">0</div>
+                <div class="label">❌ Не найдено</div>
+            </div>
         </div>
 
         <div class="controls">
@@ -482,7 +804,75 @@
 
             <div class="bases-list" id="basesList">
                 <div class="list-header">📋 Список баз в per/bases/:</div>
-                <div id="basesListItems"><div style="padding:12px;text-align:center;color:#90a4ae;font-size:12px;">Загрузка...</div></div>
+                <div id="basesListItems">
+                    <div style="padding:12px;text-align:center;color:#90a4ae;font-size:12px;">Загрузка...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ                                     -->
+        <!-- ========================================================== -->
+
+        <hr>
+
+        <div class="extra-section">
+            <div class="section-title">
+                🛠 Дополнительные функции
+                <span class="badge">объединение файлов с разделами</span>
+            </div>
+
+            <div class="extra-grid">
+                <div class="extra-box" id="mergeSectionsUpload">
+                    <label for="mergeSectionsFile">
+                        <span class="icon">📂</span>
+                        <div class="title">Выберите файлы для объединения</div>
+                        <div class="hint">Нажмите или перетащите (можно несколько)</div>
+                        <div class="file-info" id="mergeSectionsInfo"></div>
+                    </label>
+                    <input type="file" id="mergeSectionsFile" accept=".json" multiple>
+                </div>
+
+                <div style="display:flex;flex-direction:column;justify-content:center;background:#f8f9fa;border-radius:8px;padding:12px;font-size:12px;color:#78909c;text-align:center;">
+                    <span style="font-size:16px;display:block;margin-bottom:4px;">ℹ️</span>
+                    <strong style="color:#1a237e;">Как это работает:</strong><br>
+                    1. Файлы сортируются по числу в начале имени<br>
+                    2. Вопросы объединяются в один файл<br>
+                    3. Каждому вопросу присваивается сквозной номер<br>
+                    4. Добавляется поле <strong style="color:#1a237e;">source</strong> — имя файла (раздел)
+                </div>
+            </div>
+
+            <div class="extra-stats">
+                <div class="stat-card">
+                    <div class="number" id="extraFileCount">0</div>
+                    <div class="label">📄 Файлов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="extraQuestionsCount">0</div>
+                    <div class="label">📋 Вопросов</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="number" id="extraSectionsCount">0</div>
+                    <div class="label">📁 Разделов</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-purple" id="mergeSectionsBtn" disabled>🔗 Объединить в одну базу</button>
+                <button class="btn btn-danger" id="extraClearBtn">🗑️ Очистить</button>
+            </div>
+
+            <div class="progress-container" id="extraProgressContainer">
+                <div class="fill" id="extraProgressFill"></div>
+            </div>
+
+            <div class="results" id="extraResultsContainer">
+                <div class="empty-state">
+                    <span class="icon">📂</span>
+                    <h3>Нет файлов</h3>
+                    <p>Выберите несколько JSON-файлов с вопросами</p>
+                </div>
             </div>
         </div>
 
@@ -530,14 +920,29 @@
                     const isCorrect = trimmed.startsWith('++');
                     const color = isCorrect ? '#2e7d32' : '#333';
                     const text = isCorrect ? trimmed.replace('++', '').trim() : trimmed;
-                    html += `<div class="ans-item" style="color:${color};">${isCorrect ? '✅ ' : ''}${escapeHtml(text)}</div>`;
+                    html +=
+                        `<div class="ans-item" style="color:${color};">${isCorrect ? '✅ ' : ''}${escapeHtml(text)}</div>`;
                 });
             }
             return html;
         }
 
+        function getFileNumber(filename) {
+            let match = filename.match(/^\d+/);
+            return match ? parseInt(match[0]) : 999999;
+        }
+
+        function readFileAsText(file) {
+            return new Promise((resolve, reject) => {
+                let reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                reader.readAsText(file);
+            });
+        }
+
         // ================================================================
-        // ОСНОВНАЯ ЛОГИКА
+        // ОСНОВНОЙ БЛОК
         // ================================================================
 
         const multiState = {
@@ -553,7 +958,8 @@
         const mqBox = document.getElementById('multiQuestionsUpload');
         const mqInfo = document.getElementById('multiQuestionsInfo');
 
-        mqBox.addEventListener('dragover', e => { e.preventDefault(); mqBox.classList.add('dragover'); });
+        mqBox.addEventListener('dragover', e => { e.preventDefault();
+            mqBox.classList.add('dragover'); });
         mqBox.addEventListener('dragleave', () => { mqBox.classList.remove('dragover'); });
         mqBox.addEventListener('drop', e => {
             e.preventDefault();
@@ -608,7 +1014,8 @@
                 const count = multiState.questions.find(b => b.fileName === name)?.data.length || 0;
                 html += '<span class="fname">📄 ' + name + ' (' + count + ')</span>';
             });
-            html += '<div style="font-size:10px;color:#78909c;margin-top:2px;">всего ' + multiState.questions.length + ' баз, ' + total + ' вопросов</div>';
+            html += '<div style="font-size:10px;color:#78909c;margin-top:2px;">всего ' + multiState.questions.length +
+                ' баз, ' + total + ' вопросов</div>';
             mqInfo.innerHTML = html;
             mqBox.classList.add('loaded');
         }
@@ -618,7 +1025,8 @@
         const maBox = document.getElementById('multiAnswersUpload');
         const maInfo = document.getElementById('multiAnswersInfo');
 
-        maBox.addEventListener('dragover', e => { e.preventDefault(); maBox.classList.add('dragover'); });
+        maBox.addEventListener('dragover', e => { e.preventDefault();
+            maBox.classList.add('dragover'); });
         maBox.addEventListener('dragleave', () => { maBox.classList.remove('dragover'); });
         maBox.addEventListener('drop', e => {
             e.preventDefault();
@@ -673,7 +1081,8 @@
                 const count = multiState.answers.find(b => b.fileName === name)?.data.length || 0;
                 html += '<span class="fname">📚 ' + name + ' (' + count + ')</span>';
             });
-            html += '<div style="font-size:10px;color:#78909c;margin-top:2px;">всего ' + multiState.answers.length + ' баз, ' + total + ' записей</div>';
+            html += '<div style="font-size:10px;color:#78909c;margin-top:2px;">всего ' + multiState.answers.length +
+                ' баз, ' + total + ' записей</div>';
             maInfo.innerHTML = html;
             maBox.classList.add('loaded');
         }
@@ -701,7 +1110,9 @@
             });
 
             const results = [];
-            let found = 0, notFound = 0, processed = 0;
+            let found = 0,
+                notFound = 0,
+                processed = 0;
             const total = multiState.questions.reduce((sum, b) => sum + b.data.length, 0);
 
             multiState.questions.forEach((base) => {
@@ -744,30 +1155,31 @@
             const container = document.getElementById('multiResultsContainer');
 
             if (data.length === 0) {
-                container.innerHTML = `<div class="empty-state"><span class="icon">🔍</span><h3>Ничего не найдено</h3><p>Попробуйте загрузить другие файлы</p></div>`;
+                container.innerHTML =
+                    `<div class="empty-state"><span class="icon">🔍</span><h3>Ничего не найдено</h3><p>Попробуйте загрузить другие файлы</p></div>`;
                 return;
             }
 
             let html = `
-                <div class="results-header">
-                    <span class="count">📋 Всего: ${multiState.found + multiState.notFound} вопросов</span>
-                    <span>
-                        <span class="badge badge-success">✅ Найдено: ${multiState.found}</span>
-                        <span class="badge badge-danger">❌ Не найдено: ${multiState.notFound}</span>
-                    </span>
-                </div>
-                <div class="question-list">
-            `;
+                        <div class="results-header">
+                            <span class="count">📋 Всего: ${multiState.found + multiState.notFound} вопросов</span>
+                            <span>
+                                <span class="badge badge-success">✅ Найдено: ${multiState.found}</span>
+                                <span class="badge badge-danger">❌ Не найдено: ${multiState.notFound}</span>
+                            </span>
+                        </div>
+                        <div class="question-list">
+                    `;
 
             let globalCounter = 0;
 
             data.forEach((base) => {
                 html += `
-                    <div style="padding:12px 14px;background:#e8eaf6;border-bottom:2px solid #1a237e;margin:4px 0;">
-                        <strong style="color:#1a237e;font-size:15px;">📁 ${base.baseName}</strong>
-                        <span style="font-size:11px;color:#78909c;margin-left:8px;">(${base.items.length} вопросов)</span>
-                    </div>
-                `;
+                            <div style="padding:12px 14px;background:#e8eaf6;border-bottom:2px solid #1a237e;margin:4px 0;">
+                                <strong style="color:#1a237e;font-size:15px;">📁 ${base.baseName}</strong>
+                                <span style="font-size:11px;color:#78909c;margin-left:8px;">(${base.items.length} вопросов)</span>
+                            </div>
+                        `;
 
                 base.items.forEach((item) => {
                     globalCounter++;
@@ -778,20 +1190,20 @@
                     const source = a ? (a.source || '') : '';
 
                     html += `
-                        <div class="question-item">
-                            <div class="q-header">
-                                <span class="q-number">#${globalCounter}</span>
-                                <span class="q-base-tag">${base.baseName}</span>
-                                <span class="q-ident">🆔 ${ident}</span>
-                            </div>
-                            <div class="q-text">${escapeHtml(qText)}</div>
-                            <div class="q-answer">
-                                <span class="label">📖 Ответ:</span>
-                                ${renderAnswerBlock(a)}
-                            </div>
-                            ${source ? `<div class="q-source">📌 Источник: ${escapeHtml(source)}</div>` : ''}
-                        </div>
-                    `;
+                                <div class="question-item">
+                                    <div class="q-header">
+                                        <span class="q-number">#${globalCounter}</span>
+                                        <span class="q-base-tag">${base.baseName}</span>
+                                        <span class="q-ident">🆔 ${ident}</span>
+                                    </div>
+                                    <div class="q-text">${escapeHtml(qText)}</div>
+                                    <div class="q-answer">
+                                        <span class="label">📖 Ответ:</span>
+                                        ${renderAnswerBlock(a)}
+                                    </div>
+                                    ${source ? `<div class="q-source">📌 Источник: ${escapeHtml(source)}</div>` : ''}
+                                </div>
+                            `;
                 });
             });
 
@@ -800,7 +1212,7 @@
         }
 
         // ================================================================
-        // ЭКСПОРТ ВСЕХ БАЗ В ОДИН DOCX (БЕЗ ЗАГОЛОВКА)
+        // ЭКСПОРТ ВСЕХ БАЗ В ОДИН DOCX
         // ================================================================
 
         document.getElementById('multiExportDocxBtn').addEventListener('click', function() {
@@ -825,7 +1237,6 @@
                     const baseName = base.baseName;
                     let baseCounter = 0;
 
-                    // Заголовок базы (жирный, слева)
                     children.push(new Paragraph({
                         children: [
                             new TextRun({ text: baseName, size: 28, bold: true, font: 'Calibri' })
@@ -834,12 +1245,12 @@
                     }));
                     children.push(new Paragraph({
                         children: [
-                            new TextRun({ text: '─────────────────────────────────────────────', size: 16, color: 'cccccc', font: 'Calibri' })
+                            new TextRun({ text: '─────────────────────────────────────────────',
+                                size: 16, color: 'cccccc', font: 'Calibri' })
                         ],
                         spacing: { after: 150 }
                     }));
 
-                    // Вопросы базы
                     base.items.forEach((item) => {
                         baseCounter++;
                         totalQuestions++;
@@ -849,15 +1260,14 @@
                         const qText = q.question || 'Вопрос не указан';
                         const source = a ? (a.source || '') : '';
 
-                        // Вопрос
                         children.push(new Paragraph({
                             children: [
-                                new TextRun({ text: 'Вопрос №' + baseCounter, size: 24, bold: true, font: 'Calibri' })
+                                new TextRun({ text: 'Вопрос №' + baseCounter, size: 24, bold: true,
+                                    font: 'Calibri' })
                             ],
                             spacing: { before: 200, after: 30 }
                         }));
 
-                        // Текст вопроса
                         children.push(new Paragraph({
                             children: [
                                 new TextRun({ text: qText, size: 22, font: 'Calibri' })
@@ -865,7 +1275,6 @@
                             spacing: { after: 60 }
                         }));
 
-                        // Ответы
                         children.push(new Paragraph({
                             children: [
                                 new TextRun({ text: 'Ответы:', size: 20, bold: true, font: 'Calibri' })
@@ -873,14 +1282,14 @@
                             spacing: { after: 20 }
                         }));
 
-                        // Вывод всех ответов
                         if (a && a.all_answers && a.all_answers.length > 0) {
                             a.all_answers.forEach(ans => {
                                 const color = ans.correct ? '2e7d32' : 'c62828';
                                 const mark = ans.correct ? '✅' : '❌';
                                 children.push(new Paragraph({
                                     children: [
-                                        new TextRun({ text: mark + ' ' + ans.text, size: 20, color: color, font: 'Calibri' })
+                                        new TextRun({ text: mark + ' ' + ans.text, size: 20,
+                                            color: color, font: 'Calibri' })
                                     ],
                                     spacing: { after: 10 }
                                 }));
@@ -891,7 +1300,8 @@
                             correct.forEach(ans => {
                                 children.push(new Paragraph({
                                     children: [
-                                        new TextRun({ text: '✅ ' + ans, size: 20, color: '2e7d32', font: 'Calibri' })
+                                        new TextRun({ text: '✅ ' + ans, size: 20,
+                                            color: '2e7d32', font: 'Calibri' })
                                     ],
                                     spacing: { after: 10 }
                                 }));
@@ -899,7 +1309,8 @@
                             wrong.forEach(ans => {
                                 children.push(new Paragraph({
                                     children: [
-                                        new TextRun({ text: '❌ ' + ans, size: 20, color: 'c62828', font: 'Calibri' })
+                                        new TextRun({ text: '❌ ' + ans, size: 20,
+                                            color: 'c62828', font: 'Calibri' })
                                     ],
                                     spacing: { after: 10 }
                                 }));
@@ -912,10 +1323,13 @@
                                 if (!trimmed) return;
                                 const isCorrect = trimmed.startsWith('++');
                                 const color = isCorrect ? '2e7d32' : '333333';
-                                const text = isCorrect ? trimmed.replace('++', '').trim() : trimmed;
+                                const text = isCorrect ? trimmed.replace('++', '').trim() :
+                                trimmed;
                                 children.push(new Paragraph({
                                     children: [
-                                        new TextRun({ text: (isCorrect ? '✅ ' : '') + text, size: 20, color: color, font: 'Calibri' })
+                                        new TextRun({ text: (isCorrect ? '✅ ' : '') +
+                                                text, size: 20, color: color,
+                                            font: 'Calibri' })
                                     ],
                                     spacing: { after: 10 }
                                 }));
@@ -925,7 +1339,8 @@
                         if (source) {
                             children.push(new Paragraph({
                                 children: [
-                                    new TextRun({ text: 'Источник: ' + source, size: 16, color: '78909c', font: 'Calibri' })
+                                    new TextRun({ text: 'Источник: ' + source, size: 16,
+                                            color: '78909c', font: 'Calibri' })
                                 ],
                                 spacing: { after: 20 }
                             }));
@@ -933,17 +1348,18 @@
 
                         children.push(new Paragraph({
                             children: [
-                                new TextRun({ text: '─────────────────────────────────────────────', size: 14, color: 'e0e0e0', font: 'Calibri' })
+                                new TextRun({ text: '─────────────────────────────────────────────',
+                                    size: 14, color: 'e0e0e0', font: 'Calibri' })
                             ],
                             spacing: { before: 80, after: 40 }
                         }));
                     });
                 });
 
-                // Подвал
                 children.push(new Paragraph({
                     children: [
-                        new TextRun({ text: 'Всего вопросов: ' + totalQuestions + '  |  Дата: ' + new Date().toLocaleString('ru-RU'), size: 16, color: '78909c', font: 'Calibri' })
+                        new TextRun({ text: 'Всего вопросов: ' + totalQuestions + '  |  Дата: ' + new Date()
+                                .toLocaleString('ru-RU'), size: 16, color: '78909c', font: 'Calibri' })
                     ],
                     alignment: AlignmentType.CENTER,
                     spacing: { before: 150, after: 80 }
@@ -995,7 +1411,8 @@
                     return;
                 }
 
-                let successCount = 0, failCount = 0;
+                let successCount = 0,
+                    failCount = 0;
 
                 for (const base of multiState.results) {
                     const baseName = base.baseName;
@@ -1021,7 +1438,8 @@
                     status.style.color = '#16a34a';
                     await loadBasesList();
                 } else if (successCount > 0 && failCount > 0) {
-                    status.innerHTML = '⚠️ <strong>Загружено ' + successCount + ' баз, ' + failCount + ' не загружено</strong>';
+                    status.innerHTML = '⚠️ <strong>Загружено ' + successCount + ' баз, ' + failCount +
+                        ' не загружено</strong>';
                     status.style.color = '#ed6c02';
                 } else {
                     status.innerHTML = '❌ <strong>Не удалось загрузить ни одной базы</strong>';
@@ -1074,15 +1492,15 @@
                 throw new Error('Ошибка GitHub: ' + errData.message);
             }
 
-            // Обновляем index.json
             const indexPath = BASE_PATH + '/index.json';
             let indexSha = '';
             let basesList = [];
 
             try {
-                const indexGet = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
-                    headers: { 'Authorization': 'token ' + token }
-                });
+                const indexGet = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' +
+                    indexPath, {
+                        headers: { 'Authorization': 'token ' + token }
+                    });
                 if (indexGet.status === 200) {
                     const indexData = await indexGet.json();
                     indexSha = indexData.sha;
@@ -1131,7 +1549,7 @@
             });
         });
 
-        // Очистить
+        // Очистить основной блок
         document.getElementById('multiClearBtn').addEventListener('click', function() {
             multiState.questions = [];
             multiState.answers = [];
@@ -1151,12 +1569,12 @@
             document.getElementById('multiAnswersFile').value = '';
 
             document.getElementById('multiResultsContainer').innerHTML = `
-                <div class="empty-state">
-                    <span class="icon">📂</span>
-                    <h3>Нет данных</h3>
-                    <p>Загрузите базы с вопросами и базы с ответами</p>
-                </div>
-            `;
+                        <div class="empty-state">
+                            <span class="icon">📂</span>
+                            <h3>Нет данных</h3>
+                            <p>Загрузите базы с вопросами и базы с ответами</p>
+                        </div>
+                    `;
 
             document.getElementById('multiFindBtn').disabled = true;
             document.getElementById('multiExportBtn').disabled = true;
@@ -1197,8 +1615,10 @@
                     let baseName = file.name.replace('.json', '').trim();
                     if (!baseName) throw new Error('Не удалось определить название базы');
                     document.getElementById('new-base-name').value = baseName;
-                    await uploadSingleBaseToGitHub(data, baseName, document.getElementById('gh-token').value.trim());
-                    document.getElementById('gh-status').innerHTML = '🎉 <strong>База "' + baseName + '" загружена!</strong>';
+                    await uploadSingleBaseToGitHub(data, baseName, document.getElementById('gh-token').value
+                    .trim());
+                    document.getElementById('gh-status').innerHTML = '🎉 <strong>База "' + baseName +
+                        '" загружена!</strong>';
                     document.getElementById('gh-status').style.color = '#16a34a';
                     await loadBasesList();
                 } catch (error) {
@@ -1232,7 +1652,8 @@
                             throw new Error('Файл должен содержать массив');
                         }
                         await uploadSingleBaseToGitHub(data, baseName, token);
-                        document.getElementById('gh-status').innerHTML = '🎉 <strong>База "' + baseName + '" загружена!</strong>';
+                        document.getElementById('gh-status').innerHTML = '🎉 <strong>База "' + baseName +
+                            '" загружена!</strong>';
                         document.getElementById('gh-status').style.color = '#16a34a';
                         await loadBasesList();
                     } catch (error) {
@@ -1254,20 +1675,23 @@
             const BASE_PATH = 'per/bases';
 
             if (!token) {
-                listContainer.innerHTML = '<div style="padding:12px;text-align:center;color:#dc2626;font-size:12px;">❌ Введите GitHub Token</div>';
+                listContainer.innerHTML =
+                    '<div style="padding:12px;text-align:center;color:#dc2626;font-size:12px;">❌ Введите GitHub Token</div>';
                 return;
             }
 
-            listContainer.innerHTML = '<div style="padding:12px;text-align:center;color:#90a4ae;font-size:12px;">⏳ Загрузка...</div>';
+            listContainer.innerHTML =
+                '<div style="padding:12px;text-align:center;color:#90a4ae;font-size:12px;">⏳ Загрузка...</div>';
 
             try {
                 const indexPath = BASE_PATH + '/index.json';
                 let basesList = [];
 
                 try {
-                    const indexGet = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
-                        headers: { 'Authorization': 'token ' + token }
-                    });
+                    const indexGet = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' +
+                        indexPath, {
+                            headers: { 'Authorization': 'token ' + token }
+                        });
                     if (indexGet.status === 200) {
                         const indexData = await indexGet.json();
                         const parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
@@ -1278,25 +1702,27 @@
                 currentBasesList = basesList;
 
                 if (basesList.length === 0) {
-                    listContainer.innerHTML = '<div style="padding:12px;text-align:center;color:#90a4ae;font-size:12px;">📭 Нет загруженных баз</div>';
+                    listContainer.innerHTML =
+                        '<div style="padding:12px;text-align:center;color:#90a4ae;font-size:12px;">📭 Нет загруженных баз</div>';
                     return;
                 }
 
                 let html = '';
                 for (let base of basesList) {
                     html += `
-                        <div class="base-item" id="base-item-${base}">
-                            <span class="name">📄 ${base}</span>
-                            <div class="actions">
-                                <button class="btn-delete-small" onclick="deleteBase('${base}')">🗑️ Удалить</button>
-                            </div>
-                        </div>
-                    `;
+                                <div class="base-item" id="base-item-${base}">
+                                    <span class="name">📄 ${base}</span>
+                                    <div class="actions">
+                                        <button class="btn-delete-small" onclick="deleteBase('${base}')">🗑️ Удалить</button>
+                                    </div>
+                                </div>
+                            `;
                 }
                 listContainer.innerHTML = html;
 
             } catch (err) {
-                listContainer.innerHTML = '<div style="padding:12px;text-align:center;color:#dc2626;font-size:12px;">❌ Ошибка: ' + err.message + '</div>';
+                listContainer.innerHTML = '<div style="padding:12px;text-align:center;color:#dc2626;font-size:12px;">❌ Ошибка: ' +
+                    err.message + '</div>';
             }
         }
 
@@ -1325,9 +1751,10 @@
                 const filePath = BASE_PATH + '/' + baseName + '.json';
                 let sha = '';
                 try {
-                    const res = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + filePath, {
-                        headers: { 'Authorization': 'token ' + token }
-                    });
+                    const res = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' +
+                        filePath, {
+                            headers: { 'Authorization': 'token ' + token }
+                        });
                     if (res.status === 200) {
                         const d = await res.json();
                         sha = d.sha;
@@ -1338,14 +1765,15 @@
                     throw new Error('Файл ' + baseName + '.json не найден');
                 }
 
-                const deleteRes = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + filePath, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: '🗑️ Удаление базы из per: ' + baseName,
-                        sha: sha
-                    })
-                });
+                const deleteRes = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' +
+                    filePath, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            message: '🗑️ Удаление базы из per: ' + baseName,
+                            sha: sha
+                        })
+                    });
 
                 if (!deleteRes.ok) {
                     const errData = await deleteRes.json();
@@ -1357,9 +1785,10 @@
                 let currentList = [...currentBasesList];
 
                 try {
-                    const indexGet = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
-                        headers: { 'Authorization': 'token ' + token }
-                    });
+                    const indexGet = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' +
+                        indexPath, {
+                            headers: { 'Authorization': 'token ' + token }
+                        });
                     if (indexGet.status === 200) {
                         const indexData = await indexGet.json();
                         indexSha = indexData.sha;
@@ -1372,15 +1801,16 @@
                 const newIndexContent = JSON.stringify({ bases: newList }, null, 2);
                 const base64Index = btoa(unescape(encodeURIComponent(newIndexContent)));
 
-                const indexPut = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
-                    method: 'PUT',
-                    headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: '🗑️ Удаление базы из списка per: ' + baseName,
-                        content: base64Index,
-                        sha: indexSha
-                    })
-                });
+                const indexPut = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' +
+                    indexPath, {
+                        method: 'PUT',
+                        headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            message: '🗑️ Удаление базы из списка per: ' + baseName,
+                            content: base64Index,
+                            sha: indexSha
+                        })
+                    });
 
                 if (indexPut.ok) {
                     status.innerHTML = '✅ <strong>База "' + baseName + '" удалена!</strong>';
@@ -1411,15 +1841,242 @@
         });
 
         // ================================================================
+        // ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ: ОБЪЕДИНЕНИЕ ФАЙЛОВ С РАЗДЕЛАМИ
+        // ================================================================
+
+        const extraState = {
+            files: [],
+            mergedData: [],
+            sections: []
+        };
+
+        const esInput = document.getElementById('mergeSectionsFile');
+        const esBox = document.getElementById('mergeSectionsUpload');
+        const esInfo = document.getElementById('mergeSectionsInfo');
+
+        esBox.addEventListener('dragover', e => { e.preventDefault();
+            esBox.classList.add('dragover'); });
+        esBox.addEventListener('dragleave', () => { esBox.classList.remove('dragover'); });
+        esBox.addEventListener('drop', e => {
+            e.preventDefault();
+            esBox.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                esInput.files = e.dataTransfer.files;
+                esInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        esInput.addEventListener('change', function(e) {
+            const files = this.files;
+            if (!files || files.length === 0) return;
+
+            extraState.files = [];
+            const fileNames = [];
+            let processed = 0;
+            let hasError = false;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (!Array.isArray(data)) {
+                            throw new Error('Файл "' + file.name + '" не содержит массив');
+                        }
+                        const number = getFileNumber(file.name);
+                        extraState.files.push({
+                            file: file,
+                            data: data,
+                            name: file.name.replace('.json', ''),
+                            number: number
+                        });
+                        fileNames.push(file.name);
+                    } catch (error) {
+                        alert('❌ Ошибка в файле "' + file.name + '": ' + error.message);
+                        hasError = true;
+                    }
+                    processed++;
+                    if (processed === files.length && !hasError) {
+                        updateExtraInfo(fileNames);
+                        updateExtraButtons();
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function updateExtraInfo(fileNames) {
+            const total = extraState.files.reduce((sum, f) => sum + f.data.length, 0);
+            document.getElementById('extraFileCount').textContent = extraState.files.length;
+            document.getElementById('extraQuestionsCount').textContent = total;
+            document.getElementById('extraSectionsCount').textContent = extraState.files.length;
+
+            let html = '';
+            fileNames.forEach(name => {
+                const count = extraState.files.find(f => f.file.name === name)?.data.length || 0;
+                html += '<span class="fname">📄 ' + name + ' (' + count + ')</span>';
+            });
+            html += '<div style="font-size:10px;color:#4a148c;margin-top:2px;">всего ' + extraState.files.length +
+                ' файлов, ' + total + ' вопросов</div>';
+            esInfo.innerHTML = html;
+            esBox.classList.add('loaded');
+        }
+
+        function updateExtraButtons() {
+            document.getElementById('mergeSectionsBtn').disabled = extraState.files.length === 0;
+        }
+
+        // Объединение файлов
+        document.getElementById('mergeSectionsBtn').addEventListener('click', async function() {
+            if (extraState.files.length === 0) {
+                alert('❌ Выберите файлы!');
+                return;
+            }
+
+            const progressContainer = document.getElementById('extraProgressContainer');
+            const progressFill = document.getElementById('extraProgressFill');
+            progressContainer.style.display = 'block';
+
+            // Сортируем по числовому префиксу
+            extraState.files.sort((a, b) => a.number - b.number);
+
+            let allQuestions = [];
+            let currentNumber = 1;
+            const sections = [];
+
+            for (let i = 0; i < extraState.files.length; i++) {
+                const item = extraState.files[i];
+                const fileName = item.name;
+
+                sections.push(fileName);
+
+                const tagged = item.data.map((q) => ({
+                    ...q,
+                    punkt: currentNumber.toString(),
+                    source: fileName
+                }));
+
+                allQuestions = [...allQuestions, ...tagged];
+                currentNumber += item.data.length;
+
+                progressFill.style.width = ((i + 1) / extraState.files.length * 100) + '%';
+            }
+
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+                progressFill.style.width = '0%';
+            }, 400);
+
+            extraState.mergedData = allQuestions;
+            extraState.sections = sections;
+
+            // Показываем результат
+            extraRenderResults(allQuestions, sections);
+
+            // Скачиваем
+            const folderName = extraState.files[0]?.file?.webkitRelativePath?.split('/')[0] || 'объединённая_база';
+            const blob = new Blob([JSON.stringify(allQuestions, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = folderName + '.json';
+            a.click();
+
+            alert('✅ Готово!\nВсего вопросов: ' + allQuestions.length + '\nРазделов: ' + sections.length +
+                '\nНумерация: 1 — ' + allQuestions.length);
+
+            document.getElementById('mergeSectionsBtn').disabled = true;
+        });
+
+        function extraRenderResults(data, sections) {
+            const container = document.getElementById('extraResultsContainer');
+
+            if (data.length === 0) {
+                container.innerHTML =
+                    `<div class="empty-state"><span class="icon">🔍</span><h3>Нет данных</h3><p>Попробуйте загрузить другие файлы</p></div>`;
+                return;
+            }
+
+            let html = `
+                        <div class="results-header">
+                            <span class="count">📋 Всего: ${data.length} вопросов</span>
+                            <span>
+                                <span class="badge badge-purple">📁 Разделов: ${sections.length}</span>
+                            </span>
+                        </div>
+                        <div class="question-list">
+                    `;
+
+            let currentSection = '';
+            let counter = 0;
+
+            data.forEach((item) => {
+                const source = item.source || '—';
+                const punkt = item.punkt || '—';
+                const question = item.question || 'Вопрос не указан';
+
+                if (source !== currentSection) {
+                    currentSection = source;
+                    html += `
+                                <div style="padding:12px 14px;background:#f3e5f5;border-bottom:2px solid #6a1b9a;margin:4px 0;">
+                                    <strong style="color:#6a1b9a;font-size:15px;">📁 ${source}</strong>
+                                </div>
+                            `;
+                }
+
+                counter++;
+                html += `
+                            <div class="question-item">
+                                <div class="q-header">
+                                    <span class="q-number">#${counter}</span>
+                                    <span class="q-section-tag">${source}</span>
+                                    <span class="q-ident">🆔 ${punkt}</span>
+                                </div>
+                                <div class="q-text">${escapeHtml(question)}</div>
+                            </div>
+                        `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Очистить дополнительный блок
+        document.getElementById('extraClearBtn').addEventListener('click', function() {
+            extraState.files = [];
+            extraState.mergedData = [];
+            extraState.sections = [];
+
+            document.getElementById('extraFileCount').textContent = '0';
+            document.getElementById('extraQuestionsCount').textContent = '0';
+            document.getElementById('extraSectionsCount').textContent = '0';
+
+            document.getElementById('mergeSectionsInfo').innerHTML = '';
+            document.getElementById('mergeSectionsUpload').classList.remove('loaded');
+            document.getElementById('mergeSectionsFile').value = '';
+
+            document.getElementById('extraResultsContainer').innerHTML = `
+                        <div class="empty-state">
+                            <span class="icon">📂</span>
+                            <h3>Нет файлов</h3>
+                            <p>Выберите несколько JSON-файлов с вопросами</p>
+                        </div>
+                    `;
+
+            document.getElementById('mergeSectionsBtn').disabled = true;
+            document.getElementById('extraProgressContainer').style.display = 'none';
+        });
+
+        // ================================================================
         // EVENT LISTENERS
         // ================================================================
 
         document.getElementById('multiFindBtn').addEventListener('click', multiFindAnswers);
 
         console.log('🚀 Готово!');
-        console.log('📄 Загрузите базы с вопросами и базы с ответами.');
-        console.log('📥 Нажмите «Скачать всё в DOCX» для создания одного файла со всеми базами.');
-        console.log('🚀 Нажмите «Загрузить все на GitHub» для загрузки каждой базы отдельно.');
+        console.log('📄 Основной блок: загрузка вопросов/ответов, поиск, DOCX, GitHub.');
+        console.log('🛠 Дополнительные функции: объединение файлов с разделами.');
     </script>
 </body>
 </html>
