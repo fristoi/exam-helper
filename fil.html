@@ -32,7 +32,9 @@
             margin-bottom: 10px;
             font-size: 12px;
         }
+        hr { margin: 16px 0; border: 0; border-top: 2px solid #e8eaf6; }
 
+        /* ===== ОСНОВНАЯ ЧАСТЬ ===== */
         .upload-section {
             display: flex;
             gap: 10px;
@@ -113,6 +115,8 @@
         .btn-edit:hover:not(:disabled) { background: #5a52e0; transform: translateY(-1px); }
         .btn-delete-small { background: #dc2626; color: white; border: none; padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
         .btn-delete-small:hover { background: #b91c1c; }
+        .btn-purple { background: #6c63ff; color: white; }
+        .btn-purple:hover:not(:disabled) { background: #5a52e0; transform: translateY(-1px); }
 
         .search-box {
             padding: 5px 10px;
@@ -243,6 +247,14 @@
             font-size: 11px;
             font-weight: 600;
         }
+        .question-item .q-base-tag {
+            background: #e3f2fd;
+            color: #0d47a1;
+            padding: 1px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+        }
 
         .empty-state {
             text-align: center;
@@ -267,6 +279,7 @@
             margin-top: 6px;
         }
 
+        /* ===== GITHUB СЕКЦИЯ ===== */
         .github-section {
             margin-top: 14px;
             padding: 12px;
@@ -381,7 +394,6 @@
         }
         .bases-list .base-item .actions .btn-delete-small:hover { background: #b91c1c; }
         .bases-list .base-item .actions .btn-delete-small:disabled { opacity: 0.5; cursor: not-allowed; }
-
         .bases-list .list-header {
             padding: 8px 14px;
             background: #f5f7fa;
@@ -391,10 +403,87 @@
             border-bottom: 1px solid #e0e0e0;
         }
 
+        /* ===== НОВАЯ СЕКЦИЯ: ОБЪЕДИНЕНИЕ БАЗ → DOCX ===== */
+        .merge-section {
+            margin-top: 16px;
+            padding: 14px;
+            border: 2px solid #e8eaf6;
+            border-radius: 10px;
+            background: #fafbff;
+        }
+        .merge-section .section-title {
+            font-weight: 700;
+            color: #1a237e;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .merge-section .section-title .badge {
+            font-size: 10px;
+            background: #e8eaf6;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-weight: 400;
+            color: #5c6bc0;
+        }
+        .merge-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .merge-box {
+            border: 2px dashed #b0bec5;
+            border-radius: 8px;
+            padding: 8px 12px;
+            text-align: center;
+            transition: all 0.3s;
+            background: #fafafa;
+            cursor: pointer;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .merge-box:hover { border-color: #42a5f5; background: #f5faff; }
+        .merge-box.dragover { border-color: #66bb6a; background: #f1f8e9; }
+        .merge-box.loaded { border-color: #66bb6a; background: #f1f8e9; }
+        .merge-box input[type="file"] { display: none; }
+        .merge-box .icon { font-size: 20px; display: block; }
+        .merge-box .title { font-weight: 600; font-size: 12px; color: #37474f; }
+        .merge-box .hint { font-size: 10px; color: #90a4ae; }
+        .merge-box .file-info { font-size: 11px; color: #2e7d32; font-weight: 500; margin-top: 2px; }
+        .merge-box .file-info .fname {
+            display: inline-block;
+            background: #e8f5e9;
+            padding: 1px 8px;
+            border-radius: 10px;
+            margin: 2px;
+            font-size: 10px;
+        }
+
+        .merge-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 8px 0 10px;
+        }
+        .merge-stats .stat-card { background: #f8f9fa; border-radius: 6px; padding: 4px 8px; text-align: center; border-left: 3px solid #42a5f5; }
+        .merge-stats .stat-card .number { font-size: 16px; font-weight: 700; color: #1a237e; }
+        .merge-stats .stat-card .label { font-size: 9px; color: #78909c; margin-top: 1px; }
+        .merge-stats .stat-card.success { border-left-color: #66bb6a; }
+        .merge-stats .stat-card.success .number { color: #2e7d32; }
+        .merge-stats .stat-card.danger { border-left-color: #ef5350; }
+        .merge-stats .stat-card.danger .number { color: #c62828; }
+
         @media (max-width: 768px) {
             .upload-section { flex-direction: column; }
             .upload-box { min-width: unset; }
             .stats { grid-template-columns: 1fr 1fr; }
+            .merge-grid { grid-template-columns: 1fr; }
+            .merge-stats { grid-template-columns: 1fr 1fr; }
             .container { padding: 10px; }
             .controls { flex-direction: column; }
             .search-box { width: 100%; }
@@ -405,7 +494,6 @@
             .github-section .btn-upload-phone,
             .github-section .btn-edit-list { width: 100%; }
         }
-
         .question-list::-webkit-scrollbar { width: 5px; }
         .question-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 3px; }
         .question-list::-webkit-scrollbar-thumb { background: #c5cae9; border-radius: 3px; }
@@ -416,6 +504,10 @@
     <div class="container">
         <h1>🧯 Создание базы → per/bases/</h1>
         <p class="subtitle">Загрузите файл с вопросами и полную базу с ответами</p>
+
+        <!-- ============================================ -->
+        <!-- ОСНОВНАЯ ЧАСТЬ                               -->
+        <!-- ============================================ -->
 
         <div class="upload-section">
             <div class="upload-box" id="base1Upload">
@@ -461,7 +553,6 @@
         <div class="controls">
             <button class="btn btn-primary" id="compareBtn" disabled>🔍 Найти ответы</button>
             <button class="btn btn-success" id="exportBtn" disabled>📥 Скачать</button>
-            <button class="btn btn-word" id="exportDocxBtn" disabled>📄 Сохранить как DOCX</button>
             <button class="btn btn-danger" id="clearBtn">🗑️ Очистить</button>
             <input type="text" class="search-box" id="searchBox" placeholder="🔍 Поиск..." disabled>
         </div>
@@ -477,6 +568,10 @@
                 <p>Загрузите файлы и нажмите «Найти ответы»</p>
             </div>
         </div>
+
+        <!-- ============================================ -->
+        <!-- GITHUB ЗАГРУЗКА                              -->
+        <!-- ============================================ -->
 
         <div class="github-section" id="github-upload-section">
             <div class="row">
@@ -498,12 +593,73 @@
                 </div>
             </div>
         </div>
+
+        <!-- ============================================ -->
+        <!-- НОВАЯ СЕКЦИЯ: ОБЪЕДИНЕНИЕ БАЗ → DOCX        -->
+        <!-- ============================================ -->
+
+        <hr>
+
+        <div class="merge-section">
+            <div class="section-title">
+                📄 Объединение нескольких баз → DOCX
+                <span class="badge">загрузите сколько угодно файлов</span>
+            </div>
+
+            <div class="merge-grid">
+                <div class="merge-box" id="mergeQuestionsUpload">
+                    <label for="mergeQuestionsFile">
+                        <span class="icon">📋</span>
+                        <div class="title">Базы с вопросами (без ответов)</div>
+                        <div class="hint">Нажмите или перетащите (можно несколько)</div>
+                        <div class="file-info" id="mergeQuestionsInfo"></div>
+                    </label>
+                    <input type="file" id="mergeQuestionsFile" accept=".json" multiple>
+                </div>
+
+                <div class="merge-box" id="mergeAnswersUpload">
+                    <label for="mergeAnswersFile">
+                        <span class="icon">📚</span>
+                        <div class="title">Базы с ответами</div>
+                        <div class="hint">Нажмите или перетащите (можно несколько)</div>
+                        <div class="file-info" id="mergeAnswersInfo"></div>
+                    </label>
+                    <input type="file" id="mergeAnswersFile" accept=".json" multiple>
+                </div>
+            </div>
+
+            <div class="merge-stats">
+                <div class="stat-card"><div class="number" id="mqCount">0</div><div class="label">Вопросов</div></div>
+                <div class="stat-card"><div class="number" id="maCount">0</div><div class="label">Ответов</div></div>
+                <div class="stat-card success"><div class="number" id="mfFound">0</div><div class="label">✅ Найдено</div></div>
+                <div class="stat-card danger"><div class="number" id="mfNotFound">0</div><div class="label">❌ Не найдено</div></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary" id="mergeFindBtn" disabled>🔍 Найти ответы</button>
+                <button class="btn btn-word" id="mergeExportDocxBtn" disabled>📄 Сохранить как DOCX</button>
+                <button class="btn btn-danger" id="mergeClearBtn">🗑️ Очистить</button>
+            </div>
+
+            <div class="progress-container" id="mergeProgressContainer">
+                <div class="fill" id="mergeProgressFill"></div>
+            </div>
+
+            <div class="results" id="mergeResultsContainer">
+                <div class="empty-state">
+                    <span class="icon">📂</span>
+                    <h3>Нет данных</h3>
+                    <p>Загрузите базы с вопросами и базы с ответами</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // =============================================
-        // ОСНОВНАЯ ЛОГИКА ФИЛЬТРАЦИИ
-        // =============================================
+        // ============================================================
+        // 1. ОСНОВНАЯ ЛОГИКА
+        // ============================================================
 
         let filterIds = [];
         let fullBase = [];
@@ -547,13 +703,13 @@
                             filterIds = arrayData;
                             filterFileName = file.name;
                             document.getElementById('base1Count').textContent = filterIds.length;
-                            document.getElementById('base1Info').textContent = `✅ ${file.name} (${filterIds.length})`;
+                            document.getElementById('base1Info').textContent = '✅ ' + file.name + ' (' + filterIds.length + ')';
                             box.classList.add('loaded');
                         } else {
                             fullBase = arrayData;
                             fullBaseFileName = file.name;
                             document.getElementById('base2Count').textContent = fullBase.length;
-                            document.getElementById('base2Info').textContent = `✅ ${file.name} (${fullBase.length})`;
+                            document.getElementById('base2Info').textContent = '✅ ' + file.name + ' (' + fullBase.length + ')';
                             box.classList.add('loaded');
                         }
                         updateButtons();
@@ -600,7 +756,6 @@
             filteredResults = [];
             let found = 0;
             let notFound = 0;
-
             const total = filterIds.length;
 
             filterIds.forEach((item, idx) => {
@@ -626,7 +781,6 @@
 
             renderResults(filteredResults);
             document.getElementById('exportBtn').disabled = false;
-            document.getElementById('exportDocxBtn').disabled = false;
 
             const ghBtn = document.getElementById('gh-upload-btn');
             if (filteredResults.length > 0) {
@@ -666,9 +820,7 @@
             let html = `
                 <div class="results-header">
                     <span class="count">📋 Найдено: ${filtered.length}</span>
-                    <span>
-                        <span class="badge badge-info">Полная структура</span>
-                    </span>
+                    <span><span class="badge badge-info">Полная структура</span></span>
                 </div>
                 <div class="question-list">
             `;
@@ -719,10 +871,8 @@
 
         function exportFiltered() {
             if (filteredResults.length === 0) return;
-
             let baseName = filterFileName.replace(/\.[^.]+$/, '');
             let fileName = baseName + '_с_ответами.json';
-
             const blob = new Blob([JSON.stringify(filteredResults, null, 2)], {type: 'application/json;charset=utf-8'});
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -732,138 +882,776 @@
             document.body.removeChild(link);
         }
 
-        // =============================================
-        // ЭКСПОРТ В DOCX
-        // =============================================
-        function exportToDocx() {
-            if (filteredResults.length === 0) {
-                alert('❌ Сначала сформируйте базу!');
+        function clearAll() {
+            filterIds = [];
+            fullBase = [];
+            filteredResults = [];
+            document.getElementById('base1Count').textContent = '0';
+            document.getElementById('base2Count').textContent = '0';
+            document.getElementById('foundCount').textContent = '0';
+            document.getElementById('notFoundCount').textContent = '0';
+            document.getElementById('base1Upload').classList.remove('loaded');
+            document.getElementById('base1Info').textContent = '';
+            document.getElementById('base2Upload').classList.remove('loaded');
+            document.getElementById('base2Info').textContent = '';
+            document.getElementById('base1File').value = '';
+            document.getElementById('base2File').value = '';
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="empty-state">
+                    <span class="icon">📂</span>
+                    <h3>Нет данных</h3>
+                    <p>Загрузите файлы и нажмите «Найти ответы»</p>
+                </div>
+            `;
+            document.getElementById('exportBtn').disabled = true;
+            document.getElementById('compareBtn').disabled = true;
+            document.getElementById('searchBox').disabled = true;
+            document.getElementById('searchBox').value = '';
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('gh-upload-btn').disabled = true;
+            document.getElementById('gh-status').textContent = 'Ожидание действий...';
+            document.getElementById('gh-status').style.color = '#6b7280';
+        }
+
+        // ============================================================
+        // 2. ЗАГРУЗКА НА GITHUB
+        // ============================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedToken = localStorage.getItem('admin_gh_token');
+            if (savedToken) {
+                document.getElementById('gh-token').value = savedToken;
+            }
+        });
+
+        document.getElementById('gh-upload-phone-btn').addEventListener('click', function() {
+            document.getElementById('phone-file-input').click();
+        });
+
+        document.getElementById('phone-file-input').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const status = document.getElementById('gh-status');
+            status.textContent = '📖 Читаем файл: ' + file.name + '...';
+            status.style.color = '#1f2937';
+
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (!Array.isArray(data) || data.length === 0) {
+                        throw new Error('Файл должен содержать массив вопросов (не пустой)');
+                    }
+                    let baseName = file.name.replace('.json', '').trim();
+                    if (!baseName) throw new Error('Не удалось определить название базы из имени файла');
+                    document.getElementById('new-base-name').value = baseName;
+                    await uploadToPerBases(data, file.name, baseName);
+                } catch (error) {
+                    document.getElementById('gh-status').textContent = '❌ Ошибка: ' + error.message;
+                    document.getElementById('gh-status').style.color = '#dc2626';
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+        document.getElementById('gh-upload-btn').addEventListener('click', async () => {
+            await uploadToPerBases(filteredResults, 'готовую базу');
+        });
+
+        async function uploadToPerBases(dataToUpload, sourceName, customBaseName) {
+            const token = document.getElementById('gh-token').value.trim();
+            let baseName = customBaseName || document.getElementById('new-base-name').value.trim().replace('.json', '');
+            const status = document.getElementById('gh-status');
+            const OWNER = 'fristoi';
+            const REPO = 'exam-helper';
+            const BASE_PATH = 'per/bases';
+
+            if (!dataToUpload || dataToUpload.length === 0) {
+                status.textContent = '❌ Нет данных для загрузки (' + sourceName + ')';
+                status.style.color = '#dc2626';
+                return;
+            }
+            if (!token || !baseName) {
+                status.textContent = '❌ Введите токен GitHub и укажите имя базы!';
+                status.style.color = '#dc2626';
                 return;
             }
 
-            // Загружаем библиотеку docx.js
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/docx@8.4.0/build/index.min.js';
-            script.onload = function() {
-                try {
-                    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, SectionType } = window.docx;
+            localStorage.setItem('admin_gh_token', token);
+            status.textContent = '⏳ Загрузка "' + baseName + '" в per/bases/...';
+            status.style.color = '#1f2937';
 
-                    let baseName = filterFileName.replace(/\.[^.]+$/, '');
-                    let fileName = baseName + '_вопросы_и_ответы.docx';
+            try {
+                const fileContent = JSON.stringify(dataToUpload, null, 2);
+                const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
+                const filePath = BASE_PATH + '/' + baseName + '.json';
+                status.textContent = '📡 Отправка базы ' + filePath + ' на GitHub...';
+
+                let fileSha = '';
+                try {
+                    let res = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + filePath, {
+                        headers: { 'Authorization': 'token ' + token }
+                    });
+                    if (res.status === 200) {
+                        let d = await res.json();
+                        fileSha = d.sha;
+                    }
+                } catch(e) {}
+
+                let uploadRes = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + filePath, {
+                    method: 'PUT',
+                    headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: '📱 Авто-загрузка персональной базы: ' + baseName,
+                        content: base64Content,
+                        sha: fileSha
+                    })
+                });
+
+                if (!uploadRes.ok) {
+                    const errData = await uploadRes.json();
+                    throw new Error('Ошибка GitHub: ' + errData.message);
+                }
+
+                status.textContent = '🔄 Обновляем per/bases/index.json...';
+                const indexPath = BASE_PATH + '/index.json';
+                let indexSha = '';
+                let currentBasesList = [];
+
+                try {
+                    let indexGet = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
+                        headers: { 'Authorization': 'token ' + token }
+                    });
+                    if (indexGet.status === 200) {
+                        let indexData = await indexGet.json();
+                        indexSha = indexData.sha;
+                        let parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
+                        if (parsedIndex.bases) currentBasesList = parsedIndex.bases;
+                    }
+                } catch(e) {}
+
+                if (!currentBasesList.includes(baseName)) {
+                    currentBasesList.push(baseName);
+                }
+
+                const newIndexContent = JSON.stringify({ bases: currentBasesList }, null, 2);
+                const base64Index = btoa(unescape(encodeURIComponent(newIndexContent)));
+
+                let indexPut = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
+                    method: 'PUT',
+                    headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: '📱 Авто-регистрация базы в per: ' + baseName,
+                        content: base64Index,
+                        sha: indexSha
+                    })
+                });
+
+                if (indexPut.ok) {
+                    status.innerHTML = '🎉 <strong>База "' + baseName + '" загружена в per/bases/!</strong><br><span style="font-size:10px; color:#6b7280;">Обновите per.html чтобы увидеть базу</span>';
+                    status.style.color = '#16a34a';
+                    if (customBaseName) document.getElementById('new-base-name').value = '';
+                } else {
+                    const errData = await indexPut.json();
+                    throw new Error('Ошибка индекса: ' + errData.message);
+                }
+
+            } catch (err) {
+                status.textContent = '❌ Ошибка: ' + err.message;
+                status.style.color = '#dc2626';
+            }
+        }
+
+        // ============================================================
+        // 3. РЕДАКТИРОВАНИЕ СПИСКА БАЗ
+        // ============================================================
+
+        async function loadBasesList() {
+            const listContainer = document.getElementById('basesListItems');
+            const status = document.getElementById('gh-status');
+            const token = document.getElementById('gh-token').value.trim();
+            const OWNER = 'fristoi';
+            const REPO = 'exam-helper';
+            const BASE_PATH = 'per/bases';
+
+            if (!token) {
+                listContainer.innerHTML = '<div style="padding: 12px; text-align: center; color: #dc2626; font-size: 12px;">❌ Введите GitHub Token</div>';
+                return;
+            }
+
+            listContainer.innerHTML = '<div style="padding: 12px; text-align: center; color: #90a4ae; font-size: 12px;">⏳ Загрузка...</div>';
+
+            try {
+                const indexPath = BASE_PATH + '/index.json';
+                let basesList = [];
+
+                try {
+                    let indexGet = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
+                        headers: { 'Authorization': 'token ' + token }
+                    });
+
+                    if (indexGet.status === 200) {
+                        let indexData = await indexGet.json();
+                        let parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
+                        if (parsedIndex.bases) basesList = parsedIndex.bases;
+                    }
+                } catch(e) {
+                    basesList = [];
+                }
+
+                currentBasesList = basesList;
+
+                if (basesList.length === 0) {
+                    listContainer.innerHTML = '<div style="padding: 12px; text-align: center; color: #90a4ae; font-size: 12px;">📭 Нет загруженных баз</div>';
+                    return;
+                }
+
+                let html = '';
+                for (let base of basesList) {
+                    html += `
+                        <div class="base-item" id="base-item-${base}">
+                            <span class="name">📄 ${base}</span>
+                            <div class="actions">
+                                <button class="btn-delete-small" onclick="deleteBase('${base}')">🗑️ Удалить</button>
+                            </div>
+                        </div>
+                    `;
+                }
+                listContainer.innerHTML = html;
+
+            } catch (err) {
+                listContainer.innerHTML = '<div style="padding: 12px; text-align: center; color: #dc2626; font-size: 12px;">❌ Ошибка: ' + err.message + '</div>';
+            }
+        }
+
+        async function deleteBase(baseName) {
+            if (!confirm('🗑️ Удалить базу "' + baseName + '" из per/bases/ ?')) return;
+
+            const token = document.getElementById('gh-token').value.trim();
+            const status = document.getElementById('gh-status');
+            const OWNER = 'fristoi';
+            const REPO = 'exam-helper';
+            const BASE_PATH = 'per/bases';
+
+            if (!token) {
+                status.textContent = '❌ Введите GitHub Token';
+                status.style.color = '#dc2626';
+                return;
+            }
+
+            const btn = document.querySelector('#base-item-' + baseName + ' .btn-delete-small');
+            if (btn) btn.disabled = true;
+
+            status.textContent = '🗑️ Удаляем базу "' + baseName + '" из per/bases/...';
+            status.style.color = '#1f2937';
+
+            try {
+                const filePath = BASE_PATH + '/' + baseName + '.json';
+                let sha = '';
+                try {
+                    let res = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + filePath, {
+                        headers: { 'Authorization': 'token ' + token }
+                    });
+                    if (res.status === 200) {
+                        let d = await res.json();
+                        sha = d.sha;
+                    } else {
+                        throw new Error('Файл не найден на GitHub');
+                    }
+                } catch(e) {
+                    throw new Error('Файл ' + baseName + '.json не найден');
+                }
+
+                let deleteRes = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + filePath, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: '🗑️ Удаление базы из per: ' + baseName,
+                        sha: sha
+                    })
+                });
+
+                if (!deleteRes.ok) {
+                    const errData = await deleteRes.json();
+                    throw new Error('Ошибка удаления: ' + errData.message);
+                }
+
+                status.textContent = '🔄 Обновляем per/bases/index.json...';
+                const indexPath = BASE_PATH + '/index.json';
+                let indexSha = '';
+                let currentList = [...currentBasesList];
+
+                try {
+                    let indexGet = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
+                        headers: { 'Authorization': 'token ' + token }
+                    });
+                    if (indexGet.status === 200) {
+                        let indexData = await indexGet.json();
+                        indexSha = indexData.sha;
+                        let parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
+                        if (parsedIndex.bases) currentList = parsedIndex.bases;
+                    }
+                } catch(e) {}
+
+                const newList = currentList.filter(name => name !== baseName);
+                const newIndexContent = JSON.stringify({ bases: newList }, null, 2);
+                const base64Index = btoa(unescape(encodeURIComponent(newIndexContent)));
+
+                let indexPut = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
+                    method: 'PUT',
+                    headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: '🗑️ Удаление базы из списка per: ' + baseName,
+                        content: base64Index,
+                        sha: indexSha
+                    })
+                });
+
+                if (indexPut.ok) {
+                    status.innerHTML = '✅ <strong>База "' + baseName + '" удалена из per/bases/!</strong>';
+                    status.style.color = '#16a34a';
+                    await loadBasesList();
+                } else {
+                    const errData = await indexPut.json();
+                    throw new Error('Ошибка обновления индекса: ' + errData.message);
+                }
+
+            } catch (err) {
+                status.textContent = '❌ Ошибка: ' + err.message;
+                status.style.color = '#dc2626';
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        document.getElementById('gh-edit-list-btn').addEventListener('click', async () => {
+            const listEl = document.getElementById('basesList');
+            if (listEl.classList.contains('active')) {
+                listEl.classList.remove('active');
+                document.getElementById('gh-edit-list-btn').textContent = '✏️ Редактировать список';
+                return;
+            }
+            listEl.classList.add('active');
+            document.getElementById('gh-edit-list-btn').textContent = '❌ Закрыть список';
+            await loadBasesList();
+        });
+
+        // ============================================================
+        // 4. НОВАЯ СЕКЦИЯ: ОБЪЕДИНЕНИЕ БАЗ → DOCX
+        // ============================================================
+
+        const mergeState = {
+            questions: [],
+            answers: [],
+            results: [],
+            found: 0,
+            notFound: 0
+        };
+
+        // Загрузка вопросов
+        const mqInput = document.getElementById('mergeQuestionsFile');
+        const mqBox = document.getElementById('mergeQuestionsUpload');
+        const mqInfo = document.getElementById('mergeQuestionsInfo');
+
+        mqBox.addEventListener('dragover', e => { e.preventDefault(); mqBox.classList.add('dragover'); });
+        mqBox.addEventListener('dragleave', () => { mqBox.classList.remove('dragover'); });
+        mqBox.addEventListener('drop', e => {
+            e.preventDefault();
+            mqBox.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                mqInput.files = e.dataTransfer.files;
+                mqInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        mqInput.addEventListener('change', function(e) {
+            const files = this.files;
+            if (!files || files.length === 0) return;
+
+            mergeState.questions = [];
+            const fileNames = [];
+            let processed = 0;
+            let hasError = false;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (!Array.isArray(data)) {
+                            throw new Error('Файл "' + file.name + '" не содержит массив');
+                        }
+                        const name = file.name.replace('.json', '');
+                        mergeState.questions.push({ data: data, fileName: name });
+                        fileNames.push(name);
+                    } catch (error) {
+                        alert('❌ Ошибка в файле "' + file.name + '": ' + error.message);
+                        hasError = true;
+                    }
+                    processed++;
+                    if (processed === files.length && !hasError) {
+                        updateMergeQuestionsInfo(fileNames);
+                        updateMergeButtons();
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function updateMergeQuestionsInfo(fileNames) {
+            const total = mergeState.questions.reduce((sum, b) => sum + b.data.length, 0);
+            document.getElementById('mqCount').textContent = total;
+
+            let html = '';
+            fileNames.forEach(name => {
+                const count = mergeState.questions.find(b => b.fileName === name)?.data.length || 0;
+                html += '<span class="fname">📄 ' + name + ' (' + count + ')</span>';
+            });
+            html += '<div style="font-size:10px;color:#78909c;margin-top:2px;">всего ' + mergeState.questions.length + ' баз, ' + total + ' вопросов</div>';
+            mqInfo.innerHTML = html;
+            mqBox.classList.add('loaded');
+        }
+
+        // Загрузка ответов
+        const maInput = document.getElementById('mergeAnswersFile');
+        const maBox = document.getElementById('mergeAnswersUpload');
+        const maInfo = document.getElementById('mergeAnswersInfo');
+
+        maBox.addEventListener('dragover', e => { e.preventDefault(); maBox.classList.add('dragover'); });
+        maBox.addEventListener('dragleave', () => { maBox.classList.remove('dragover'); });
+        maBox.addEventListener('drop', e => {
+            e.preventDefault();
+            maBox.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                maInput.files = e.dataTransfer.files;
+                maInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        maInput.addEventListener('change', function(e) {
+            const files = this.files;
+            if (!files || files.length === 0) return;
+
+            mergeState.answers = [];
+            const fileNames = [];
+            let processed = 0;
+            let hasError = false;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (!Array.isArray(data)) {
+                            throw new Error('Файл "' + file.name + '" не содержит массив');
+                        }
+                        const name = file.name.replace('.json', '');
+                        mergeState.answers.push({ data: data, fileName: name });
+                        fileNames.push(name);
+                    } catch (error) {
+                        alert('❌ Ошибка в файле "' + file.name + '": ' + error.message);
+                        hasError = true;
+                    }
+                    processed++;
+                    if (processed === files.length && !hasError) {
+                        updateMergeAnswersInfo(fileNames);
+                        updateMergeButtons();
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function updateMergeAnswersInfo(fileNames) {
+            const total = mergeState.answers.reduce((sum, b) => sum + b.data.length, 0);
+            document.getElementById('maCount').textContent = total;
+
+            let html = '';
+            fileNames.forEach(name => {
+                const count = mergeState.answers.find(b => b.fileName === name)?.data.length || 0;
+                html += '<span class="fname">📚 ' + name + ' (' + count + ')</span>';
+            });
+            html += '<div style="font-size:10px;color:#78909c;margin-top:2px;">всего ' + mergeState.answers.length + ' баз, ' + total + ' записей</div>';
+            maInfo.innerHTML = html;
+            maBox.classList.add('loaded');
+        }
+
+        function updateMergeButtons() {
+            const hasQ = mergeState.questions.length > 0;
+            const hasA = mergeState.answers.length > 0;
+            document.getElementById('mergeFindBtn').disabled = !(hasQ && hasA);
+        }
+
+        function mergeFindAnswers() {
+            const progressContainer = document.getElementById('mergeProgressContainer');
+            const progressFill = document.getElementById('mergeProgressFill');
+            progressContainer.style.display = 'block';
+
+            const indexById = new Map();
+            mergeState.answers.forEach(base => {
+                base.data.forEach(item => {
+                    const id = getIdent(item);
+                    if (id && !indexById.has(id)) {
+                        indexById.set(id, item);
+                    }
+                });
+            });
+
+            const results = [];
+            let found = 0;
+            let notFound = 0;
+            let processed = 0;
+            const total = mergeState.questions.reduce((sum, b) => sum + b.data.length, 0);
+
+            mergeState.questions.forEach((base) => {
+                base.data.forEach((item) => {
+                    const id = getIdent(item);
+                    const match = id ? indexById.get(id) : null;
+                    if (match) {
+                        found++;
+                        results.push({ baseName: base.fileName, question: item, answer: match });
+                    } else {
+                        notFound++;
+                        results.push({ baseName: base.fileName, question: item, answer: null });
+                    }
+                    processed++;
+                    progressFill.style.width = (processed / total * 100) + '%';
+                });
+            });
+
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+                progressFill.style.width = '0%';
+            }, 400);
+
+            mergeState.results = results;
+            mergeState.found = found;
+            mergeState.notFound = notFound;
+
+            document.getElementById('mfFound').textContent = found;
+            document.getElementById('mfNotFound').textContent = notFound;
+
+            mergeRenderResults(results);
+            document.getElementById('mergeExportDocxBtn').disabled = false;
+        }
+
+        function mergeRenderResults(data) {
+            const container = document.getElementById('mergeResultsContainer');
+
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <span class="icon">🔍</span>
+                        <h3>Ничего не найдено</h3>
+                        <p>Попробуйте загрузить другие файлы</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="results-header">
+                    <span class="count">📋 Всего: ${data.length} вопросов</span>
+                    <span>
+                        <span class="badge badge-success">✅ Найдено: ${mergeState.found}</span>
+                        <span class="badge badge-danger">❌ Не найдено: ${mergeState.notFound}</span>
+                    </span>
+                </div>
+                <div class="question-list">
+            `;
+
+            let currentBase = '';
+            let globalCounter = 0;
+
+            data.forEach((item) => {
+                const q = item.question;
+                const a = item.answer;
+
+                if (item.baseName !== currentBase) {
+                    currentBase = item.baseName;
+                    const countInBase = data.filter(d => d.baseName === currentBase).length;
+                    html += `
+                        <div style="padding:12px 14px;background:#e8eaf6;border-bottom:2px solid #1a237e;margin:4px 0;">
+                            <strong style="color:#1a237e;font-size:15px;">📁 ${currentBase}</strong>
+                            <span style="font-size:11px;color:#78909c;margin-left:8px;">(${countInBase} вопросов)</span>
+                        </div>
+                    `;
+                }
+
+                globalCounter++;
+                const qText = q.question || 'Вопрос не указан';
+                const ident = getIdent(q) || '—';
+                const answerText = a ? (a.answer || 'Нет ответа') : '❌ Ответ не найден';
+                const source = a ? (a.source || '') : '';
+
+                html += `
+                    <div class="question-item">
+                        <div class="q-header">
+                            <span class="q-number">#${globalCounter}</span>
+                            <span class="q-base-tag">${currentBase}</span>
+                            <span class="q-ident">🆔 ${ident}</span>
+                        </div>
+                        <div class="q-text">${escapeHtml(qText)}</div>
+                        <div class="q-answer">
+                            <span class="label">📖 Ответ:</span>
+                            ${escapeHtml(answerText)}
+                            ${a && a.correct && a.correct.length > 0 ? `<div style="margin-top:3px;font-size:11px;color:#2e7d32;">✅ Правильные: ${a.correct.join('; ')}</div>` : ''}
+                            ${a && a.wrong && a.wrong.length > 0 ? `<div style="margin-top:2px;font-size:11px;color:#c62828;">❌ Неправильные: ${a.wrong.join('; ')}</div>` : ''}
+                        </div>
+                        ${source ? `<div class="q-source">📌 Источник: ${escapeHtml(source)}</div>` : ''}
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // ============================================================
+        // 5. ЭКСПОРТ В DOCX (с запасными CDN)
+        // ============================================================
+
+        function mergeExportDocx() {
+            if (mergeState.results.length === 0) {
+                alert('❌ Сначала найдите ответы!');
+                return;
+            }
+
+            // Функция загрузки библиотеки с запасным вариантом
+            function loadDocxLibrary(callback) {
+                if (window.docx) {
+                    callback();
+                    return;
+                }
+
+                // Пробуем первый CDN
+                const script1 = document.createElement('script');
+                script1.src = 'https://cdn.jsdelivr.net/npm/docx@8.4.0/build/index.min.js';
+                script1.onload = callback;
+                script1.onerror = function() {
+                    // Пробуем второй CDN
+                    const script2 = document.createElement('script');
+                    script2.src = 'https://unpkg.com/docx@8.4.0/build/index.min.js';
+                    script2.onload = callback;
+                    script2.onerror = function() {
+                        alert('❌ Не удалось загрузить библиотеку docx.js.\nПроверьте интернет или попробуйте позже.');
+                    };
+                    document.head.appendChild(script2);
+                };
+                document.head.appendChild(script1);
+            }
+
+            loadDocxLibrary(function() {
+                try {
+                    const { Document, Packer, Paragraph, TextRun, AlignmentType } = window.docx;
 
                     const children = [];
 
-                    // Заголовок
+                    const baseNames = mergeState.questions.map(b => b.fileName).join(' + ');
                     children.push(new Paragraph({
                         children: [
-                            new TextRun({ text: `📋 ${baseName} — вопросы и ответы`, size: 32, bold: true, font: 'Times New Roman' })
+                            new TextRun({ text: '📋 ' + baseNames + ' — объединённая база', size: 36, bold: true, font: 'Times New Roman' })
                         ],
                         alignment: AlignmentType.CENTER,
                         spacing: { before: 200, after: 400 }
                     }));
 
-                    // Отделитель
                     children.push(new Paragraph({
                         children: [
                             new TextRun({ text: '═══════════════════════════════════════════════════', size: 16, color: '1a237e' })
                         ],
                         alignment: AlignmentType.CENTER,
-                        spacing: { after: 200 }
+                        spacing: { after: 300 }
                     }));
 
-                    // Проходим по каждому вопросу
-                    filteredResults.forEach((item, index) => {
-                        const punkt = item.punkt || '';
-                        const question = item.question || 'Вопрос не указан';
-                        const answer = item.answer || 'Нет ответа';
-                        const correct = item.correct || [];
-                        const wrong = item.wrong || [];
+                    let currentBase = '';
+                    let globalCounter = 0;
 
-                        // Номер вопроса
-                        let headerText = `Вопрос №${index + 1}`;
-                        if (punkt) headerText += ` — п. ${punkt}`;
-
-                        children.push(new Paragraph({
-                            children: [
-                                new TextRun({ text: headerText, size: 24, bold: true, color: '1a237e', font: 'Times New Roman' })
-                            ],
-                            spacing: { before: 300, after: 100 }
-                        }));
-
-                        // Текст вопроса
-                        children.push(new Paragraph({
-                            children: [
-                                new TextRun({ text: question, size: 22, font: 'Times New Roman' })
-                            ],
-                            spacing: { before: 0, after: 100 }
-                        }));
-
-                        // Подпись "Ответы:"
-                        children.push(new Paragraph({
-                            children: [
-                                new TextRun({ text: 'Ответы:', size: 20, bold: true, color: '37474f', font: 'Times New Roman' })
-                            ],
-                            spacing: { before: 50, after: 50 }
-                        }));
-
-                        // Список ответов
-                        let answerTexts = [];
-
-                        if (item.all_answers && item.all_answers.length > 0) {
-                            item.all_answers.forEach(a => {
-                                if (a.correct) {
-                                    answerTexts.push({ text: `✅ ${a.text}`, correct: true });
-                                } else {
-                                    answerTexts.push({ text: `❌ ${a.text}`, correct: false });
-                                }
-                            });
-                        } else if (correct.length > 0 || wrong.length > 0) {
-                            correct.forEach(c => {
-                                answerTexts.push({ text: `✅ ${c}`, correct: true });
-                            });
-                            wrong.forEach(w => {
-                                answerTexts.push({ text: `❌ ${w}`, correct: false });
-                            });
-                        } else {
-                            let lines = answer.split('\n');
-                            lines.forEach(line => {
-                                let trimmed = line.trim();
-                                if (trimmed.startsWith('++')) {
-                                    let cleanText = trimmed.replace('++', '').trim();
-                                    answerTexts.push({ text: `✅ ${cleanText}`, correct: true });
-                                } else if (trimmed) {
-                                    answerTexts.push({ text: trimmed, correct: false });
-                                }
-                            });
-                        }
-
-                        if (answerTexts.length === 0) {
-                            answerTexts.push({ text: 'Нет ответа', correct: false });
-                        }
-
-                        answerTexts.forEach(a => {
-                            const color = a.correct ? '2e7d32' : 'c62828';
+                    mergeState.results.forEach((item) => {
+                        if (item.baseName !== currentBase) {
+                            currentBase = item.baseName;
                             children.push(new Paragraph({
                                 children: [
-                                    new TextRun({ text: a.text, size: 20, color: color, font: 'Times New Roman' })
+                                    new TextRun({ text: '\n' + currentBase, size: 34, bold: true, color: '1a237e', font: 'Times New Roman' })
                                 ],
-                                spacing: { before: 20, after: 20 }
+                                alignment: AlignmentType.CENTER,
+                                spacing: { before: 400, after: 200 }
+                            }));
+                            children.push(new Paragraph({
+                                children: [
+                                    new TextRun({ text: '─────────────────────────────────────────────', size: 16, color: 'cccccc' })
+                                ],
+                                alignment: AlignmentType.CENTER,
+                                spacing: { after: 200 }
+                            }));
+                        }
+
+                        globalCounter++;
+
+                        const q = item.question;
+                        const a = item.answer;
+                        const qText = q.question || 'Вопрос не указан';
+                        const answerText = a ? (a.answer || 'Нет ответа') : '❌ Ответ не найден';
+                        const source = a ? (a.source || '') : '';
+
+                        children.push(new Paragraph({
+                            children: [
+                                new TextRun({ text: 'Вопрос №' + globalCounter, size: 24, bold: true, color: '1a237e', font: 'Times New Roman' })
+                            ],
+                            spacing: { before: 250, after: 50 }
+                        }));
+
+                        children.push(new Paragraph({
+                            children: [
+                                new TextRun({ text: qText, size: 22, font: 'Times New Roman' })
+                            ],
+                            spacing: { after: 80 }
+                        }));
+
+                        children.push(new Paragraph({
+                            children: [
+                                new TextRun({ text: 'Ответ:', size: 20, bold: true, color: '2e7d32', font: 'Times New Roman' })
+                            ],
+                            spacing: { after: 30 }
+                        }));
+
+                        const lines = answerText.split('\n');
+                        lines.forEach(line => {
+                            const trimmed = line.trim();
+                            if (!trimmed) return;
+                            const isCorrect = trimmed.startsWith('++');
+                            const color = isCorrect ? '2e7d32' : '333333';
+                            const text = isCorrect ? trimmed.replace('++', '').trim() : trimmed;
+                            children.push(new Paragraph({
+                                children: [
+                                    new TextRun({ text: isCorrect ? '✅ ' + text : text, size: 20, color: color, font: 'Times New Roman' })
+                                ],
+                                spacing: { after: 15 }
                             }));
                         });
 
-                        // Отделитель между вопросами
+                        if (source) {
+                            children.push(new Paragraph({
+                                children: [
+                                    new TextRun({ text: 'Источник: ' + source, size: 16, color: '78909c', font: 'Times New Roman' })
+                                ],
+                                spacing: { after: 30 }
+                            }));
+                        }
+
                         children.push(new Paragraph({
                             children: [
-                                new TextRun({ text: '─────────────────────────────────────────────', size: 14, color: 'cccccc' })
+                                new TextRun({ text: '─────────────────────────────────────────────', size: 14, color: 'e0e0e0' })
                             ],
-                            spacing: { before: 150, after: 50 }
+                            spacing: { before: 100, after: 50 }
                         }));
                     });
 
-                    // Подвал
                     children.push(new Paragraph({
                         children: [
-                            new TextRun({ text: `Всего вопросов: ${filteredResults.length}  |  Дата: ${new Date().toLocaleString('ru-RU')}`, size: 16, color: '78909c', font: 'Times New Roman' })
+                            new TextRun({ text: 'Всего вопросов: ' + mergeState.results.length + '  |  Дата: ' + new Date().toLocaleString('ru-RU'), size: 16, color: '78909c', font: 'Times New Roman' })
                         ],
                         alignment: AlignmentType.CENTER,
                         spacing: { before: 200, after: 100 }
@@ -885,6 +1673,8 @@
                         }]
                     });
 
+                    const fileName = 'Объединённая_база_' + new Date().toISOString().slice(0,10) + '.docx';
+
                     Packer.toBlob(doc).then(blob => {
                         const link = document.createElement('a');
                         link.href = URL.createObjectURL(blob);
@@ -898,409 +1688,59 @@
                     alert('❌ Ошибка при создании DOCX: ' + e.message);
                     console.error(e);
                 }
-            };
-            script.onerror = function() {
-                alert('❌ Не удалось загрузить библиотеку docx.js. Проверьте подключение к интернету.');
-            };
-            document.head.appendChild(script);
+            });
         }
 
-        // =============================================
+        function mergeClear() {
+            mergeState.questions = [];
+            mergeState.answers = [];
+            mergeState.results = [];
+            mergeState.found = 0;
+            mergeState.notFound = 0;
 
-        function clearAll() {
-            filterIds = [];
-            fullBase = [];
-            filteredResults = [];
+            ['mqCount', 'maCount', 'mfFound', 'mfNotFound'].forEach(id => {
+                document.getElementById(id).textContent = '0';
+            });
 
-            document.getElementById('base1Count').textContent = '0';
-            document.getElementById('base2Count').textContent = '0';
-            document.getElementById('foundCount').textContent = '0';
-            document.getElementById('notFoundCount').textContent = '0';
+            document.getElementById('mergeQuestionsInfo').innerHTML = '';
+            document.getElementById('mergeAnswersInfo').innerHTML = '';
+            document.getElementById('mergeQuestionsUpload').classList.remove('loaded');
+            document.getElementById('mergeAnswersUpload').classList.remove('loaded');
+            document.getElementById('mergeQuestionsFile').value = '';
+            document.getElementById('mergeAnswersFile').value = '';
 
-            document.getElementById('base1Upload').classList.remove('loaded');
-            document.getElementById('base1Info').textContent = '';
-            document.getElementById('base2Upload').classList.remove('loaded');
-            document.getElementById('base2Info').textContent = '';
-
-            document.getElementById('base1File').value = '';
-            document.getElementById('base2File').value = '';
-
-            document.getElementById('resultsContainer').innerHTML = `
+            document.getElementById('mergeResultsContainer').innerHTML = `
                 <div class="empty-state">
                     <span class="icon">📂</span>
                     <h3>Нет данных</h3>
-                    <p>Загрузите файлы и нажмите «Найти ответы»</p>
+                    <p>Загрузите базы с вопросами и базы с ответами</p>
                 </div>
             `;
 
-            document.getElementById('exportBtn').disabled = true;
-            document.getElementById('exportDocxBtn').disabled = true;
-            document.getElementById('compareBtn').disabled = true;
-            document.getElementById('searchBox').disabled = true;
-            document.getElementById('searchBox').value = '';
-            document.getElementById('progressContainer').style.display = 'none';
-            document.getElementById('gh-upload-btn').disabled = true;
-            document.getElementById('gh-status').textContent = 'Ожидание действий...';
-            document.getElementById('gh-status').style.color = '#6b7280';
+            document.getElementById('mergeFindBtn').disabled = true;
+            document.getElementById('mergeExportDocxBtn').disabled = true;
+            document.getElementById('mergeProgressContainer').style.display = 'none';
         }
 
-        // =============================================
-        // ЗАГРУЗКА НА GITHUB (в папку per/bases/)
-        // =============================================
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedToken = localStorage.getItem('admin_gh_token');
-            if (savedToken) {
-                document.getElementById('gh-token').value = savedToken;
-            }
-        });
-
-        document.getElementById('gh-upload-phone-btn').addEventListener('click', function() {
-            document.getElementById('phone-file-input').click();
-        });
-
-        document.getElementById('phone-file-input').addEventListener('change', async function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const status = document.getElementById('gh-status');
-            status.textContent = `📖 Читаем файл: ${file.name}...`;
-            status.style.color = '#1f2937';
-
-            const reader = new FileReader();
-            reader.onload = async function(event) {
-                try {
-                    const data = JSON.parse(event.target.result);
-                    if (!Array.isArray(data) || data.length === 0) {
-                        throw new Error('Файл должен содержать массив вопросов (не пустой)');
-                    }
-
-                    let baseName = file.name.replace('.json', '').trim();
-                    if (!baseName) {
-                        throw new Error('Не удалось определить название базы из имени файла');
-                    }
-
-                    document.getElementById('new-base-name').value = baseName;
-
-                    await uploadToPerBases(data, file.name, baseName);
-                } catch (error) {
-                    document.getElementById('gh-status').textContent = `❌ Ошибка: ${error.message}`;
-                    document.getElementById('gh-status').style.color = '#dc2626';
-                }
-            };
-            reader.readAsText(file);
-            e.target.value = '';
-        });
-
-        document.getElementById('gh-upload-btn').addEventListener('click', async () => {
-            await uploadToPerBases(filteredResults, 'готовую базу');
-        });
-
-        async function uploadToPerBases(dataToUpload, sourceName, customBaseName) {
-            const token = document.getElementById('gh-token').value.trim();
-            let baseName = customBaseName || document.getElementById('new-base-name').value.trim().replace('.json', '');
-            const status = document.getElementById('gh-status');
-
-            const OWNER = 'fristoi';
-            const REPO = 'exam-helper';
-            const BASE_PATH = 'per/bases';
-
-            if (!dataToUpload || dataToUpload.length === 0) {
-                status.textContent = `❌ Нет данных для загрузки (${sourceName})`;
-                status.style.color = '#dc2626';
-                return;
-            }
-
-            if (!token || !baseName) {
-                status.textContent = '❌ Введите токен GitHub и укажите имя базы!';
-                status.style.color = '#dc2626';
-                return;
-            }
-
-            localStorage.setItem('admin_gh_token', token);
-
-            status.textContent = `⏳ Загрузка "${baseName}" в per/bases/...`;
-            status.style.color = '#1f2937';
-
-            try {
-                const fileContent = JSON.stringify(dataToUpload, null, 2);
-                const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
-
-                const filePath = `${BASE_PATH}/${baseName}.json`;
-                status.textContent = `📡 Отправка базы ${filePath} на GitHub...`;
-
-                let fileSha = '';
-                try {
-                    let res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-                    if (res.status === 200) {
-                        let d = await res.json();
-                        fileSha = d.sha;
-                    }
-                } catch(e) {}
-
-                let uploadRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: `📱 Авто-загрузка персональной базы: ${baseName}`,
-                        content: base64Content,
-                        sha: fileSha
-                    })
-                });
-
-                if (!uploadRes.ok) {
-                    const errData = await uploadRes.json();
-                    throw new Error(`Ошибка GitHub: ${errData.message}`);
-                }
-
-                status.textContent = '🔄 Обновляем per/bases/index.json...';
-                const indexPath = `${BASE_PATH}/index.json`;
-                let indexSha = '';
-                let currentBasesList = [];
-
-                try {
-                    let indexGet = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-
-                    if (indexGet.status === 200) {
-                        let indexData = await indexGet.json();
-                        indexSha = indexData.sha;
-                        let parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
-                        if (parsedIndex.bases) currentBasesList = parsedIndex.bases;
-                    }
-                } catch(e) {}
-
-                if (!currentBasesList.includes(baseName)) {
-                    currentBasesList.push(baseName);
-                }
-
-                const newIndexContent = JSON.stringify({ bases: currentBasesList }, null, 2);
-                const base64Index = btoa(unescape(encodeURIComponent(newIndexContent)));
-
-                let indexPut = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: `📱 Авто-регистрация базы в per: ${baseName}`,
-                        content: base64Index,
-                        sha: indexSha
-                    })
-                });
-
-                if (indexPut.ok) {
-                    status.innerHTML = `🎉 <strong>База "${baseName}" загружена в per/bases/!</strong><br><span style="font-size:10px; color:#6b7280;">Обновите per.html чтобы увидеть базу</span>`;
-                    status.style.color = '#16a34a';
-                    if (customBaseName) {
-                        document.getElementById('new-base-name').value = '';
-                    }
-                } else {
-                    const errData = await indexPut.json();
-                    throw new Error(`Ошибка индекса: ${errData.message}`);
-                }
-
-            } catch (err) {
-                status.textContent = `❌ Ошибка: ${err.message}`;
-                status.style.color = '#dc2626';
-            }
-        }
-
-        // =============================================
-        // РЕДАКТИРОВАНИЕ СПИСКА БАЗ
-        // =============================================
-
-        async function loadBasesList() {
-            const listContainer = document.getElementById('basesListItems');
-            const status = document.getElementById('gh-status');
-            const token = document.getElementById('gh-token').value.trim();
-            const OWNER = 'fristoi';
-            const REPO = 'exam-helper';
-            const BASE_PATH = 'per/bases';
-
-            if (!token) {
-                listContainer.innerHTML = `<div style="padding: 12px; text-align: center; color: #dc2626; font-size: 12px;">❌ Введите GitHub Token</div>`;
-                return;
-            }
-
-            listContainer.innerHTML = `<div style="padding: 12px; text-align: center; color: #90a4ae; font-size: 12px;">⏳ Загрузка...</div>`;
-
-            try {
-                const indexPath = `${BASE_PATH}/index.json`;
-                let basesList = [];
-
-                try {
-                    let indexGet = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-
-                    if (indexGet.status === 200) {
-                        let indexData = await indexGet.json();
-                        let parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
-                        if (parsedIndex.bases) basesList = parsedIndex.bases;
-                    }
-                } catch(e) {
-                    basesList = [];
-                }
-
-                currentBasesList = basesList;
-
-                if (basesList.length === 0) {
-                    listContainer.innerHTML = `<div style="padding: 12px; text-align: center; color: #90a4ae; font-size: 12px;">📭 Нет загруженных баз</div>`;
-                    return;
-                }
-
-                let html = '';
-                for (let base of basesList) {
-                    html += `
-                        <div class="base-item" id="base-item-${base}">
-                            <span class="name">📄 ${base}</span>
-                            <div class="actions">
-                                <button class="btn-delete-small" onclick="deleteBase('${base}')">🗑️ Удалить</button>
-                            </div>
-                        </div>
-                    `;
-                }
-                listContainer.innerHTML = html;
-
-            } catch (err) {
-                listContainer.innerHTML = `<div style="padding: 12px; text-align: center; color: #dc2626; font-size: 12px;">❌ Ошибка: ${err.message}</div>`;
-            }
-        }
-
-        async function deleteBase(baseName) {
-            if (!confirm(`🗑️ Удалить базу "${baseName}" из per/bases/ ?`)) return;
-
-            const token = document.getElementById('gh-token').value.trim();
-            const status = document.getElementById('gh-status');
-            const OWNER = 'fristoi';
-            const REPO = 'exam-helper';
-            const BASE_PATH = 'per/bases';
-
-            if (!token) {
-                status.textContent = '❌ Введите GitHub Token';
-                status.style.color = '#dc2626';
-                return;
-            }
-
-            const btn = document.querySelector(`#base-item-${baseName} .btn-delete-small`);
-            if (btn) btn.disabled = true;
-
-            status.textContent = `🗑️ Удаляем базу "${baseName}" из per/bases/...`;
-            status.style.color = '#1f2937';
-
-            try {
-                const filePath = `${BASE_PATH}/${baseName}.json`;
-                let sha = '';
-                try {
-                    let res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-                    if (res.status === 200) {
-                        let d = await res.json();
-                        sha = d.sha;
-                    } else {
-                        throw new Error('Файл не найден на GitHub');
-                    }
-                } catch(e) {
-                    throw new Error(`Файл ${baseName}.json не найден`);
-                }
-
-                let deleteRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: `🗑️ Удаление базы из per: ${baseName}`,
-                        sha: sha
-                    })
-                });
-
-                if (!deleteRes.ok) {
-                    const errData = await deleteRes.json();
-                    throw new Error(`Ошибка удаления: ${errData.message}`);
-                }
-
-                status.textContent = '🔄 Обновляем per/bases/index.json...';
-                const indexPath = `${BASE_PATH}/index.json`;
-                let indexSha = '';
-                let currentList = [...currentBasesList];
-
-                try {
-                    let indexGet = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-
-                    if (indexGet.status === 200) {
-                        let indexData = await indexGet.json();
-                        indexSha = indexData.sha;
-                        let parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
-                        if (parsedIndex.bases) currentList = parsedIndex.bases;
-                    }
-                } catch(e) {}
-
-                const newList = currentList.filter(name => name !== baseName);
-                const newIndexContent = JSON.stringify({ bases: newList }, null, 2);
-                const base64Index = btoa(unescape(encodeURIComponent(newIndexContent)));
-
-                let indexPut = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${indexPath}`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: `🗑️ Удаление базы из списка per: ${baseName}`,
-                        content: base64Index,
-                        sha: indexSha
-                    })
-                });
-
-                if (indexPut.ok) {
-                    status.innerHTML = `✅ <strong>База "${baseName}" удалена из per/bases/!</strong>`;
-                    status.style.color = '#16a34a';
-                    await loadBasesList();
-                } else {
-                    const errData = await indexPut.json();
-                    throw new Error(`Ошибка обновления индекса: ${errData.message}`);
-                }
-
-            } catch (err) {
-                status.textContent = `❌ Ошибка: ${err.message}`;
-                status.style.color = '#dc2626';
-                if (btn) btn.disabled = false;
-            }
-        }
-
-        document.getElementById('gh-edit-list-btn').addEventListener('click', async () => {
-            const listEl = document.getElementById('basesList');
-            if (listEl.classList.contains('active')) {
-                listEl.classList.remove('active');
-                document.getElementById('gh-edit-list-btn').textContent = '✏️ Редактировать список';
-                return;
-            }
-
-            listEl.classList.add('active');
-            document.getElementById('gh-edit-list-btn').textContent = '❌ Закрыть список';
-            await loadBasesList();
-        });
-
-        // =============================================
+        // ============================================================
         // EVENT LISTENERS
-        // =============================================
+        // ============================================================
 
         document.getElementById('compareBtn').addEventListener('click', filterBase);
         document.getElementById('exportBtn').addEventListener('click', exportFiltered);
-        document.getElementById('exportDocxBtn').addEventListener('click', exportToDocx);
         document.getElementById('clearBtn').addEventListener('click', clearAll);
         document.getElementById('searchBox').addEventListener('input', () => {
             if (filteredResults.length > 0) renderResults(filteredResults);
         });
 
+        document.getElementById('mergeFindBtn').addEventListener('click', mergeFindAnswers);
+        document.getElementById('mergeExportDocxBtn').addEventListener('click', mergeExportDocx);
+        document.getElementById('mergeClearBtn').addEventListener('click', mergeClear);
+
         updateButtons();
         console.log('🚀 Инструмент готов!');
-        console.log('📖 Загрузите файлы и нажмите «Найти ответы»');
-        console.log('📤 Кнопка «Загрузить с телефона» берёт название базы ИЗ ИМЕНИ ФАЙЛА');
-        console.log('📄 Кнопка «Сохранить как DOCX» создаёт Word-документ (.docx)');
-        console.log('💡 Базы загружаются в папку per/bases/');
-        console.log('✏️ Кнопка «Редактировать список» показывает все базы и позволяет удалять их');
+        console.log('📖 Верхняя часть: загрузка 2 файлов, поиск, загрузка на GitHub.');
+        console.log('📄 Нижняя часть: объединение нескольких баз и сохранение в DOCX.');
     </script>
 </body>
 </html>
