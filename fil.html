@@ -215,6 +215,24 @@
             background: #5a52e0;
             transform: translateY(-1px);
         }
+        .btn-copy {
+            background: #607d8b;
+            color: white;
+            border: none;
+            padding: 2px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-copy:hover {
+            background: #455a64;
+            transform: translateY(-1px);
+        }
+        .btn-copy.copied {
+            background: #2e7d32;
+        }
 
         .progress-container {
             width: 100%;
@@ -664,6 +682,42 @@
             margin-top: 1px;
         }
 
+        /* СКРИПТЫ */
+        .scripts-section {
+            margin-top: 16px;
+            padding: 14px;
+            border: 2px solid #fce4ec;
+            border-radius: 10px;
+            background: #fefafb;
+        }
+        .scripts-section .section-title {
+            font-weight: 700;
+            color: #880e4f;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .scripts-section .section-title .badge {
+            font-size: 10px;
+            background: #fce4ec;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-weight: 400;
+            color: #880e4f;
+        }
+        .script-card {
+            border: 1px solid #fce4ec;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            background: white;
+        }
+        .script-card:last-child {
+            margin-bottom: 0;
+        }
+
         @media (max-width: 768px) {
             .upload-box {
                 min-width: unset;
@@ -698,6 +752,12 @@
             .github-section .btn-edit-list {
                 width: 100%;
             }
+            .script-card .script-row {
+                flex-wrap: wrap;
+            }
+            .script-card .script-name {
+                min-width: 100%;
+            }
         }
         .question-list::-webkit-scrollbar {
             width: 5px;
@@ -721,7 +781,7 @@
         <p class="subtitle">Загрузите базы с вопросами и базы с ответами</p>
 
         <!-- ========================================================== -->
-        <!-- ОСНОВНОЙ БЛОК: загрузка нескольких баз → поиск → GitHub    -->
+        <!-- ОСНОВНОЙ БЛОК                                              -->
         <!-- ========================================================== -->
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
@@ -876,6 +936,38 @@
             </div>
         </div>
 
+        <!-- ========================================================== -->
+        <!-- СКРИПТЫ (компактная версия)                                -->
+        <!-- ========================================================== -->
+
+        <hr>
+
+        <div class="scripts-section">
+            <div class="section-title">
+                📜 Скрипты
+                <span class="badge">для WebTutor</span>
+            </div>
+
+            <!-- Сборщик вопросов -->
+            <div class="script-card">
+                <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                    <span style="font-weight:600; font-size:12px; color:#1a237e; min-width:140px;">🧹 Сборщик вопросов</span>
+                    <button class="btn-copy" onclick="copyScriptText('(function(){console.log(\\'🔍 Начинаем сбор вопросов...\\');function cleanQuestionText(t){return t?t.replace(/(укажите все правильные ответы)/gi,\\'\\'):t}let allQuestions=[],sequence=window.g_oPlayer?.aSequence;if(!sequence)return console.log(\\'❌ g_oPlayer не найден\\');console.log(`📊 Всего элементов: ${sequence.length}`);for(let i=0;i<sequence.length;i++){let item=sequence[i];if(item.sType!==\\'choice\\'&&item.sType!==\\'select\\')continue;let questionText=item.sQuestionText;if(!questionText)continue;let cleanedQuestion=cleanQuestionText(questionText);let punkt=\\'\\';if(item.sTitle){let match=item.sTitle.match(/[\\d\\.]+/);if(match)punkt=match[0]}let ident=item.sIdent||item._id||item.id;let renderChoice=item.jxResponse?.[0]?.getElementsByTagName(\\'render_choice\\')[0];let labels=renderChoice?renderChoice.getElementsByTagName(\\'response_label\\'):[];let idToText={};for(let lbl of labels){let id=lbl.getAttribute(\\'ident\\');let mattext=lbl.getElementsByTagName(\\'mattext\\')[0];if(id&&mattext){idToText[id]=mattext.textContent.trim()}}let correctAnswers=[];let wrongAnswers=[];let allAnswers=[];for(let lbl of labels){let ws_right=lbl.getAttribute(\\'ws_right\\');let id=lbl.getAttribute(\\'ident\\');if(idToText[id]){let answerText=idToText[id];let isCorrect=(ws_right===\\'1\\');allAnswers.push({text:answerText,correct:isCorrect});if(isCorrect){correctAnswers.push(answerText)}else{wrongAnswers.push(answerText)}}}if(correctAnswers.length>0||wrongAnswers.length>0){let questionData={ident:ident,punkt:punkt,question:cleanedQuestion,correct:correctAnswers,wrong:wrongAnswers,all_answers:allAnswers,answer:correctAnswers.length===1?correctAnswers[0]:correctAnswers.map(a=>\\'++ \\'+a).join(\\'\\n\\')};allQuestions.push(questionData);console.log(`✅ [${i}] ${punkt} (ident: ${ident})`);console.log(`   Очищенный вопрос: ${cleanedQuestion.substring(0,70)}...`)}}console.log(\\'\\n🎯 ВСЕГО СОБРАНО:\\',allQuestions.length,\\' вопросов\\');if(allQuestions.length>0){let dataStr=JSON.stringify(allQuestions,null,2);let blob=new Blob([dataStr],{type:\\'application/json\\'});let url=URL.createObjectURL(blob);let a=document.createElement(\\'a\\');a.href=url;a.download=`база_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log(\\'📥 Файл скачан!\\')}})();')">📋 ПК</button>
+                    <button class="btn-copy" onclick="copyScriptText('javascript:(function(){console.log(\\'%D0%A1%D0%B1%D0%BE%D1%80%20%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D0%BE%D0%B2...\\');function%20cleanQuestionText(t){return%20t%3Ft.replace(/(%D1%83%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%B2%D1%81%D0%B5%20%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D1%8B)/gi,\\'\\'):t}let%20allQuestions=[],sequence=window.g_oPlayer%3F.aSequence;if(!sequence)return%20alert(\\'%D0%9E%D1%88%D0%B8%D0%B1%D0%BA%D0%B0:%20g_oPlayer%20%D0%BD%D0%B5%20%D0%BD%D0%B0%D0%B9%D0%B4%D0%B5%D0%BD\\'),void%200;for(let%20e=0;e<sequence.length;e++){let%20n=sequence[e];if(\\'choice\\'!==n.sType&&\\'select\\'!==n.sType)continue;let%20o=n.sQuestionText;if(!o)continue;let%20a=cleanQuestionText(o),l=\\'\\';if(n.sTitle){let%20r=n.sTitle.match(/[\\d\\.]+/);r&&(l=r[0])}let%20c=n.sIdent||n._id||n.id,s=n.jxResponse%3F.[0]%3F.getElementsByTagName(\\'render_choice\\')[0],i=s%3Fs.getElementsByTagName(\\'response_label\\'):[],d={};for(let%20u%20of%20i){let%20p=u.getAttribute(\\'ident\\'),p2=u.getElementsByTagName(\\'mattext\\')[0];p&&p2&&(d[p]=p2.textContent.trim())}let%20m=[],g=[],f=[];for(let%20h%20of%20i){let%20_=\\'1\\'===h.getAttribute(\\'ws_right\\'),x=h.getAttribute(\\'ident\\');if(d[x]){let%20E=d[x];f.push({text:E,correct:_}),_%3F(m.push(E),g.push(\\'%2B%2B%20\\'+E)):g.push(E)}}if(m.length%3E0||f.length%3E0){let%20v={ident:c,punkt:l,question:a,correct:m,wrong:f.filter(t=%3E!m.includes(t.text)).map(t=%3Et.text),all_answers:f,answer:1===m.length%3Fm[0]:g.join(\\'%5Cn\\')};allQuestions.push(v)}}if(allQuestions.length%3E0){let%20w=\\'baza_\\'+new%20Date().toISOString().slice(0,10)%2B\\'.json\\',N=prompt(\\'%D0%92%D0%B2%D0%B5%D0%B4%D0%B8%D1%82%D0%B5%20%D0%B8%D0%BC%D1%8F%20%D1%84%D0%B0%D0%B9%D0%BB%D0%B0%20%D0%B4%D0%BB%D1%8F%20%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F:\\',w);if(null!==N){N.endsWith(\\'.json\\')||(N%2B=\\'.json\\');let%20B=JSON.stringify(allQuestions,null,2),A=document.createElement(\\'a\\');A.href=\\'data:application/json;charset=utf-8,\\'%2BencodeURIComponent(B),A.download=N,document.body.appendChild(A),A.click(),document.body.removeChild(A)}}else%20alert(\\'%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B%20%D0%BD%D0%B5%20%D0%BD%D0%B0%D0%B9%D0%B4%D0%B5%D0%BD%D1%8B\\');})();')">📱 Тел</button>
+                </div>
+            </div>
+
+            <!-- Карта вопросов -->
+            <div class="script-card">
+                <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                    <span style="font-weight:600; font-size:12px; color:#1a237e; min-width:140px;">🗺 Карта вопросов</span>
+                    <button class="btn-copy" onclick="copyScriptText('(function(){console.log(\\'🔍 Сохраняем карту вопросов...\\');let mapData=[];let rows=document.querySelectorAll(\\'tr[data-ident]\\');rows.forEach(row=>{let ident=row.getAttribute(\\'data-ident\\');let number=row.querySelector(\\'.wtq-map-q-number\\')?.innerText||\\'\\';let question=row.querySelector(\\'.wtq-map-q-text\\')?.innerText||\\'\\';let type=row.querySelector(\\'.wtq-map-q-type\\')?.innerText||\\'\\';mapData.push({ident:ident,number:number,question:question,type:type});});console.log(`📋 Сохранено ${mapData.length} вопросов из карты`);if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:\\'application/json\\'});let a=document.createElement(\\'a\\');a.href=URL.createObjectURL(blob);a.download=`карта_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log(\\'📥 Файл с картой скачан!\\');}else{alert(\\'Элементы карты вопросов не найдены. Убедитесь, что вы находитесь на странице с таблицей вопросов WebTutor.\\');}})();')">📋 ПК</button>
+                    <button class="btn-copy" onclick="copyScriptText('javascript:(function(){console.log(\\'🔍 Сохраняем карту вопросов...\\');let mapData=[];let rows=document.querySelectorAll(\\'tr[data-ident]\\');rows.forEach(row=>{let ident=row.getAttribute(\\'data-ident\\');let number=row.querySelector(\\'.wtq-map-q-number\\')?.innerText||\\'\\';let question=row.querySelector(\\'.wtq-map-q-text\\')?.innerText||\\'\\';let type=row.querySelector(\\'.wtq-map-q-type\\')?.innerText||\\'\\';mapData.push({ident:ident,number:number,question:question,type:type});});console.log(`📋 Сохранено ${mapData.length} вопросов из карты`);if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:\\'application/json\\'});let a=document.createElement(\\'a\\');a.href=URL.createObjectURL(blob);a.download=`карта_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log(\\'📥 Файл с картой скачан!\\');}else{alert(\\'Элементы карты вопросов не найдены. Убедитесь, что вы находитесь на странице с таблицей вопросов WebTutor.\\');}})();')">📱 Тел</button>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
     <script>
@@ -938,6 +1030,29 @@
                 reader.onload = (e) => resolve(e.target.result);
                 reader.onerror = (e) => reject(e);
                 reader.readAsText(file);
+            });
+        }
+
+        // ================================================================
+        // КОПИРОВАНИЕ СКРИПТОВ
+        // ================================================================
+
+        function copyScriptText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btns = document.querySelectorAll('.btn-copy');
+                btns.forEach(btn => {
+                    const originalText = btn.textContent;
+                    if (btn.textContent === '📋 ПК' || btn.textContent === '📱 Тел') {
+                        btn.textContent = '✅';
+                        btn.classList.add('copied');
+                        setTimeout(() => {
+                            btn.textContent = originalText;
+                            btn.classList.remove('copied');
+                        }, 1500);
+                    }
+                });
+            }).catch(() => {
+                alert('❌ Не удалось скопировать. Выделите текст вручную и нажмите Ctrl+C.');
             });
         }
 
@@ -1938,7 +2053,6 @@
             const progressFill = document.getElementById('extraProgressFill');
             progressContainer.style.display = 'block';
 
-            // Сортируем по числовому префиксу
             extraState.files.sort((a, b) => a.number - b.number);
 
             let allQuestions = [];
@@ -1971,10 +2085,8 @@
             extraState.mergedData = allQuestions;
             extraState.sections = sections;
 
-            // Показываем результат
             extraRenderResults(allQuestions, sections);
 
-            // Скачиваем
             const folderName = extraState.files[0]?.file?.webkitRelativePath?.split('/')[0] || 'объединённая_база';
             const blob = new Blob([JSON.stringify(allQuestions, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -2077,6 +2189,7 @@
         console.log('🚀 Готово!');
         console.log('📄 Основной блок: загрузка вопросов/ответов, поиск, DOCX, GitHub.');
         console.log('🛠 Дополнительные функции: объединение файлов с разделами.');
+        console.log('📜 Скрипты: сборщик вопросов и карта вопросов для WebTutor.');
     </script>
 </body>
 </html>
