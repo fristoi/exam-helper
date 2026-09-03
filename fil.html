@@ -225,7 +225,6 @@
             font-size: 10px;
             font-weight: 600;
             transition: all 0.3s;
-            white-space: nowrap;
         }
         .btn-copy:hover {
             background: #455a64;
@@ -294,10 +293,6 @@
             background: #e8eaf6;
             color: #1a237e;
         }
-        .badge-pink {
-            background: #fce4ec;
-            color: #880e4f;
-        }
 
         .question-list {
             max-height: 400px;
@@ -316,7 +311,6 @@
         .question-item:last-child {
             border-bottom: none;
         }
-
         .question-item .q-header {
             display: flex;
             flex-wrap: wrap;
@@ -727,14 +721,18 @@
             gap: 6px;
             align-items: center;
             flex-wrap: wrap;
+            margin-bottom: 4px;
         }
-        .script-card .script-row .label {
+        .script-card .script-row:last-child {
+            margin-bottom: 0;
+        }
+        .script-card .script-label {
             font-weight: 600;
             font-size: 12px;
             color: #1a237e;
-            min-width: 110px;
+            min-width: 130px;
         }
-        .script-card .script-row input {
+        .script-card input[type="text"] {
             flex: 1;
             min-width: 120px;
             padding: 4px 8px;
@@ -747,7 +745,7 @@
             outline: none;
             height: 30px;
         }
-        .script-card .script-row input:focus {
+        .script-card input[type="text"]:focus {
             border-color: #6c63ff;
         }
 
@@ -788,10 +786,10 @@
             .script-card .script-row {
                 flex-wrap: wrap;
             }
-            .script-card .script-row .label {
+            .script-card .script-label {
                 min-width: 100%;
             }
-            .script-card .script-row input {
+            .script-card input[type="text"] {
                 min-width: 100%;
             }
         }
@@ -973,7 +971,7 @@
         </div>
 
         <!-- ========================================================== -->
-        <!-- СКРИПТЫ (компактная версия с полями)                       -->
+        <!-- СКРИПТЫ (компактная версия)                                -->
         <!-- ========================================================== -->
 
         <hr>
@@ -987,12 +985,12 @@
             <!-- Сборщик вопросов -->
             <div class="script-card">
                 <div class="script-row">
-                    <span class="label">🧹 Сборщик вопросов</span>
+                    <span class="script-label">🧹 Сборщик вопросов</span>
                     <button class="btn-copy" onclick="copyScriptText('scriptCollectorPC')">📋 ПК</button>
                     <input type="text" id="scriptCollectorPC" value="(function(){console.log('🔍 Начинаем сбор вопросов...');function cleanQuestionText(t){return t?t.replace(/(укажите все правильные ответы)/gi,''):t}let allQuestions=[],sequence=window.g_oPlayer?.aSequence;if(!sequence)return console.log('❌ g_oPlayer не найден');console.log(`📊 Всего элементов: ${sequence.length}`);for(let i=0;i<sequence.length;i++){let item=sequence[i];if(item.sType!=='choice'&&item.sType!=='select')continue;let questionText=item.sQuestionText;if(!questionText)continue;let cleanedQuestion=cleanQuestionText(questionText);let punkt='';if(item.sTitle){let match=item.sTitle.match(/[\d\.]+/);if(match)punkt=match[0]}let ident=item.sIdent||item._id||item.id;let renderChoice=item.jxResponse?.[0]?.getElementsByTagName('render_choice')[0];let labels=renderChoice?renderChoice.getElementsByTagName('response_label'):[];let idToText={};for(let lbl of labels){let id=lbl.getAttribute('ident');let mattext=lbl.getElementsByTagName('mattext')[0];if(id&&mattext){idToText[id]=mattext.textContent.trim()}}let correctAnswers=[];let wrongAnswers=[];let allAnswers=[];for(let lbl of labels){let ws_right=lbl.getAttribute('ws_right');let id=lbl.getAttribute('ident');if(idToText[id]){let answerText=idToText[id];let isCorrect=(ws_right==='1');allAnswers.push({text:answerText,correct:isCorrect});if(isCorrect){correctAnswers.push(answerText)}else{wrongAnswers.push(answerText)}}}if(correctAnswers.length>0||wrongAnswers.length>0){let questionData={ident:ident,punkt:punkt,question:cleanedQuestion,correct:correctAnswers,wrong:wrongAnswers,all_answers:allAnswers,answer:correctAnswers.length===1?correctAnswers[0]:correctAnswers.map(a=>'++ '+a).join('\n')};allQuestions.push(questionData);console.log(`✅ [${i}] ${punkt} (ident: ${ident})`);console.log(`   Очищенный вопрос: ${cleanedQuestion.substring(0,70)}...`)}}console.log('\n🎯 ВСЕГО СОБРАНО:',allQuestions.length,'вопросов');if(allQuestions.length>0){let dataStr=JSON.stringify(allQuestions,null,2);let blob=new Blob([dataStr],{type:'application/json'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download=`база_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл скачан!')}})();" readonly>
                 </div>
                 <div class="script-row">
-                    <span class="label">📱 Сборщик (тел)</span>
+                    <span class="script-label">📱 Сборщик (тел)</span>
                     <button class="btn-copy" onclick="copyScriptText('scriptCollectorTel')">📱 Тел</button>
                     <input type="text" id="scriptCollectorTel" value="javascript:(function(){console.log('%D0%A1%D0%B1%D0%BE%D1%80%20%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D0%BE%D0%B2...');function%20cleanQuestionText(t){return%20t%3Ft.replace(/(%D1%83%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%B2%D1%81%D0%B5%20%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D1%8B)/gi,''):t}let%20allQuestions=[],sequence=window.g_oPlayer%3F.aSequence;if(!sequence)return%20alert('%D0%9E%D1%88%D0%B8%D0%B1%D0%BA%D0%B0:%20g_oPlayer%20%D0%BD%D0%B5%20%D0%BD%D0%B0%D0%B9%D0%B4%D0%B5%D0%BD'),void%200;for(let%20e=0;e<sequence.length;e++){let%20n=sequence[e];if('choice'!==n.sType&&'select'!==n.sType)continue;let%20o=n.sQuestionText;if(!o)continue;let%20a=cleanQuestionText(o),l='';if(n.sTitle){let%20r=n.sTitle.match(/[\d\.]+/);r&&(l=r[0])}let%20c=n.sIdent||n._id||n.id,s=n.jxResponse%3F.[0]%3F.getElementsByTagName('render_choice')[0],i=s%3Fs.getElementsByTagName('response_label'):[],d={};for(let%20u%20of%20i){let%20p=u.getAttribute('ident'),p2=u.getElementsByTagName('mattext')[0];p&&p2&&(d[p]=p2.textContent.trim())}let%20m=[],g=[],f=[];for(let%20h%20of%20i){let%20_='1'===h.getAttribute('ws_right'),x=h.getAttribute('ident');if(d[x]){let%20E=d[x];f.push({text:E,correct:_}),_%3F(m.push(E),g.push('%2B%2B%20'+E)):g.push(E)}}if(m.length%3E0||f.length%3E0){let%20v={ident:c,punkt:l,question:a,correct:m,wrong:f.filter(t=%3E!m.includes(t.text)).map(t=%3Et.text),all_answers:f,answer:1===m.length%3Fm[0]:g.join('%5Cn')};allQuestions.push(v)}}if(allQuestions.length%3E0){let%20w='baza_'+new%20Date().toISOString().slice(0,10)%2B'.json',N=prompt('%D0%92%D0%B2%D0%B5%D0%B4%D0%B8%D1%82%D0%B5%20%D0%B8%D0%BC%D1%8F%20%D1%84%D0%B0%D0%B9%D0%BB%D0%B0%20%D0%B4%D0%BB%D1%8F%20%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F:',w);if(null!==N){N.endsWith('.json')||(N%2B='.json');let%20B=JSON.stringify(allQuestions,null,2),A=document.createElement('a');A.href='data:application/json;charset=utf-8,'%2BencodeURIComponent(B),A.download=N,document.body.appendChild(A),A.click(),document.body.removeChild(A)}}else%20alert('%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B%20%D0%BD%D0%B5%20%D0%BD%D0%B0%D0%B9%D0%B4%D0%B5%D0%BD%D1%8B');})();" readonly>
                 </div>
@@ -1001,12 +999,12 @@
             <!-- Карта вопросов -->
             <div class="script-card">
                 <div class="script-row">
-                    <span class="label">🗺 Карта вопросов</span>
+                    <span class="script-label">🗺 Карта вопросов</span>
                     <button class="btn-copy" onclick="copyScriptText('scriptMapPC')">📋 ПК</button>
                     <input type="text" id="scriptMapPC" value="(function(){console.log('🔍 Сохраняем карту вопросов...');let mapData=[];let rows=document.querySelectorAll('tr[data-ident]');rows.forEach(row=>{let ident=row.getAttribute('data-ident');let number=row.querySelector('.wtq-map-q-number')?.innerText||'';let question=row.querySelector('.wtq-map-q-text')?.innerText||'';let type=row.querySelector('.wtq-map-q-type')?.innerText||'';mapData.push({ident:ident,number:number,question:question,type:type});});console.log(`📋 Сохранено ${mapData.length} вопросов из карты`);if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`карта_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл с картой скачан!');}else{alert('Элементы карты вопросов не найдены. Убедитесь, что вы находитесь на странице с таблицей вопросов WebTutor.');}})();" readonly>
                 </div>
                 <div class="script-row">
-                    <span class="label">📱 Карта (тел)</span>
+                    <span class="script-label">📱 Карта (тел)</span>
                     <button class="btn-copy" onclick="copyScriptText('scriptMapTel')">📱 Тел</button>
                     <input type="text" id="scriptMapTel" value="javascript:(function(){console.log('🔍 Сохраняем карту вопросов...');let mapData=[];let rows=document.querySelectorAll('tr[data-ident]');rows.forEach(row=>{let ident=row.getAttribute('data-ident');let number=row.querySelector('.wtq-map-q-number')?.innerText||'';let question=row.querySelector('.wtq-map-q-text')?.innerText||'';let type=row.querySelector('.wtq-map-q-type')?.innerText||'';mapData.push({ident:ident,number:number,question:question,type:type});});console.log(`📋 Сохранено ${mapData.length} вопросов из карты`);if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`карта_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл с картой скачан!');}else{alert('Элементы карты вопросов не найдены. Убедитесь, что вы находитесь на странице с таблицей вопросов WebTutor.');}})();" readonly>
                 </div>
@@ -1092,7 +1090,6 @@
 
             const text = input.value;
 
-            // Способ 1: Clipboard API (современный)
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(() => {
                     showCopySuccess(id);
@@ -1414,7 +1411,7 @@
         }
 
         // ================================================================
-        // ЭКСПОРТ ВСЕХ БАЗ В ОДИН DOCX
+        // ЭКСПОРТ ВСЕХ БАЗ В ОДИН DOCX (вопрос без отступа, ответы с отступом)
         // ================================================================
 
         document.getElementById('multiExportDocxBtn').addEventListener('click', function() {
@@ -1447,8 +1444,8 @@
                     }));
                     children.push(new Paragraph({
                         children: [
-                            new TextRun({ text: '─────────────────────────────────────────────',
-                                size: 16, color: 'cccccc', font: 'Calibri' })
+                            new TextRun({ text: '─────────────────────────────────────────────', size: 16,
+                                color: 'cccccc', font: 'Calibri' })
                         ],
                         spacing: { after: 150 }
                     }));
@@ -1464,24 +1461,11 @@
 
                         children.push(new Paragraph({
                             children: [
-                                new TextRun({ text: 'Вопрос №' + baseCounter, size: 24, bold: true,
-                                    font: 'Calibri' })
+                                new TextRun({ text: baseCounter + '.', size: 24, bold: true,
+                                    font: 'Calibri' }),
+                                new TextRun({ text: ' ' + qText, size: 22, font: 'Calibri' })
                             ],
-                            spacing: { before: 200, after: 30 }
-                        }));
-
-                        children.push(new Paragraph({
-                            children: [
-                                new TextRun({ text: qText, size: 22, font: 'Calibri' })
-                            ],
-                            spacing: { after: 60 }
-                        }));
-
-                        children.push(new Paragraph({
-                            children: [
-                                new TextRun({ text: 'Ответы:', size: 20, bold: true, font: 'Calibri' })
-                            ],
-                            spacing: { after: 20 }
+                            spacing: { before: 200, after: 60 }
                         }));
 
                         if (a && a.all_answers && a.all_answers.length > 0) {
@@ -1493,7 +1477,8 @@
                                         new TextRun({ text: mark + ' ' + ans.text, size: 20,
                                             color: color, font: 'Calibri' })
                                     ],
-                                    spacing: { after: 10 }
+                                    spacing: { after: 10 },
+                                    indent: { firstLine: 360 }
                                 }));
                             });
                         } else if (a && (a.correct || a.wrong)) {
@@ -1505,7 +1490,8 @@
                                         new TextRun({ text: '✅ ' + ans, size: 20,
                                             color: '2e7d32', font: 'Calibri' })
                                     ],
-                                    spacing: { after: 10 }
+                                    spacing: { after: 10 },
+                                    indent: { firstLine: 360 }
                                 }));
                             });
                             wrong.forEach(ans => {
@@ -1514,7 +1500,8 @@
                                         new TextRun({ text: '❌ ' + ans, size: 20,
                                             color: 'c62828', font: 'Calibri' })
                                     ],
-                                    spacing: { after: 10 }
+                                    spacing: { after: 10 },
+                                    indent: { firstLine: 360 }
                                 }));
                             });
                         } else {
@@ -1533,7 +1520,8 @@
                                                 text, size: 20, color: color,
                                             font: 'Calibri' })
                                     ],
-                                    spacing: { after: 10 }
+                                    spacing: { after: 10 },
+                                    indent: { firstLine: 360 }
                                 }));
                             });
                         }
