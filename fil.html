@@ -571,7 +571,6 @@
             border-bottom: 1px solid #e0e0e0;
         }
 
-        /* ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ */
         .extra-section {
             margin-top: 16px;
             padding: 14px;
@@ -681,7 +680,6 @@
             margin-top: 1px;
         }
 
-        /* СКРИПТЫ */
         .scripts-section {
             margin-top: 16px;
             padding: 14px;
@@ -814,10 +812,7 @@
         <h1>🧯 Создание базы → per/bases/</h1>
         <p class="subtitle">Загрузите базы с вопросами и базы с ответами</p>
 
-        <!-- ========================================================== -->
-        <!-- ОСНОВНОЙ БЛОК                                              -->
-        <!-- ========================================================== -->
-
+        <!-- ОСНОВНОЙ БЛОК -->
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
             <div class="upload-box" id="multiQuestionsUpload">
                 <label for="multiQuestionsFile">
@@ -879,10 +874,7 @@
             </div>
         </div>
 
-        <!-- ========================================================== -->
-        <!-- GITHUB СЕКЦИЯ                                              -->
-        <!-- ========================================================== -->
-
+        <!-- GITHUB СЕКЦИЯ -->
         <div class="github-section" id="github-upload-section">
             <div class="row">
                 <input type="password" id="gh-token" placeholder="🔑 GitHub Token (ghp_...)" style="flex: 2;">
@@ -904,10 +896,7 @@
             </div>
         </div>
 
-        <!-- ========================================================== -->
-        <!-- ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ                                     -->
-        <!-- ========================================================== -->
-
+        <!-- ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ -->
         <hr>
 
         <div class="extra-section">
@@ -970,48 +959,48 @@
             </div>
         </div>
 
-        <!-- ========================================================== -->
-<!-- СКРИПТЫ (компактная версия)                                -->
-<!-- ========================================================== -->
+        <!-- СКРИПТЫ -->
+        <hr>
 
-<hr>
+        <div class="scripts-section">
+            <div class="section-title">
+                📜 Скрипты
+                <span class="badge">для WebTutor</span>
+            </div>
 
-<div class="scripts-section">
-    <div class="section-title">
-        📜 Скрипты
-        <span class="badge">для WebTutor</span>
+            <!-- Сборщик вопросов -->
+            <div class="script-card">
+                <div class="script-row">
+                    <span class="script-label">🧹 Сборщик вопросов</span>
+                    <button class="btn-copy" onclick="copyScriptText('scriptCollectorPC')">📋 ПК</button>
+                    <input type="text" id="scriptCollectorPC" value="(function(){console.log('🔍 Начинаем сбор вопросов...');function cleanQuestionText(t){return t?t.replace(/(укажите все правильные ответы)/gi,''):t}let allQuestions=[],sequence=window.g_oPlayer?.aSequence;if(!sequence)return console.log('❌ g_oPlayer не найден');console.log(`📊 Всего элементов: ${sequence.length}`);for(let i=0;i<sequence.length;i++){let item=sequence[i];if(item.sType!=='choice'&&item.sType!=='select')continue;let questionText=item.sQuestionText;if(!questionText)continue;let cleanedQuestion=cleanQuestionText(questionText);let punkt='';if(item.sTitle){let match=item.sTitle.match(/[\d\.]+/);if(match)punkt=match[0]}let ident=item.sIdent||item._id||item.id;let renderChoice=item.jxResponse?.[0]?.getElementsByTagName('render_choice')[0];let labels=renderChoice?renderChoice.getElementsByTagName('response_label'):[];let idToText={};for(let lbl of labels){let id=lbl.getAttribute('ident');let mattext=lbl.getElementsByTagName('mattext')[0];if(id&&mattext){idToText[id]=mattext.textContent.trim()}}let correctAnswers=[];let wrongAnswers=[];let allAnswers=[];for(let lbl of labels){let ws_right=lbl.getAttribute('ws_right');let id=lbl.getAttribute('ident');if(idToText[id]){let answerText=idToText[id];let isCorrect=(ws_right==='1');allAnswers.push({text:answerText,correct:isCorrect});if(isCorrect){correctAnswers.push(answerText)}else{wrongAnswers.push(answerText)}}}if(correctAnswers.length>0||wrongAnswers.length>0){let questionData={ident:ident,punkt:punkt,question:cleanedQuestion,correct:correctAnswers,wrong:wrongAnswers,all_answers:allAnswers,answer:correctAnswers.length===1?correctAnswers[0]:correctAnswers.map(a=>'++ '+a).join('\n')};allQuestions.push(questionData);console.log(`✅ [${i}] ${punkt} (ident: ${ident})`);console.log(`   Очищенный вопрос: ${cleanedQuestion.substring(0,70)}...`)}}console.log('\n🎯 ВСЕГО СОБРАНО:',allQuestions.length,'вопросов');if(allQuestions.length>0){let dataStr=JSON.stringify(allQuestions,null,2);let blob=new Blob([dataStr],{type:'application/json'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download=`база_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл скачан!')}})();" readonly>
+                </div>
+                <div class="script-row">
+                    <span class="script-label">📱 Сборщик (тел)</span>
+                    <button class="btn-copy" onclick="copyScriptText('scriptCollectorTel')">📱 Тел</button>
+                    <input type="text" id="scriptCollectorTel" value="javascript:(function(){const p=window.g_oPlayer;if(!p)return;const q=[];const clean=t=>t?t.replace(/(укажите все правильные ответы)/gi,''):t;const seq=p.aSequence||[];for(let i=0;i<seq.length;i++){const item=seq[i];if(item.sType!=='choice'&&item.sType!=='select')continue;const qt=item.sQuestionText;if(!qt)continue;const qClean=clean(qt);let punkt='';if(item.sTitle){const m=item.sTitle.match(/[\d\.]+/);if(m)punkt=m[0];}const rc=item.jxResponse?.[0]?.getElementsByTagName('render_choice')[0];const labels=rc?rc.getElementsByTagName('response_label'):[];const idToText={};for(const lbl of labels){const id=lbl.getAttribute('ident');const mt=lbl.getElementsByTagName('mattext')[0];if(id&&mt)idToText[id]=mt.textContent.trim();}const correct=[];const wrong=[];for(const lbl of labels){const id=lbl.getAttribute('ident');const ws=lbl.getAttribute('ws_right');if(idToText[id]){if(ws==='1')correct.push(idToText[id]);else wrong.push(idToText[id]);}}if(correct.length||wrong.length){q.push({ident:item.sIdent||item._id||item.id,punkt,question:qClean,correct,wrong,all_answers:[...correct,...wrong].map(t=>({text:t,correct:correct.includes(t)})),answer:correct.length===1?correct[0]:correct.map(a=>'++ '+a).join('\n')});}}if(q.length){const data=JSON.stringify(q,null,2);const blob=new Blob([data],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`база_${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},1000);}})();" readonly>
+                </div>
+            </div>
+
+            <!-- Карта вопросов -->
+            <div class="script-card">
+                <div class="script-row">
+                    <span class="script-label">🗺 Карта вопросов</span>
+                    <button class="btn-copy" onclick="copyScriptText('scriptMapPC')">📋 ПК</button>
+                    <input type="text" id="scriptMapPC" value="(function(){console.log('🔍 Сохраняем карту вопросов...');let mapData=[];let rows=document.querySelectorAll('tr[data-ident]');rows.forEach(row=>{let ident=row.getAttribute('data-ident');let number=row.querySelector('.wtq-map-q-number')?.innerText||'';let question=row.querySelector('.wtq-map-q-text')?.innerText||'';let type=row.querySelector('.wtq-map-q-type')?.innerText||'';mapData.push({ident:ident,number:number,question:question,type:type});});console.log(`📋 Сохранено ${mapData.length} вопросов из карты`);if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`карта_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл с картой скачан!');}else{alert('Элементы карты вопросов не найдены. Убедитесь, что вы находитесь на странице с таблицей вопросов WebTutor.');}})();" readonly>
+                </div>
+                <div class="script-row">
+                    <span class="script-label">📱 Карта (тел)</span>
+                    <button class="btn-copy" onclick="copyScriptText('scriptMapTel')">📱 Тел</button>
+                    <input type="text" id="scriptMapTel" value="javascript:(function(){console.log('🔍 Сохраняем карту вопросов...');let mapData=[];let rows=document.querySelectorAll('tr[data-ident]');rows.forEach(row=>{let ident=row.getAttribute('data-ident');let number=row.querySelector('.wtq-map-q-number')?.innerText||'';let question=row.querySelector('.wtq-map-q-text')?.innerText||'';let type=row.querySelector('.wtq-map-q-type')?.innerText||'';mapData.push({ident:ident,number:number,question:question,type:type});});console.log(`📋 Сохранено ${mapData.length} вопросов из карты`);if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`карта_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл с картой скачан!');}else{alert('Элементы карты вопросов не найдены. Убедитесь, что вы находитесь на странице с таблицей вопросов WebTutor.');}})();" readonly>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
-    <!-- Сборщик вопросов -->
-    <div class="script-card">
-        <div class="script-row">
-            <span class="script-label">🧹 Сборщик вопросов</span>
-            <button class="btn-copy" onclick="copyScriptText('scriptCollectorPC')">📋 ПК</button>
-            <input type="text" id="scriptCollectorPC" value="(function(){console.log('🔍 Начинаем сбор вопросов...');function cleanQuestionText(t){return t?t.replace(/(укажите все правильные ответы)/gi,''):t}let allQuestions=[],sequence=window.g_oPlayer?.aSequence;if(!sequence)return console.log('❌ g_oPlayer не найден');console.log(`📊 Всего элементов: ${sequence.length}`);for(let i=0;i<sequence.length;i++){let item=sequence[i];if(item.sType!=='choice'&&item.sType!=='select')continue;let questionText=item.sQuestionText;if(!questionText)continue;let cleanedQuestion=cleanQuestionText(questionText);let punkt='';if(item.sTitle){let match=item.sTitle.match(/[\d\.]+/);if(match)punkt=match[0]}let ident=item.sIdent||item._id||item.id;let renderChoice=item.jxResponse?.[0]?.getElementsByTagName('render_choice')[0];let labels=renderChoice?renderChoice.getElementsByTagName('response_label'):[];let idToText={};for(let lbl of labels){let id=lbl.getAttribute('ident');let mattext=lbl.getElementsByTagName('mattext')[0];if(id&&mattext){idToText[id]=mattext.textContent.trim()}}let correctAnswers=[];let wrongAnswers=[];let allAnswers=[];for(let lbl of labels){let ws_right=lbl.getAttribute('ws_right');let id=lbl.getAttribute('ident');if(idToText[id]){let answerText=idToText[id];let isCorrect=(ws_right==='1');allAnswers.push({text:answerText,correct:isCorrect});if(isCorrect){correctAnswers.push(answerText)}else{wrongAnswers.push(answerText)}}}if(correctAnswers.length>0||wrongAnswers.length>0){let questionData={ident:ident,punkt:punkt,question:cleanedQuestion,correct:correctAnswers,wrong:wrongAnswers,all_answers:allAnswers,answer:correctAnswers.length===1?correctAnswers[0]:correctAnswers.map(a=>'++ '+a).join('\n')};allQuestions.push(questionData);console.log(`✅ [${i}] ${punkt} (ident: ${ident})`);console.log(`   Очищенный вопрос: ${cleanedQuestion.substring(0,70)}...`)}}console.log('\n🎯 ВСЕГО СОБРАНО:',allQuestions.length,'вопросов');if(allQuestions.length>0){let dataStr=JSON.stringify(allQuestions,null,2);let blob=new Blob([dataStr],{type:'application/json'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download=`база_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл скачан!')}})();" readonly>
-        </div>
-        <div class="script-row">
-            <span class="script-label">📱 Сборщик (тел)</span>
-            <button class="btn-copy" onclick="copyScriptText('scriptCollectorTel')">📱 Тел</button>
-            <input type="text" id="scriptCollectorTel" value="javascript:(function(){const p=window.g_oPlayer;if(!p)return;const q=[];const clean=t=>t?t.replace(/(укажите все правильные ответы)/gi,''):t;const seq=p.aSequence||[];for(let i=0;i<seq.length;i++){const item=seq[i];if(item.sType!=='choice'&&item.sType!=='select')continue;const qt=item.sQuestionText;if(!qt)continue;const qClean=clean(qt);let punkt='';if(item.sTitle){const m=item.sTitle.match(/[\d\.]+/);if(m)punkt=m[0];}const rc=item.jxResponse?.[0]?.getElementsByTagName('render_choice')[0];const labels=rc?rc.getElementsByTagName('response_label'):[];const idToText={};for(const lbl of labels){const id=lbl.getAttribute('ident');const mt=lbl.getElementsByTagName('mattext')[0];if(id&&mt)idToText[id]=mt.textContent.trim();}const correct=[];const wrong=[];for(const lbl of labels){const id=lbl.getAttribute('ident');const ws=lbl.getAttribute('ws_right');if(idToText[id]){if(ws==='1')correct.push(idToText[id]);else wrong.push(idToText[id]);}}if(correct.length||wrong.length){q.push({ident:item.sIdent||item._id||item.id,punkt,question:qClean,correct,wrong,all_answers:[...correct,...wrong].map(t=>({text:t,correct:correct.includes(t)})),answer:correct.length===1?correct[0]:correct.map(a=>'++ '+a).join('\n')});}}if(q.length){const data=JSON.stringify(q,null,2);const blob=new Blob([data],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`база_${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},1000);}})();" readonly>
-        </div>
-    </div>
-
-    <!-- Карта вопросов -->
-    <div class="script-card">
-        <div class="script-row">
-            <span class="script-label">🗺 Карта вопросов</span>
-            <button class="btn-copy" onclick="copyScriptText('scriptMapPC')">📋 ПК</button>
-            <input type="text" id="scriptMapPC" value="(function(){console.log('🔍 Сохраняем карту вопросов...');let mapData=[];let rows=document.querySelectorAll('tr[data-ident]');rows.forEach(row=>{let ident=row.getAttribute('data-ident');let number=row.querySelector('.wtq-map-q-number')?.innerText||'';let question=row.querySelector('.wtq-map-q-text')?.innerText||'';let type=row.querySelector('.wtq-map-q-type')?.innerText||'';mapData.push({ident:ident,number:number,question:question,type:type});});console.log(`📋 Сохранено ${mapData.length} вопросов из карты`);if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`карта_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл с картой скачан!');}else{alert('Элементы карты вопросов не найдены. Убедитесь, что вы находитесь на странице с таблицей вопросов WebTutor.');}})();" readonly>
-        </div>
-        <div class="script-row">
-            <span class="script-label">📱 Карта (тел)</span>
-            <button class="btn-copy" onclick="copyScriptText('scriptMapTel')">📱 Тел</button>
-            <input type="text" id="scriptMapTel" value="javascript:(function(){console.log('🔍 Сохраняем карту вопросов...');let mapData=[];let rows=document.querySelectorAll('tr[data-ident]');rows.forEach(row=>{let ident=row.getAttribute('data-ident');let number=row.querySelector('.wtq-map-q-number')?.innerText||'';let question=row.querySelector('.wtq-map-q-text')?.innerText||'';let type=row.querySelector('.wtq-map-q-type')?.innerText||'';mapData.push({ident:ident,number:number,question:question,type:type});});console.log(`📋 Сохранено ${mapData.length} вопросов из карты`);if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`карта_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл с картой скачан!');}else{alert('Элементы карты вопросов не найдены. Убедитесь, что вы находитесь на странице с таблицей вопросов WebTutor.');}})();" readonly>
-        </div>
-    </div>
-
-</div>
-        
+    <script>
         // ================================================================
         // ОБЩИЕ ФУНКЦИИ
         // ================================================================
@@ -1075,7 +1064,7 @@
         }
 
         // ================================================================
-        // КОПИРОВАНИЕ СКРИПТОВ (с поддержкой телефона)
+        // КОПИРОВАНИЕ СКРИПТОВ
         // ================================================================
 
         function copyScriptText(id) {
@@ -1149,7 +1138,6 @@
             notFound: 0
         };
 
-        // Загрузка вопросов
         const mqInput = document.getElementById('multiQuestionsFile');
         const mqBox = document.getElementById('multiQuestionsUpload');
         const mqInfo = document.getElementById('multiQuestionsInfo');
@@ -1216,7 +1204,6 @@
             mqBox.classList.add('loaded');
         }
 
-        // Загрузка ответов
         const maInput = document.getElementById('multiAnswersFile');
         const maBox = document.getElementById('multiAnswersUpload');
         const maInfo = document.getElementById('multiAnswersInfo');
@@ -1289,7 +1276,6 @@
             document.getElementById('multiFindBtn').disabled = !(hasQ && hasA);
         }
 
-        // Поиск ответов
         function multiFindAnswers() {
             const progressContainer = document.getElementById('multiProgressContainer');
             const progressFill = document.getElementById('multiProgressFill');
@@ -1408,7 +1394,7 @@
         }
 
         // ================================================================
-        // ЭКСПОРТ ВСЕХ БАЗ В ОДИН DOCX (вопрос без отступа, ответы с отступом)
+        // ЭКСПОРТ ВСЕХ БАЗ В ОДИН DOCX
         // ================================================================
 
         document.getElementById('multiExportDocxBtn').addEventListener('click', function() {
@@ -1719,7 +1705,6 @@
             }
         }
 
-        // Скачать все JSON
         document.getElementById('multiExportBtn').addEventListener('click', function() {
             if (multiState.results.length === 0) return;
 
@@ -1736,7 +1721,6 @@
             });
         });
 
-        // Очистить основной блок
         document.getElementById('multiClearBtn').addEventListener('click', function() {
             multiState.questions = [];
             multiState.answers = [];
@@ -1771,7 +1755,7 @@
         });
 
         // ================================================================
-        // GITHUB: загрузка с телефона, список баз, удаление
+        // GITHUB
         // ================================================================
 
         let currentBasesList = [];
@@ -1853,7 +1837,6 @@
             input.click();
         });
 
-        // Редактирование списка баз
         async function loadBasesList() {
             const listContainer = document.getElementById('basesListItems');
             const token = document.getElementById('gh-token').value.trim();
@@ -2028,7 +2011,7 @@
         });
 
         // ================================================================
-        // ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ: ОБЪЕДИНЕНИЕ ФАЙЛОВ С РАЗДЕЛАМИ
+        // ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ
         // ================================================================
 
         const extraState = {
@@ -2114,7 +2097,6 @@
             document.getElementById('mergeSectionsBtn').disabled = extraState.files.length === 0;
         }
 
-        // Объединение файлов
         document.getElementById('mergeSectionsBtn').addEventListener('click', async function() {
             if (extraState.files.length === 0) {
                 alert('❌ Выберите файлы!');
@@ -2226,7 +2208,6 @@
             container.innerHTML = html;
         }
 
-        // Очистить дополнительный блок
         document.getElementById('extraClearBtn').addEventListener('click', function() {
             extraState.files = [];
             extraState.mergedData = [];
