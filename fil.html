@@ -79,8 +79,6 @@
         .btn-delete-small:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-purple { background: #6c63ff; color: white; }
         .btn-purple:hover:not(:disabled) { background: #5a52e0; transform: translateY(-1px); }
-        .btn-gray { background: #607d8b; color: white; }
-        .btn-gray:hover:not(:disabled) { background: #455a64; transform: translateY(-1px); }
         .btn-copy {
             background: #607d8b; color: white; border: none; padding: 2px 12px;
             border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: 600;
@@ -212,30 +210,46 @@
             border-radius: 6px; overflow: hidden; display: none;
         }
         .bases-list.active { display: block; }
+
+        .bases-list .list-header {
+            padding: 8px 14px;
+            background: #f5f7fa;
+            font-weight: 600;
+            font-size: 12px;
+            color: #1a237e;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .bases-list .list-header .title {
+            flex: 1;
+            text-align: left;
+        }
+
         .bases-list .base-item {
-            display: flex; align-items: center;
-            padding: 8px 14px; border-bottom: 1px solid #f0f0f0;
-            background: white; gap: 10px;
+            display: flex;
+            align-items: center;
+            padding: 8px 14px;
+            border-bottom: 1px solid #f0f0f0;
+            background: white;
+            gap: 10px;
         }
         .bases-list .base-item:last-child { border-bottom: none; }
-        .bases-list .base-item .checkbox-wrap {
-            display: flex; align-items: center; gap: 10px;
-            cursor: pointer; width: 100%;
+        .bases-list .base-item .name {
+            flex: 1;
+            text-align: left;
+            font-weight: 500;
+            font-size: 13px;
+            color: #333;
         }
         .bases-list .base-item input[type="checkbox"] {
-            width: 16px; height: 16px; cursor: pointer;
-            accent-color: #dc2626; flex-shrink: 0; margin: 0;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #dc2626;
+            flex-shrink: 0;
         }
-        .bases-list .base-item .name {
-            font-weight: 500; font-size: 13px;
-            text-align: left; flex: 1;
-        }
-        .bases-list .list-header {
-            padding: 8px 14px; background: #f5f7fa; font-weight: 600;
-            font-size: 12px; color: #1a237e; border-bottom: 1px solid #e0e0e0;
-            display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-        }
-        .bases-list .list-header .spacer { flex: 1; }
 
         .extra-section {
             margin-top: 16px; padding: 14px; border: 2px solid #e8eaf6;
@@ -408,8 +422,7 @@
 
             <div class="bases-list" id="basesList">
                 <div class="list-header">
-                    <span>📋 Список баз в per/bases/:</span>
-                    <span class="spacer"></span>
+                    <span class="title">📋 Список баз в per/bases/:</span>
                     <button class="btn-delete-small" id="selectAllBtn" style="display:none; background:#607d8b;" onclick="toggleSelectAll()">☑️ Выбрать все</button>
                     <button class="btn-delete-small" id="deleteSelectedBtn" style="display:none;" onclick="deleteSelectedBases()">🗑️ Удалить выбранные</button>
                 </div>
@@ -1647,11 +1660,9 @@
                 let html = '';
                 for (let base of basesList) {
                     html += `
-                        <div class="base-item" id="base-item-${base}">
-                            <label class="checkbox-wrap">
-                                <input type="checkbox" class="base-checkbox" value="${base}" onchange="updateDeleteButton()">
-                                <span class="name">📄 ${base}</span>
-                            </label>
+                        <div class="base-item">
+                            <span class="name">📄 ${base}</span>
+                            <input type="checkbox" class="base-checkbox" value="${base}" onchange="updateDeleteButton()">
                         </div>
                     `;
                 }
@@ -2022,6 +2033,7 @@
         console.log('✅ Пауза между базами: 3 секунды');
         console.log('✅ Пауза перед повтором: 5 секунд');
         console.log('✅ index.json обновляется один раз в конце.');
+        console.log('✅ Названия баз слева, чекбоксы справа.');
     </script>
 </body>
 </html>
