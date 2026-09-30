@@ -356,15 +356,15 @@
             <div class="stat-card danger"><div class="number" id="multiNotFoundCount">0</div><div class="label">❌ Не найдено</div></div>
         </div>
 
-        <!-- ОСНОВНЫЕ КНОПКИ + РЕДКИЕ СПРАВА -->
+        <!-- КНОПКИ -->
         <div class="controls">
             <button class="btn btn-primary" id="multiFindBtn" disabled>🔍 Найти ответы</button>
             <button class="btn btn-word" id="multiExportDocxByPersonBtn" disabled>📄 Скачать по фамилии в DOCX</button>
             <button class="btn btn-github" id="multiGhUploadBtn" disabled>🚀 Загрузить все на GitHub</button>
             <button class="btn btn-danger" id="multiGhCancelBtn" style="display:none;">⏹ Отменить загрузку</button>
-            
+
             <span style="flex:1; min-width:20px;"></span>
-            
+
             <button class="btn btn-success" id="multiExportBtn" disabled>📥 Скачать всё в JSON</button>
             <button class="btn btn-word" id="multiExportDocxBtn" disabled>📄 Скачать всё в DOCX</button>
             <button class="btn btn-danger" id="multiClearBtn">🗑️ Очистить</button>
@@ -467,7 +467,6 @@
                 <span class="badge">для WebTutor</span>
             </div>
 
-            <!-- Сборщик вопросов -->
             <div class="script-card">
                 <div class="script-row">
                     <span class="label">🧹 Сборщик вопросов</span>
@@ -481,7 +480,6 @@
                 </div>
             </div>
 
-            <!-- Карта вопросов -->
             <div class="script-card">
                 <div class="script-row">
                     <span class="label">🗺 Карта вопросов</span>
@@ -1201,7 +1199,7 @@
             const status = document.getElementById('gh-status');
 
             btn.disabled = true;
-            btn.textContent = '⏳ Загрузка...';
+            btn.textContent = '⏳ Проверка...';
             cancelBtn.style.display = 'inline-flex';
             uploadCancelled = false;
 
@@ -1215,70 +1213,74 @@
                     return;
                 }
 
-                // ЭТАП 0: Получаем список уже загруженных баз
-                status.innerHTML = '🔍 Проверяем, какие базы уже загружены...';
+                const OWNER = 'fristoi';
+                const REPO = 'exam-helper';
+                const BASE_PATH = 'per/bases';
+
+                // ЭТАП 1: Проверяем КАЖДЫЙ файл физически на GitHub
+                status.innerHTML = '🔍 Проверяем, какие файлы уже есть на GitHub...';
                 status.style.color = '#1f2937';
 
-                let existingBases = [];
-                try {
-                    const indexPath = 'per/bases/index.json';
-                    const indexGet = await fetch('https://api.github.com/repos/fristoi/exam-helper/contents/' + indexPath, {
-                        headers: { 'Authorization': 'token ' + token }
-                    });
-                    if (indexGet.status === 200) {
-                        const indexData = await indexGet.json();
-                        const parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
-                        if (parsedIndex.bases) existingBases = parsedIndex.bases;
-                    }
-                } catch (e) {
-                    console.warn('Не удалось получить список существующих баз:', e);
-                }
+                const existingFiles = [];
+                const toUpload = [];
 
-                // Проверяем также физическое наличие файлов на GitHub
-                status.innerHTML = '🔍 Проверяем наличие файлов на GitHub...';
-                const physicallyExisting = [];
-                for (const base of multiState.results) {
+                for (let i = 0; i < multiState.results.length; i++) {
+                    const base = multiState.results[i];
+                    const baseName = base.baseName;
+                    const filePath = BASE_PATH + '/' + baseName + '.json';
+
+                    btn.textContent = `🔍 Проверка ${i + 1}/${multiState.results.length}: ${baseName}`;
+                    status.innerHTML = `🔍 Проверка <strong>${baseName}</strong> (${i + 1} из ${multiState.results.length})...`;
+
+                    let fileExists = false;
                     try {
-                        const filePath = 'per/bases/' + base.baseName + '.json';
-                        const fileCheck = await fetch('https://api.github.com/repos/fristoi/exam-helper/contents/' + filePath, {
+                        const res = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + filePath, {
                             headers: { 'Authorization': 'token ' + token }
                         });
-                        if (fileCheck.status === 200) {
-                            physicallyExisting.push(base.baseName);
+                        if (res.status === 200) {
+                            fileExists = true;
+                            existingFiles.push(baseName);
                         }
-                    } catch (e) {}
+                    } catch (e) {
+                        console.warn('Ошибка проверки ' + baseName + ':', e);
+                    }
+
+                    if (!fileExists) {
+                        toUpload.push(base);
+                    }
+
+                    if (i < multiState.results.length - 1) {
+                        await new Promise(resolve => setTimeout(resolve, 300));
+                    }
                 }
-                console.log('📋 Физически существует файлов:', physicallyExisting.length);
 
-                // Объединяем оба списка
-                const allExisting = [...new Set([...existingBases, ...physicallyExisting])];
+                console.log('📋 Уже на GitHub:', existingFiles.length, existingFiles);
+                console.log('📤 Надо загрузить:', toUpload.length, toUpload.map(b => b.baseName));
 
-                // ЭТАП 1: Фильтруем
-                const toUpload = [];
-                const skipped = [];
-
-                multiState.results.forEach((base) => {
-                    if (allExisting.includes(base.baseName)) skipped.push(base.baseName);
-                    else toUpload.push(base);
-                });
-
+                // ЭТАП 2: Если грузить нечего
                 if (toUpload.length === 0) {
-                    status.innerHTML = `✅ <strong>Все ${allExisting.length} баз уже загружены!</strong>`;
+                    status.innerHTML = `✅ <strong>Все ${existingFiles.length} баз уже есть на GitHub!</strong><br><span style="font-size:10px;">🔄 Обновляем index.json...</span>`;
                     status.style.color = '#16a34a';
-                    // Всё равно обновим index.json на всякий случай
+
                     try {
-                        await updateIndexJson(allExisting, token);
-                    } catch (e) {}
+                        await updateIndexJson(existingFiles, token);
+                        status.innerHTML = `✅ <strong>Все ${existingFiles.length} баз уже есть на GitHub!</strong><br><span style="font-size:10px;color:#16a34a;">✅ index.json обновлён (${existingFiles.length} баз)</span>`;
+                    } catch (err) {
+                        status.innerHTML = `⚠️ <strong>Файлы на месте, но index.json не обновился</strong><br><span style="font-size:10px;color:#dc2626;">${err.message}</span>`;
+                        status.style.color = '#ed6c02';
+                    }
+
+                    await loadBasesList();
                     btn.disabled = false;
                     btn.textContent = '🚀 Загрузить все на GitHub';
                     cancelBtn.style.display = 'none';
                     return;
                 }
 
-                status.innerHTML = `⏳ Загрузка ${toUpload.length} баз (пропущено: ${skipped.length})...`;
+                // ЭТАП 3: Загрузка только новых
+                status.innerHTML = `⏳ Загрузка ${toUpload.length} баз (пропущено: ${existingFiles.length})...`;
                 status.style.color = '#1f2937';
 
-                // ЭТАП 2: Загрузка
                 const successList = [];
                 const failList = [];
                 const total = toUpload.length;
@@ -1336,24 +1338,23 @@
                 // ИТОГ
                 if (!uploadCancelled) {
                     if (failList.length === 0) {
-                        status.innerHTML = `🎉 <strong>Все ${successList.length} баз загружены!</strong><br><span style="font-size:10px;">Пропущено уже загруженных: ${skipped.length}</span>`;
+                        status.innerHTML = `🎉 <strong>Все ${successList.length} баз загружены!</strong><br><span style="font-size:10px;">Пропущено: ${existingFiles.length}</span>`;
                         status.style.color = '#16a34a';
                     } else {
                         status.innerHTML = `
                             ⚠️ <strong>Загружено: ${successList.length} баз</strong><br>
                             ❌ <strong>Не загрузилось: ${failList.length} баз</strong><br>
                             <span style="font-size:10px;color:#dc2626;">Не загружены: ${failList.join(', ')}</span>
-                            ${skipped.length > 0 ? `<br><span style="font-size:10px;color:#16a34a;">Пропущено: ${skipped.length}</span>` : ''}
+                            ${existingFiles.length > 0 ? `<br><span style="font-size:10px;color:#16a34a;">Пропущено: ${existingFiles.length}</span>` : ''}
                         `;
                         status.style.color = '#ed6c02';
                     }
 
-                    // ✅ ОБНОВЛЯЕМ INDEX.JSON ОДИН РАЗ В КОНЦЕ
-                    if (successList.length > 0) {
+                    const allBasesForIndex = [...new Set([...existingFiles, ...successList])];
+
+                    if (allBasesForIndex.length > 0) {
                         status.innerHTML += '<br><span style="font-size:10px;color:#6b7280;">🔄 Обновляем index.json...</span>';
                         try {
-                            // Собираем ВСЕ базы: уже загруженные + успешно загруженные сейчас
-                            const allBasesForIndex = [...new Set([...existingBases, ...physicallyExisting, ...successList])];
                             await updateIndexJson(allBasesForIndex, token);
                             status.innerHTML += '<br><span style="font-size:10px;color:#16a34a;">✅ index.json обновлён (' + allBasesForIndex.length + ' баз)</span>';
                         } catch (err) {
@@ -1375,7 +1376,7 @@
         });
 
         // ================================================================
-        // ОБНОВЛЕНИЕ INDEX.JSON (один раз после всех загрузок)
+        // ОБНОВЛЕНИЕ INDEX.JSON
         // ================================================================
 
         async function updateIndexJson(newBaseNames, token) {
@@ -1400,14 +1401,12 @@
                 console.warn('Не удалось прочитать index.json:', e);
             }
 
-            // Добавляем новые базы (без дубликатов)
             newBaseNames.forEach(name => {
                 if (!currentBases.includes(name)) {
                     currentBases.push(name);
                 }
             });
 
-            // Сортируем по алфавиту
             currentBases.sort();
 
             const newIndexContent = JSON.stringify({ bases: currentBases }, null, 2);
@@ -1432,7 +1431,7 @@
         }
 
         // ================================================================
-        // ЗАГРУЗКА ОДНОЙ БАЗЫ (без обновления index.json)
+        // ЗАГРУЗКА ОДНОЙ БАЗЫ (без index.json)
         // ================================================================
 
         async function uploadSingleBaseToGitHub(data, baseName, token) {
@@ -1550,7 +1549,6 @@
                     if (!baseName) throw new Error('Не удалось определить название');
                     document.getElementById('new-base-name').value = baseName;
                     await uploadSingleBaseToGitHub(data, baseName, document.getElementById('gh-token').value.trim());
-                    // Обновляем index.json
                     try {
                         await updateIndexJson([baseName], document.getElementById('gh-token').value.trim());
                     } catch (e) {}
@@ -1688,7 +1686,6 @@
 
                 if (!deleteRes.ok) { const errData = await deleteRes.json(); throw new Error('Ошибка: ' + errData.message); }
 
-                // Обновляем index.json - убираем базу
                 const indexPath = BASE_PATH + '/index.json';
                 let indexSha = '';
                 let currentList = [...currentBasesList];
@@ -1933,8 +1930,8 @@
         document.getElementById('multiFindBtn').addEventListener('click', multiFindAnswers);
 
         console.log('🚀 Готово!');
-        console.log('📄 index.json теперь обновляется ОДИН РАЗ в конце загрузки.');
-        console.log('✅ Базы загружаются отдельно, индекс — потом.');
+        console.log('📄 Проверка файлов теперь идёт через API GitHub (по одному).');
+        console.log('✅ index.json обновляется один раз в конце.');
     </script>
 </body>
 </html>
