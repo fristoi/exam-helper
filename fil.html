@@ -6,11 +6,7 @@
     <title>Создание базы → per/bases/</title>
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5/build/index.umd.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f0f2f5;
@@ -32,16 +28,8 @@
             align-items: center;
             gap: 8px;
         }
-        .subtitle {
-            color: #78909c;
-            margin-bottom: 10px;
-            font-size: 12px;
-        }
-        hr {
-            margin: 16px 0;
-            border: 0;
-            border-top: 2px solid #e8eaf6;
-        }
+        .subtitle { color: #78909c; margin-bottom: 10px; font-size: 12px; }
+        hr { margin: 16px 0; border: 0; border-top: 2px solid #e8eaf6; }
 
         .upload-box {
             border: 2px dashed #b0bec5;
@@ -52,40 +40,14 @@
             background: #fafafa;
             cursor: pointer;
         }
-        .upload-box:hover {
-            border-color: #42a5f5;
-            background: #f5faff;
-        }
-        .upload-box.dragover {
-            border-color: #66bb6a;
-            background: #f1f8e9;
-        }
-        .upload-box.loaded {
-            border-color: #66bb6a;
-            background: #f1f8e9;
-        }
-        .upload-box input[type="file"] {
-            display: none;
-        }
-        .upload-box .icon {
-            font-size: 22px;
-            display: block;
-        }
-        .upload-box .title {
-            font-weight: 600;
-            font-size: 12px;
-            color: #37474f;
-        }
-        .upload-box .hint {
-            font-size: 10px;
-            color: #90a4ae;
-        }
-        .upload-box .file-info {
-            font-size: 11px;
-            color: #2e7d32;
-            font-weight: 500;
-            margin-top: 2px;
-        }
+        .upload-box:hover { border-color: #42a5f5; background: #f5faff; }
+        .upload-box.dragover { border-color: #66bb6a; background: #f1f8e9; }
+        .upload-box.loaded { border-color: #66bb6a; background: #f1f8e9; }
+        .upload-box input[type="file"] { display: none; }
+        .upload-box .icon { font-size: 22px; display: block; }
+        .upload-box .title { font-weight: 600; font-size: 12px; color: #37474f; }
+        .upload-box .hint { font-size: 10px; color: #90a4ae; }
+        .upload-box .file-info { font-size: 11px; color: #2e7d32; font-weight: 500; margin-top: 2px; }
         .upload-box .file-info .fname {
             display: inline-block;
             background: #e8f5e9;
@@ -108,28 +70,12 @@
             text-align: center;
             border-left: 3px solid #42a5f5;
         }
-        .stat-card .number {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1a237e;
-        }
-        .stat-card .label {
-            font-size: 10px;
-            color: #78909c;
-            margin-top: 1px;
-        }
-        .stat-card.success {
-            border-left-color: #66bb6a;
-        }
-        .stat-card.success .number {
-            color: #2e7d32;
-        }
-        .stat-card.danger {
-            border-left-color: #ef5350;
-        }
-        .stat-card.danger .number {
-            color: #c62828;
-        }
+        .stat-card .number { font-size: 18px; font-weight: 700; color: #1a237e; }
+        .stat-card .label { font-size: 10px; color: #78909c; margin-top: 1px; }
+        .stat-card.success { border-left-color: #66bb6a; }
+        .stat-card.success .number { color: #2e7d32; }
+        .stat-card.danger { border-left-color: #ef5350; }
+        .stat-card.danger .number { color: #c62828; }
 
         .controls {
             display: flex;
@@ -150,51 +96,17 @@
             align-items: center;
             gap: 5px;
         }
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-        .btn-primary {
-            background: #1a237e;
-            color: white;
-        }
-        .btn-primary:hover:not(:disabled) {
-            background: #0d1445;
-            transform: translateY(-1px);
-        }
-        .btn-success {
-            background: #2e7d32;
-            color: white;
-        }
-        .btn-success:hover:not(:disabled) {
-            background: #1b5e20;
-            transform: translateY(-1px);
-        }
-        .btn-danger {
-            background: #c62828;
-            color: white;
-        }
-        .btn-danger:hover:not(:disabled) {
-            background: #b71c1c;
-            transform: translateY(-1px);
-        }
-        .btn-word {
-            background: #1856a8;
-            color: white;
-        }
-        .btn-word:hover:not(:disabled) {
-            background: #0d3d7a;
-            transform: translateY(-1px);
-        }
-        .btn-github {
-            background: #24292e;
-            color: white;
-        }
-        .btn-github:hover:not(:disabled) {
-            background: #1a1e22;
-            transform: translateY(-1px);
-        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .btn-primary { background: #1a237e; color: white; }
+        .btn-primary:hover:not(:disabled) { background: #0d1445; transform: translateY(-1px); }
+        .btn-success { background: #2e7d32; color: white; }
+        .btn-success:hover:not(:disabled) { background: #1b5e20; transform: translateY(-1px); }
+        .btn-danger { background: #c62828; color: white; }
+        .btn-danger:hover:not(:disabled) { background: #b71c1c; transform: translateY(-1px); }
+        .btn-word { background: #1856a8; color: white; }
+        .btn-word:hover:not(:disabled) { background: #0d3d7a; transform: translateY(-1px); }
+        .btn-github { background: #24292e; color: white; }
+        .btn-github:hover:not(:disabled) { background: #1a1e22; transform: translateY(-1px); }
         .btn-delete-small {
             background: #dc2626;
             color: white;
@@ -204,17 +116,9 @@
             cursor: pointer;
             font-size: 11px;
         }
-        .btn-delete-small:hover {
-            background: #b91c1c;
-        }
-        .btn-purple {
-            background: #6c63ff;
-            color: white;
-        }
-        .btn-purple:hover:not(:disabled) {
-            background: #5a52e0;
-            transform: translateY(-1px);
-        }
+        .btn-delete-small:hover { background: #b91c1c; }
+        .btn-purple { background: #6c63ff; color: white; }
+        .btn-purple:hover:not(:disabled) { background: #5a52e0; transform: translateY(-1px); }
         .btn-copy {
             background: #607d8b;
             color: white;
@@ -226,13 +130,8 @@
             font-weight: 600;
             transition: all 0.3s;
         }
-        .btn-copy:hover {
-            background: #455a64;
-            transform: translateY(-1px);
-        }
-        .btn-copy.copied {
-            background: #2e7d32;
-        }
+        .btn-copy:hover { background: #455a64; transform: translateY(-1px); }
+        .btn-copy.copied { background: #2e7d32; }
 
         .progress-container {
             width: 100%;
@@ -250,9 +149,7 @@
             width: 0%;
         }
 
-        .results {
-            margin-top: 10px;
-        }
+        .results { margin-top: 10px; }
         .results-header {
             display: flex;
             justify-content: space-between;
@@ -264,11 +161,7 @@
             flex-wrap: wrap;
             gap: 6px;
         }
-        .results-header .count {
-            font-weight: 600;
-            color: #1a237e;
-            font-size: 13px;
-        }
+        .results-header .count { font-weight: 600; color: #1a237e; font-size: 13px; }
 
         .badge {
             display: inline-block;
@@ -277,22 +170,10 @@
             font-size: 10px;
             font-weight: 600;
         }
-        .badge-success {
-            background: #c8e6c9;
-            color: #1b5e20;
-        }
-        .badge-danger {
-            background: #ffcdd2;
-            color: #b71c1c;
-        }
-        .badge-info {
-            background: #bbdefb;
-            color: #0d47a1;
-        }
-        .badge-purple {
-            background: #e8eaf6;
-            color: #1a237e;
-        }
+        .badge-success { background: #c8e6c9; color: #1b5e20; }
+        .badge-danger { background: #ffcdd2; color: #b71c1c; }
+        .badge-info { background: #bbdefb; color: #0d47a1; }
+        .badge-purple { background: #e8eaf6; color: #1a237e; }
 
         .question-list {
             max-height: 400px;
@@ -305,12 +186,8 @@
             border-bottom: 1px solid #f0f0f0;
             transition: background 0.2s;
         }
-        .question-item:hover {
-            background: #fafafa;
-        }
-        .question-item:last-child {
-            border-bottom: none;
-        }
+        .question-item:hover { background: #fafafa; }
+        .question-item:last-child { border-bottom: none; }
         .question-item .q-header {
             display: flex;
             flex-wrap: wrap;
@@ -358,15 +235,8 @@
             display: block;
             margin-bottom: 2px;
         }
-        .question-item .q-answer .ans-item {
-            margin-bottom: 2px;
-            font-size: 12px;
-        }
-        .question-item .q-source {
-            font-size: 10px;
-            color: #78909c;
-            margin-top: 3px;
-        }
+        .question-item .q-answer .ans-item { margin-bottom: 2px; font-size: 12px; }
+        .question-item .q-source { font-size: 10px; color: #78909c; margin-top: 3px; }
         .question-item .q-punkt {
             background: #fff3e0;
             color: #e65100;
@@ -397,20 +267,9 @@
             padding: 30px 20px;
             color: #b0bec5;
         }
-        .empty-state .icon {
-            font-size: 36px;
-            display: block;
-            margin-bottom: 8px;
-        }
-        .empty-state h3 {
-            color: #78909c;
-            margin-bottom: 4px;
-            font-size: 14px;
-        }
-        .empty-state p {
-            color: #b0bec5;
-            font-size: 12px;
-        }
+        .empty-state .icon { font-size: 36px; display: block; margin-bottom: 8px; }
+        .empty-state h3 { color: #78909c; margin-bottom: 4px; font-size: 14px; }
+        .empty-state p { color: #b0bec5; font-size: 12px; }
 
         .json-preview {
             background: #263238;
@@ -453,9 +312,7 @@
             font-size: 12px;
             outline: none;
         }
-        .github-section input:focus {
-            border-color: #1a237e;
-        }
+        .github-section input:focus { border-color: #1a237e; }
         .github-section .btn-github-full {
             flex: 1;
             min-width: 100px;
@@ -468,13 +325,8 @@
             font-size: 12px;
             cursor: pointer;
         }
-        .github-section .btn-github-full:hover {
-            background: #1a1e22;
-        }
-        .github-section .btn-github-full:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .github-section .btn-github-full:hover { background: #1a1e22; }
+        .github-section .btn-github-full:disabled { opacity: 0.5; cursor: not-allowed; }
         .github-section .btn-upload-phone {
             flex: 1;
             min-width: 100px;
@@ -487,9 +339,7 @@
             font-size: 12px;
             cursor: pointer;
         }
-        .github-section .btn-upload-phone:hover {
-            background: #bf360c;
-        }
+        .github-section .btn-upload-phone:hover { background: #bf360c; }
         .github-section .btn-edit-list {
             flex: 1;
             min-width: 100px;
@@ -502,12 +352,8 @@
             font-size: 12px;
             cursor: pointer;
         }
-        .github-section .btn-edit-list:hover {
-            background: #5a52e0;
-        }
-        .github-section input[type="file"] {
-            display: none;
-        }
+        .github-section .btn-edit-list:hover { background: #5a52e0; }
+        .github-section input[type="file"] { display: none; }
         #gh-status {
             margin-top: 6px;
             font-size: 11px;
@@ -524,9 +370,7 @@
             overflow: hidden;
             display: none;
         }
-        .bases-list.active {
-            display: block;
-        }
+        .bases-list.active { display: block; }
         .bases-list .base-item {
             display: flex;
             justify-content: space-between;
@@ -535,17 +379,9 @@
             border-bottom: 1px solid #f0f0f0;
             background: white;
         }
-        .bases-list .base-item:last-child {
-            border-bottom: none;
-        }
-        .bases-list .base-item .name {
-            font-weight: 500;
-            font-size: 13px;
-        }
-        .bases-list .base-item .actions {
-            display: flex;
-            gap: 6px;
-        }
+        .bases-list .base-item:last-child { border-bottom: none; }
+        .bases-list .base-item .name { font-weight: 500; font-size: 13px; }
+        .bases-list .base-item .actions { display: flex; gap: 6px; }
         .bases-list .base-item .actions .btn-delete-small {
             background: #dc2626;
             color: white;
@@ -555,13 +391,8 @@
             cursor: pointer;
             font-size: 11px;
         }
-        .bases-list .base-item .actions .btn-delete-small:hover {
-            background: #b91c1c;
-        }
-        .bases-list .base-item .actions .btn-delete-small:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .bases-list .base-item .actions .btn-delete-small:hover { background: #b91c1c; }
+        .bases-list .base-item .actions .btn-delete-small:disabled { opacity: 0.5; cursor: not-allowed; }
         .bases-list .list-header {
             padding: 8px 14px;
             background: #f5f7fa;
@@ -613,40 +444,14 @@
             flex-direction: column;
             justify-content: center;
         }
-        .extra-box:hover {
-            border-color: #6c63ff;
-            background: #f5f3ff;
-        }
-        .extra-box.dragover {
-            border-color: #6c63ff;
-            background: #f3f0ff;
-        }
-        .extra-box.loaded {
-            border-color: #6c63ff;
-            background: #f3f0ff;
-        }
-        .extra-box input[type="file"] {
-            display: none;
-        }
-        .extra-box .icon {
-            font-size: 20px;
-            display: block;
-        }
-        .extra-box .title {
-            font-weight: 600;
-            font-size: 12px;
-            color: #37474f;
-        }
-        .extra-box .hint {
-            font-size: 10px;
-            color: #90a4ae;
-        }
-        .extra-box .file-info {
-            font-size: 11px;
-            color: #4a148c;
-            font-weight: 500;
-            margin-top: 2px;
-        }
+        .extra-box:hover { border-color: #6c63ff; background: #f5f3ff; }
+        .extra-box.dragover { border-color: #6c63ff; background: #f3f0ff; }
+        .extra-box.loaded { border-color: #6c63ff; background: #f3f0ff; }
+        .extra-box input[type="file"] { display: none; }
+        .extra-box .icon { font-size: 20px; display: block; }
+        .extra-box .title { font-weight: 600; font-size: 12px; color: #37474f; }
+        .extra-box .hint { font-size: 10px; color: #90a4ae; }
+        .extra-box .file-info { font-size: 11px; color: #4a148c; font-weight: 500; margin-top: 2px; }
         .extra-box .file-info .fname {
             display: inline-block;
             background: #ede7f6;
@@ -669,16 +474,8 @@
             text-align: center;
             border-left: 3px solid #6c63ff;
         }
-        .extra-stats .stat-card .number {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1a237e;
-        }
-        .extra-stats .stat-card .label {
-            font-size: 9px;
-            color: #78909c;
-            margin-top: 1px;
-        }
+        .extra-stats .stat-card .number { font-size: 16px; font-weight: 700; color: #1a237e; }
+        .extra-stats .stat-card .label { font-size: 9px; color: #78909c; margin-top: 1px; }
 
         .scripts-section {
             margin-top: 16px;
@@ -711,9 +508,7 @@
             margin-bottom: 6px;
             background: white;
         }
-        .script-card:last-child {
-            margin-bottom: 0;
-        }
+        .script-card:last-child { margin-bottom: 0; }
         .script-card .script-row {
             display: flex;
             gap: 6px;
@@ -721,9 +516,7 @@
             flex-wrap: wrap;
             margin-bottom: 4px;
         }
-        .script-card .script-row:last-child {
-            margin-bottom: 0;
-        }
+        .script-card .script-row:last-child { margin-bottom: 0; }
         .script-card .script-label {
             font-weight: 600;
             font-size: 12px;
@@ -743,68 +536,29 @@
             outline: none;
             height: 30px;
         }
-        .script-card input[type="text"]:focus {
-            border-color: #6c63ff;
-        }
+        .script-card input[type="text"]:focus { border-color: #6c63ff; }
 
         @media (max-width: 768px) {
-            .upload-box {
-                min-width: unset;
-            }
-            .stats {
-                grid-template-columns: 1fr 1fr;
-            }
-            .extra-grid {
-                grid-template-columns: 1fr;
-            }
-            .extra-stats {
-                grid-template-columns: 1fr 1fr;
-            }
-            .container {
-                padding: 10px;
-            }
-            .controls {
-                flex-direction: column;
-            }
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-            .github-section .row {
-                flex-direction: column;
-            }
-            .github-section .row-buttons {
-                flex-direction: column;
-            }
+            .upload-box { min-width: unset; }
+            .stats { grid-template-columns: 1fr 1fr; }
+            .extra-grid { grid-template-columns: 1fr; }
+            .extra-stats { grid-template-columns: 1fr 1fr; }
+            .container { padding: 10px; }
+            .controls { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+            .github-section .row { flex-direction: column; }
+            .github-section .row-buttons { flex-direction: column; }
             .github-section .btn-github-full,
             .github-section .btn-upload-phone,
-            .github-section .btn-edit-list {
-                width: 100%;
-            }
-            .script-card .script-row {
-                flex-wrap: wrap;
-            }
-            .script-card .script-label {
-                min-width: 100%;
-            }
-            .script-card input[type="text"] {
-                min-width: 100%;
-            }
+            .github-section .btn-edit-list { width: 100%; }
+            .script-card .script-row { flex-wrap: wrap; }
+            .script-card .script-label { min-width: 100%; }
+            .script-card input[type="text"] { min-width: 100%; }
         }
-        .question-list::-webkit-scrollbar {
-            width: 5px;
-        }
-        .question-list::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-        .question-list::-webkit-scrollbar-thumb {
-            background: #c5cae9;
-            border-radius: 3px;
-        }
-        .question-list::-webkit-scrollbar-thumb:hover {
-            background: #9fa8da;
-        }
+        .question-list::-webkit-scrollbar { width: 5px; }
+        .question-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 3px; }
+        .question-list::-webkit-scrollbar-thumb { background: #c5cae9; border-radius: 3px; }
+        .question-list::-webkit-scrollbar-thumb:hover { background: #9fa8da; }
     </style>
 </head>
 <body>
@@ -836,22 +590,10 @@
         </div>
 
         <div class="stats">
-            <div class="stat-card">
-                <div class="number" id="multiQuestionsCount">0</div>
-                <div class="label">Вопросов</div>
-            </div>
-            <div class="stat-card">
-                <div class="number" id="multiAnswersCount">0</div>
-                <div class="label">Ответов</div>
-            </div>
-            <div class="stat-card success">
-                <div class="number" id="multiFoundCount">0</div>
-                <div class="label">✅ Найдено</div>
-            </div>
-            <div class="stat-card danger">
-                <div class="number" id="multiNotFoundCount">0</div>
-                <div class="label">❌ Не найдено</div>
-            </div>
+            <div class="stat-card"><div class="number" id="multiQuestionsCount">0</div><div class="label">Вопросов</div></div>
+            <div class="stat-card"><div class="number" id="multiAnswersCount">0</div><div class="label">Ответов</div></div>
+            <div class="stat-card success"><div class="number" id="multiFoundCount">0</div><div class="label">✅ Найдено</div></div>
+            <div class="stat-card danger"><div class="number" id="multiNotFoundCount">0</div><div class="label">❌ Не найдено</div></div>
         </div>
 
         <div class="controls">
@@ -927,18 +669,9 @@
             </div>
 
             <div class="extra-stats">
-                <div class="stat-card">
-                    <div class="number" id="extraFileCount">0</div>
-                    <div class="label">📄 Файлов</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="extraQuestionsCount">0</div>
-                    <div class="label">📋 Вопросов</div>
-                </div>
-                <div class="stat-card success">
-                    <div class="number" id="extraSectionsCount">0</div>
-                    <div class="label">📁 Разделов</div>
-                </div>
+                <div class="stat-card"><div class="number" id="extraFileCount">0</div><div class="label">📄 Файлов</div></div>
+                <div class="stat-card"><div class="number" id="extraQuestionsCount">0</div><div class="label">📋 Вопросов</div></div>
+                <div class="stat-card success"><div class="number" id="extraSectionsCount">0</div><div class="label">📁 Разделов</div></div>
             </div>
 
             <div class="controls">
@@ -987,7 +720,7 @@
                 <div class="script-row">
                     <span class="script-label">🗺 Карта вопросов</span>
                     <button class="btn-copy" onclick="copyScriptText('scriptMapPC')">📋 ПК</button>
-                    <input type="text" id="scriptMapPC" value="(function(){console.log('🔍 Сохраняем карту вопросов...');let mapData=[];let rows=document.querySelectorAll('tr[data-ident]');rows.forEach(row=>{let ident=row.getAttribute('data-ident');let number=row.querySelector('.wtq-map-q-number')?.innerText||'';let question=row.querySelector('.wtq-map-q-text')?.innerText||'';let type=row.querySelector('.wtq-map-q-type')?.innerText||'';mapData.push({ident:ident,number:number,question:question,type:type});});console.log(`📋 Сохранено ${mapData.length} вопросов из карты`);if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`карта_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл с картой скачан!');}else{alert('Элементы карты вопросов не найдены. Убедитесь, что вы находитесь на странице с таблицей вопросов WebTutor.');}})();" readonly>
+                    <input type="text" id="scriptMapPC" value="" readonly>
                 </div>
                 <div class="script-row">
                     <span class="script-label">📱 Карта (тел)</span>
@@ -1042,8 +775,7 @@
                     const isCorrect = trimmed.startsWith('++');
                     const color = isCorrect ? '#2e7d32' : '#333';
                     const text = isCorrect ? trimmed.replace('++', '').trim() : trimmed;
-                    html +=
-                        `<div class="ans-item" style="color:${color};">${isCorrect ? '✅ ' : ''}${escapeHtml(text)}</div>`;
+                    html += `<div class="ans-item" style="color:${color};">${isCorrect ? '✅ ' : ''}${escapeHtml(text)}</div>`;
                 });
             }
             return html;
@@ -1052,15 +784,6 @@
         function getFileNumber(filename) {
             let match = filename.match(/^\d+/);
             return match ? parseInt(match[0]) : 999999;
-        }
-
-        function readFileAsText(file) {
-            return new Promise((resolve, reject) => {
-                let reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
-                reader.onerror = (e) => reject(e);
-                reader.readAsText(file);
-            });
         }
 
         // ================================================================
@@ -1125,6 +848,46 @@
                 }
             });
         }
+
+        // ================================================================
+        // АВТОСОХРАНЕНИЕ ТОКЕНА
+        // ================================================================
+
+        // Загрузка токена при открытии страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const savedToken = localStorage.getItem('admin_gh_token');
+                if (savedToken) {
+                    document.getElementById('gh-token').value = savedToken;
+                    console.log('✅ Токен загружен из памяти');
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки токена:', e);
+            }
+        });
+
+        // Автосохранение токена при вводе
+        document.getElementById('gh-token').addEventListener('input', function() {
+            const token = this.value.trim();
+            if (token.length >= 20) {
+                try {
+                    localStorage.setItem('admin_gh_token', token);
+                    console.log('💾 Токен сохранён');
+                } catch (e) {
+                    console.error('Ошибка сохранения токена:', e);
+                }
+            }
+        });
+
+        // Сохранение при потере фокуса
+        document.getElementById('gh-token').addEventListener('blur', function() {
+            const token = this.value.trim();
+            if (token.length >= 20) {
+                try {
+                    localStorage.setItem('admin_gh_token', token);
+                } catch (e) {}
+            }
+        });
 
         // ================================================================
         // ОСНОВНОЙ БЛОК
@@ -1549,7 +1312,13 @@
                     }]
                 });
 
-                const fileName = 'Объединённая_база_' + new Date().toISOString().slice(0, 10) + '.docx';
+                // Имя файла: ПервоеСлово_экза_ДДММГГ.docx
+                const firstName = multiState.questions[0]?.fileName?.split('_')[0] || 'База';
+                const now = new Date();
+                const day = String(now.getDate()).padStart(2, '0');
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const year = String(now.getFullYear()).slice(-2);
+                const fileName = firstName + '_экза_' + day + month + year + '.docx';
 
                 Packer.toBlob(doc).then(blob => {
                     const link = document.createElement('a');
@@ -1567,13 +1336,15 @@
         });
 
         // ================================================================
-        // ЗАГРУЗКА ВСЕХ БАЗ НА GITHUB
+        // ЗАГРУЗКА ВСЕХ БАЗ НА GITHUB (с автоповтором и паузами)
         // ================================================================
 
         document.getElementById('multiGhUploadBtn').addEventListener('click', async function() {
             const btn = this;
             btn.disabled = true;
             btn.textContent = '⏳ Загрузка...';
+
+            const status = document.getElementById('gh-status');
 
             try {
                 const token = document.getElementById('gh-token').value.trim();
@@ -1584,39 +1355,106 @@
                     return;
                 }
 
-                let successCount = 0,
-                    failCount = 0;
+                // Сохраняем токен
+                try { localStorage.setItem('admin_gh_token', token); } catch (e) {}
 
-                for (const base of multiState.results) {
+                const total = multiState.results.length;
+                const successList = [];
+                const failList = [];
+
+                // === ЭТАП 1: Основная загрузка ===
+                for (let i = 0; i < total; i++) {
+                    const base = multiState.results[i];
                     const baseName = base.baseName;
                     const dataToUpload = base.items.map(item => item.answer).filter(a => a !== null);
 
                     if (dataToUpload.length === 0) {
-                        failCount++;
+                        failList.push(baseName);
                         continue;
                     }
 
-                    try {
-                        await uploadSingleBaseToGitHub(dataToUpload, baseName, token);
-                        successCount++;
-                    } catch (err) {
-                        failCount++;
-                        console.error('Ошибка загрузки ' + baseName + ': ' + err.message);
+                    btn.textContent = `⏳ Загрузка ${i + 1}/${total}: ${baseName}`;
+                    status.innerHTML = `⏳ Загрузка <strong>${baseName}</strong> (${i + 1} из ${total})...`;
+                    status.style.color = '#1f2937';
+
+                    let uploaded = false;
+
+                    // 3 попытки на каждую базу
+                    for (let attempt = 1; attempt <= 3; attempt++) {
+                        try {
+                            await uploadSingleBaseToGitHub(dataToUpload, baseName, token);
+                            uploaded = true;
+                            successList.push(baseName);
+                            break;
+                        } catch (err) {
+                            console.error(`Попытка ${attempt} для "${baseName}" не удалась: ${err.message}`);
+                            if (attempt < 3) {
+                                status.innerHTML = `⚠️ Повторная попытка для <strong>${baseName}</strong> (${attempt + 1}/3)...`;
+                                await new Promise(resolve => setTimeout(resolve, 5000));
+                            }
+                        }
+                    }
+
+                    if (!uploaded) {
+                        failList.push(baseName);
+                    }
+
+                    // Пауза 3 секунды между базами
+                    if (i < total - 1) {
+                        await new Promise(resolve => setTimeout(resolve, 3000));
                     }
                 }
 
-                const status = document.getElementById('gh-status');
-                if (successCount > 0 && failCount === 0) {
-                    status.innerHTML = '🎉 <strong>Все ' + successCount + ' баз загружены в per/bases/!</strong>';
+                // === ЭТАП 2: Повторная попытка для неудавшихся баз ===
+                if (failList.length > 0) {
+                    status.innerHTML = `⏳ Повторная загрузка ${failList.length} баз...`;
+                    status.style.color = '#ed6c02';
+
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+
+                    const stillFailed = [];
+
+                    for (let i = 0; i < failList.length; i++) {
+                        const baseName = failList[i];
+                        const base = multiState.results.find(b => b.baseName === baseName);
+                        if (!base) continue;
+
+                        const dataToUpload = base.items.map(item => item.answer).filter(a => a !== null);
+                        if (dataToUpload.length === 0) {
+                            stillFailed.push(baseName);
+                            continue;
+                        }
+
+                        btn.textContent = `⏳ Повтор ${i + 1}/${failList.length}: ${baseName}`;
+
+                        try {
+                            await uploadSingleBaseToGitHub(dataToUpload, baseName, token);
+                            const idx = failList.indexOf(baseName);
+                            if (idx > -1) failList.splice(idx, 1);
+                            successList.push(baseName);
+                        } catch (err) {
+                            stillFailed.push(baseName);
+                        }
+
+                        if (i < failList.length - 1) {
+                            await new Promise(resolve => setTimeout(resolve, 3000));
+                        }
+                    }
+                }
+
+                // === ИТОГ ===
+                if (failList.length === 0) {
+                    status.innerHTML = `🎉 <strong>Все ${successList.length} баз загружены в per/bases/!</strong>`;
                     status.style.color = '#16a34a';
                     await loadBasesList();
-                } else if (successCount > 0 && failCount > 0) {
-                    status.innerHTML = '⚠️ <strong>Загружено ' + successCount + ' баз, ' + failCount +
-                        ' не загружено</strong>';
-                    status.style.color = '#ed6c02';
                 } else {
-                    status.innerHTML = '❌ <strong>Не удалось загрузить ни одной базы</strong>';
-                    status.style.color = '#dc2626';
+                    status.innerHTML = `
+                        ⚠️ <strong>Загружено: ${successList.length} баз</strong><br>
+                        ❌ <strong>Не загрузилось: ${failList.length} баз</strong><br>
+                        <span style="font-size:10px;color:#dc2626;">Не загружены: ${failList.join(', ')}</span>
+                    `;
+                    status.style.color = '#ed6c02';
+                    await loadBasesList();
                 }
 
             } catch (err) {
@@ -1755,15 +1593,10 @@
         });
 
         // ================================================================
-        // GITHUB
+        // GITHUB: загрузка с телефона, список баз, удаление
         // ================================================================
 
         let currentBasesList = [];
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedToken = localStorage.getItem('admin_gh_token');
-            if (savedToken) document.getElementById('gh-token').value = savedToken;
-        });
 
         document.getElementById('gh-upload-phone-btn').addEventListener('click', function() {
             document.getElementById('phone-file-input').click();
@@ -2234,6 +2067,15 @@
         });
 
         // ================================================================
+        // НОВЫЙ СКРИПТ КАРТЫ ВОПРОСОВ (ПК)
+        // ================================================================
+
+        const newScriptMapPC = `(function(){console.log('🔍 Сохраняем карту вопросов...');let examTitle=document.querySelector('span[wtq-elem="ass-title"]')?.innerText?.trim()||'';console.log('📚 Название экзамена: "'+examTitle+'"');function getFileBaseName(title){const t=title.toLowerCase();if(t.includes('пожарная безопасность')||t.includes('пожарной безопасности')){return '_Экза_ППБ';}if(t.includes('правила техники безопасности')||t.includes('техники безопасности')){return '_Экза_ПТБ';}if(t.includes('техническая эксплуатация')||t.includes('технической эксплуатации')){return '_Экза_ПТЭ';}return '_Экза_'+title.replace(/[\\\\/:*?"<>|]/g,'_').trim();}const baseName=getFileBaseName(examTitle);console.log('💾 Имя файла: '+baseName+'.json');let mapData=[];let rows=document.querySelectorAll('tr[data-ident]');rows.forEach(row=>{let ident=row.getAttribute('data-ident');let number=row.querySelector('.wtq-map-q-number')?.innerText||'';let question=row.querySelector('.wtq-map-q-text')?.innerText||'';let type=row.querySelector('.wtq-map-q-type')?.innerText||'';mapData.push({ident:ident,number:number,question:question,type:type});});console.log('📋 Сохранено '+mapData.length+' вопросов из карты');if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=baseName+'.json';a.click();console.log('📥 Файл "'+baseName+'.json" скачан!');}})();`;
+
+        // Устанавливаем значение в input
+        document.getElementById('scriptMapPC').value = newScriptMapPC;
+
+        // ================================================================
         // EVENT LISTENERS
         // ================================================================
 
@@ -2243,6 +2085,7 @@
         console.log('📄 Основной блок: загрузка вопросов/ответов, поиск, DOCX, GitHub.');
         console.log('🛠 Дополнительные функции: объединение файлов с разделами.');
         console.log('📜 Скрипты: сборщик вопросов и карта вопросов для WebTutor.');
+        console.log('💾 Токен автоматически сохраняется в localStorage.');
     </script>
 </body>
 </html>
