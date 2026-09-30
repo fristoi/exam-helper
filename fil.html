@@ -213,32 +213,29 @@
         }
         .bases-list.active { display: block; }
         .bases-list .base-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 14px; border-bottom: 1px solid #f0f0f0; background: white;
+            display: flex; align-items: center;
+            padding: 8px 14px; border-bottom: 1px solid #f0f0f0;
+            background: white; gap: 10px;
         }
         .bases-list .base-item:last-child { border-bottom: none; }
-        .bases-list .base-item .name { font-weight: 500; font-size: 13px; }
-        .bases-list .base-item .actions { display: flex; gap: 6px; }
-        .bases-list .base-item .actions .btn-delete-small {
-            background: #dc2626; color: white; border: none; padding: 3px 10px;
-            border-radius: 4px; cursor: pointer; font-size: 11px;
+        .bases-list .base-item .checkbox-wrap {
+            display: flex; align-items: center; gap: 10px;
+            cursor: pointer; width: 100%;
         }
-        .bases-list .base-item .actions .btn-delete-small:hover { background: #b91c1c; }
-        .bases-list .base-item .actions .btn-delete-small:disabled { opacity: 0.5; cursor: not-allowed; }
+        .bases-list .base-item input[type="checkbox"] {
+            width: 16px; height: 16px; cursor: pointer;
+            accent-color: #dc2626; flex-shrink: 0; margin: 0;
+        }
+        .bases-list .base-item .name {
+            font-weight: 500; font-size: 13px;
+            text-align: left; flex: 1;
+        }
         .bases-list .list-header {
             padding: 8px 14px; background: #f5f7fa; font-weight: 600;
             font-size: 12px; color: #1a237e; border-bottom: 1px solid #e0e0e0;
             display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
         }
         .bases-list .list-header .spacer { flex: 1; }
-        .bases-list .base-item .checkbox-wrap {
-            display: flex; align-items: center; gap: 8px;
-            cursor: pointer; flex: 1;
-        }
-        .bases-list .base-item input[type="checkbox"] {
-            width: 16px; height: 16px; cursor: pointer;
-            accent-color: #dc2626;
-        }
 
         .extra-section {
             margin-top: 16px; padding: 14px; border: 2px solid #e8eaf6;
@@ -413,7 +410,7 @@
                 <div class="list-header">
                     <span>📋 Список баз в per/bases/:</span>
                     <span class="spacer"></span>
-                    <button class="btn-delete-small btn-gray" id="selectAllBtn" style="display:none; background:#607d8b;" onclick="toggleSelectAll()">☑️ Выбрать все</button>
+                    <button class="btn-delete-small" id="selectAllBtn" style="display:none; background:#607d8b;" onclick="toggleSelectAll()">☑️ Выбрать все</button>
                     <button class="btn-delete-small" id="deleteSelectedBtn" style="display:none;" onclick="deleteSelectedBases()">🗑️ Удалить выбранные</button>
                 </div>
                 <div id="basesListItems">
@@ -1332,11 +1329,8 @@
                         } catch (err) {
                             console.error(`Попытка ${attempt} для "${baseName}" не удалась: ${err.message}`);
                             if (attempt < 3) {
-                                status.innerHTML = `⚠️ Повторная попытка для <strong>${baseName}</strong> (${attempt + 1}/3)...`;
-                                for (let s = 0; s < 60; s++) {
-                                    if (uploadCancelled) break;
-                                    await new Promise(resolve => setTimeout(resolve, 1000));
-                                }
+                                status.innerHTML = `⚠️ Повторная попытка для <strong>${baseName}</strong> (${attempt + 1}/3) через 5 секунд...`;
+                                await new Promise(resolve => setTimeout(resolve, 5000));
                             }
                         }
                     }
@@ -1344,12 +1338,9 @@
                     if (!uploaded) failList.push(baseName);
 
                     if (i < total - 1 && !uploadCancelled) {
-                        status.innerHTML = `⏸ Пауза 60 секунд перед следующей базой... (осталось: ${total - i - 1})`;
+                        status.innerHTML = `⏸ Пауза 3 секунды... (осталось: ${total - i - 1})`;
                         status.style.color = '#ed6c02';
-                        for (let s = 0; s < 60; s++) {
-                            if (uploadCancelled) break;
-                            await new Promise(resolve => setTimeout(resolve, 1000));
-                        }
+                        await new Promise(resolve => setTimeout(resolve, 3000));
                     }
                 }
 
@@ -1657,7 +1648,7 @@
                 for (let base of basesList) {
                     html += `
                         <div class="base-item" id="base-item-${base}">
-                            <label class="checkbox-wrap" style="cursor:pointer; flex:1;">
+                            <label class="checkbox-wrap">
                                 <input type="checkbox" class="base-checkbox" value="${base}" onchange="updateDeleteButton()">
                                 <span class="name">📄 ${base}</span>
                             </label>
@@ -2028,9 +2019,9 @@
         document.getElementById('multiFindBtn').addEventListener('click', multiFindAnswers);
 
         console.log('🚀 Готово!');
-        console.log('✅ Проверка файлов идёт через API GitHub.');
+        console.log('✅ Пауза между базами: 3 секунды');
+        console.log('✅ Пауза перед повтором: 5 секунд');
         console.log('✅ index.json обновляется один раз в конце.');
-        console.log('✅ Массовое удаление баз через чекбоксы.');
     </script>
 </body>
 </html>
