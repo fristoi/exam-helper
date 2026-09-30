@@ -6,7 +6,11 @@
     <title>Создание базы → per/bases/</title>
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5/build/index.umd.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f0f2f5;
@@ -28,8 +32,16 @@
             align-items: center;
             gap: 8px;
         }
-        .subtitle { color: #78909c; margin-bottom: 10px; font-size: 12px; }
-        hr { margin: 16px 0; border: 0; border-top: 2px solid #e8eaf6; }
+        .subtitle {
+            color: #78909c;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        hr {
+            margin: 16px 0;
+            border: 0;
+            border-top: 2px solid #e8eaf6;
+        }
 
         .upload-box {
             border: 2px dashed #b0bec5;
@@ -40,14 +52,40 @@
             background: #fafafa;
             cursor: pointer;
         }
-        .upload-box:hover { border-color: #42a5f5; background: #f5faff; }
-        .upload-box.dragover { border-color: #66bb6a; background: #f1f8e9; }
-        .upload-box.loaded { border-color: #66bb6a; background: #f1f8e9; }
-        .upload-box input[type="file"] { display: none; }
-        .upload-box .icon { font-size: 22px; display: block; }
-        .upload-box .title { font-weight: 600; font-size: 12px; color: #37474f; }
-        .upload-box .hint { font-size: 10px; color: #90a4ae; }
-        .upload-box .file-info { font-size: 11px; color: #2e7d32; font-weight: 500; margin-top: 2px; }
+        .upload-box:hover {
+            border-color: #42a5f5;
+            background: #f5faff;
+        }
+        .upload-box.dragover {
+            border-color: #66bb6a;
+            background: #f1f8e9;
+        }
+        .upload-box.loaded {
+            border-color: #66bb6a;
+            background: #f1f8e9;
+        }
+        .upload-box input[type="file"] {
+            display: none;
+        }
+        .upload-box .icon {
+            font-size: 22px;
+            display: block;
+        }
+        .upload-box .title {
+            font-weight: 600;
+            font-size: 12px;
+            color: #37474f;
+        }
+        .upload-box .hint {
+            font-size: 10px;
+            color: #90a4ae;
+        }
+        .upload-box .file-info {
+            font-size: 11px;
+            color: #2e7d32;
+            font-weight: 500;
+            margin-top: 2px;
+        }
         .upload-box .file-info .fname {
             display: inline-block;
             background: #e8f5e9;
@@ -70,12 +108,28 @@
             text-align: center;
             border-left: 3px solid #42a5f5;
         }
-        .stat-card .number { font-size: 18px; font-weight: 700; color: #1a237e; }
-        .stat-card .label { font-size: 10px; color: #78909c; margin-top: 1px; }
-        .stat-card.success { border-left-color: #66bb6a; }
-        .stat-card.success .number { color: #2e7d32; }
-        .stat-card.danger { border-left-color: #ef5350; }
-        .stat-card.danger .number { color: #c62828; }
+        .stat-card .number {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a237e;
+        }
+        .stat-card .label {
+            font-size: 10px;
+            color: #78909c;
+            margin-top: 1px;
+        }
+        .stat-card.success {
+            border-left-color: #66bb6a;
+        }
+        .stat-card.success .number {
+            color: #2e7d32;
+        }
+        .stat-card.danger {
+            border-left-color: #ef5350;
+        }
+        .stat-card.danger .number {
+            color: #c62828;
+        }
 
         .controls {
             display: flex;
@@ -96,17 +150,51 @@
             align-items: center;
             gap: 5px;
         }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
-        .btn-primary { background: #1a237e; color: white; }
-        .btn-primary:hover:not(:disabled) { background: #0d1445; transform: translateY(-1px); }
-        .btn-success { background: #2e7d32; color: white; }
-        .btn-success:hover:not(:disabled) { background: #1b5e20; transform: translateY(-1px); }
-        .btn-danger { background: #c62828; color: white; }
-        .btn-danger:hover:not(:disabled) { background: #b71c1c; transform: translateY(-1px); }
-        .btn-word { background: #1856a8; color: white; }
-        .btn-word:hover:not(:disabled) { background: #0d3d7a; transform: translateY(-1px); }
-        .btn-github { background: #24292e; color: white; }
-        .btn-github:hover:not(:disabled) { background: #1a1e22; transform: translateY(-1px); }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .btn-primary {
+            background: #1a237e;
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #0d1445;
+            transform: translateY(-1px);
+        }
+        .btn-success {
+            background: #2e7d32;
+            color: white;
+        }
+        .btn-success:hover:not(:disabled) {
+            background: #1b5e20;
+            transform: translateY(-1px);
+        }
+        .btn-danger {
+            background: #c62828;
+            color: white;
+        }
+        .btn-danger:hover:not(:disabled) {
+            background: #b71c1c;
+            transform: translateY(-1px);
+        }
+        .btn-word {
+            background: #1856a8;
+            color: white;
+        }
+        .btn-word:hover:not(:disabled) {
+            background: #0d3d7a;
+            transform: translateY(-1px);
+        }
+        .btn-github {
+            background: #24292e;
+            color: white;
+        }
+        .btn-github:hover:not(:disabled) {
+            background: #1a1e22;
+            transform: translateY(-1px);
+        }
         .btn-delete-small {
             background: #dc2626;
             color: white;
@@ -116,9 +204,17 @@
             cursor: pointer;
             font-size: 11px;
         }
-        .btn-delete-small:hover { background: #b91c1c; }
-        .btn-purple { background: #6c63ff; color: white; }
-        .btn-purple:hover:not(:disabled) { background: #5a52e0; transform: translateY(-1px); }
+        .btn-delete-small:hover {
+            background: #b91c1c;
+        }
+        .btn-purple {
+            background: #6c63ff;
+            color: white;
+        }
+        .btn-purple:hover:not(:disabled) {
+            background: #5a52e0;
+            transform: translateY(-1px);
+        }
         .btn-copy {
             background: #607d8b;
             color: white;
@@ -129,9 +225,15 @@
             font-size: 10px;
             font-weight: 600;
             transition: all 0.3s;
+            white-space: nowrap;
         }
-        .btn-copy:hover { background: #455a64; transform: translateY(-1px); }
-        .btn-copy.copied { background: #2e7d32; }
+        .btn-copy:hover {
+            background: #455a64;
+            transform: translateY(-1px);
+        }
+        .btn-copy.copied {
+            background: #2e7d32;
+        }
 
         .progress-container {
             width: 100%;
@@ -149,7 +251,9 @@
             width: 0%;
         }
 
-        .results { margin-top: 10px; }
+        .results {
+            margin-top: 10px;
+        }
         .results-header {
             display: flex;
             justify-content: space-between;
@@ -161,7 +265,11 @@
             flex-wrap: wrap;
             gap: 6px;
         }
-        .results-header .count { font-weight: 600; color: #1a237e; font-size: 13px; }
+        .results-header .count {
+            font-weight: 600;
+            color: #1a237e;
+            font-size: 13px;
+        }
 
         .badge {
             display: inline-block;
@@ -170,10 +278,26 @@
             font-size: 10px;
             font-weight: 600;
         }
-        .badge-success { background: #c8e6c9; color: #1b5e20; }
-        .badge-danger { background: #ffcdd2; color: #b71c1c; }
-        .badge-info { background: #bbdefb; color: #0d47a1; }
-        .badge-purple { background: #e8eaf6; color: #1a237e; }
+        .badge-success {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+        .badge-danger {
+            background: #ffcdd2;
+            color: #b71c1c;
+        }
+        .badge-info {
+            background: #bbdefb;
+            color: #0d47a1;
+        }
+        .badge-purple {
+            background: #e8eaf6;
+            color: #1a237e;
+        }
+        .badge-pink {
+            background: #fce4ec;
+            color: #880e4f;
+        }
 
         .question-list {
             max-height: 400px;
@@ -186,8 +310,13 @@
             border-bottom: 1px solid #f0f0f0;
             transition: background 0.2s;
         }
-        .question-item:hover { background: #fafafa; }
-        .question-item:last-child { border-bottom: none; }
+        .question-item:hover {
+            background: #fafafa;
+        }
+        .question-item:last-child {
+            border-bottom: none;
+        }
+
         .question-item .q-header {
             display: flex;
             flex-wrap: wrap;
@@ -235,8 +364,15 @@
             display: block;
             margin-bottom: 2px;
         }
-        .question-item .q-answer .ans-item { margin-bottom: 2px; font-size: 12px; }
-        .question-item .q-source { font-size: 10px; color: #78909c; margin-top: 3px; }
+        .question-item .q-answer .ans-item {
+            margin-bottom: 2px;
+            font-size: 12px;
+        }
+        .question-item .q-source {
+            font-size: 10px;
+            color: #78909c;
+            margin-top: 3px;
+        }
         .question-item .q-punkt {
             background: #fff3e0;
             color: #e65100;
@@ -267,9 +403,20 @@
             padding: 30px 20px;
             color: #b0bec5;
         }
-        .empty-state .icon { font-size: 36px; display: block; margin-bottom: 8px; }
-        .empty-state h3 { color: #78909c; margin-bottom: 4px; font-size: 14px; }
-        .empty-state p { color: #b0bec5; font-size: 12px; }
+        .empty-state .icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .empty-state h3 {
+            color: #78909c;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        .empty-state p {
+            color: #b0bec5;
+            font-size: 12px;
+        }
 
         .json-preview {
             background: #263238;
@@ -312,7 +459,9 @@
             font-size: 12px;
             outline: none;
         }
-        .github-section input:focus { border-color: #1a237e; }
+        .github-section input:focus {
+            border-color: #1a237e;
+        }
         .github-section .btn-github-full {
             flex: 1;
             min-width: 100px;
@@ -325,8 +474,13 @@
             font-size: 12px;
             cursor: pointer;
         }
-        .github-section .btn-github-full:hover { background: #1a1e22; }
-        .github-section .btn-github-full:disabled { opacity: 0.5; cursor: not-allowed; }
+        .github-section .btn-github-full:hover {
+            background: #1a1e22;
+        }
+        .github-section .btn-github-full:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .github-section .btn-upload-phone {
             flex: 1;
             min-width: 100px;
@@ -339,7 +493,9 @@
             font-size: 12px;
             cursor: pointer;
         }
-        .github-section .btn-upload-phone:hover { background: #bf360c; }
+        .github-section .btn-upload-phone:hover {
+            background: #bf360c;
+        }
         .github-section .btn-edit-list {
             flex: 1;
             min-width: 100px;
@@ -352,8 +508,12 @@
             font-size: 12px;
             cursor: pointer;
         }
-        .github-section .btn-edit-list:hover { background: #5a52e0; }
-        .github-section input[type="file"] { display: none; }
+        .github-section .btn-edit-list:hover {
+            background: #5a52e0;
+        }
+        .github-section input[type="file"] {
+            display: none;
+        }
         #gh-status {
             margin-top: 6px;
             font-size: 11px;
@@ -370,7 +530,9 @@
             overflow: hidden;
             display: none;
         }
-        .bases-list.active { display: block; }
+        .bases-list.active {
+            display: block;
+        }
         .bases-list .base-item {
             display: flex;
             justify-content: space-between;
@@ -379,9 +541,17 @@
             border-bottom: 1px solid #f0f0f0;
             background: white;
         }
-        .bases-list .base-item:last-child { border-bottom: none; }
-        .bases-list .base-item .name { font-weight: 500; font-size: 13px; }
-        .bases-list .base-item .actions { display: flex; gap: 6px; }
+        .bases-list .base-item:last-child {
+            border-bottom: none;
+        }
+        .bases-list .base-item .name {
+            font-weight: 500;
+            font-size: 13px;
+        }
+        .bases-list .base-item .actions {
+            display: flex;
+            gap: 6px;
+        }
         .bases-list .base-item .actions .btn-delete-small {
             background: #dc2626;
             color: white;
@@ -391,8 +561,13 @@
             cursor: pointer;
             font-size: 11px;
         }
-        .bases-list .base-item .actions .btn-delete-small:hover { background: #b91c1c; }
-        .bases-list .base-item .actions .btn-delete-small:disabled { opacity: 0.5; cursor: not-allowed; }
+        .bases-list .base-item .actions .btn-delete-small:hover {
+            background: #b91c1c;
+        }
+        .bases-list .base-item .actions .btn-delete-small:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .bases-list .list-header {
             padding: 8px 14px;
             background: #f5f7fa;
@@ -402,6 +577,7 @@
             border-bottom: 1px solid #e0e0e0;
         }
 
+        /* ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ */
         .extra-section {
             margin-top: 16px;
             padding: 14px;
@@ -444,14 +620,40 @@
             flex-direction: column;
             justify-content: center;
         }
-        .extra-box:hover { border-color: #6c63ff; background: #f5f3ff; }
-        .extra-box.dragover { border-color: #6c63ff; background: #f3f0ff; }
-        .extra-box.loaded { border-color: #6c63ff; background: #f3f0ff; }
-        .extra-box input[type="file"] { display: none; }
-        .extra-box .icon { font-size: 20px; display: block; }
-        .extra-box .title { font-weight: 600; font-size: 12px; color: #37474f; }
-        .extra-box .hint { font-size: 10px; color: #90a4ae; }
-        .extra-box .file-info { font-size: 11px; color: #4a148c; font-weight: 500; margin-top: 2px; }
+        .extra-box:hover {
+            border-color: #6c63ff;
+            background: #f5f3ff;
+        }
+        .extra-box.dragover {
+            border-color: #6c63ff;
+            background: #f3f0ff;
+        }
+        .extra-box.loaded {
+            border-color: #6c63ff;
+            background: #f3f0ff;
+        }
+        .extra-box input[type="file"] {
+            display: none;
+        }
+        .extra-box .icon {
+            font-size: 20px;
+            display: block;
+        }
+        .extra-box .title {
+            font-weight: 600;
+            font-size: 12px;
+            color: #37474f;
+        }
+        .extra-box .hint {
+            font-size: 10px;
+            color: #90a4ae;
+        }
+        .extra-box .file-info {
+            font-size: 11px;
+            color: #4a148c;
+            font-weight: 500;
+            margin-top: 2px;
+        }
         .extra-box .file-info .fname {
             display: inline-block;
             background: #ede7f6;
@@ -474,9 +676,18 @@
             text-align: center;
             border-left: 3px solid #6c63ff;
         }
-        .extra-stats .stat-card .number { font-size: 16px; font-weight: 700; color: #1a237e; }
-        .extra-stats .stat-card .label { font-size: 9px; color: #78909c; margin-top: 1px; }
+        .extra-stats .stat-card .number {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a237e;
+        }
+        .extra-stats .stat-card .label {
+            font-size: 9px;
+            color: #78909c;
+            margin-top: 1px;
+        }
 
+        /* СКРИПТЫ */
         .scripts-section {
             margin-top: 16px;
             padding: 14px;
@@ -508,22 +719,22 @@
             margin-bottom: 6px;
             background: white;
         }
-        .script-card:last-child { margin-bottom: 0; }
+        .script-card:last-child {
+            margin-bottom: 0;
+        }
         .script-card .script-row {
             display: flex;
             gap: 6px;
             align-items: center;
             flex-wrap: wrap;
-            margin-bottom: 4px;
         }
-        .script-card .script-row:last-child { margin-bottom: 0; }
-        .script-card .script-label {
+        .script-card .script-row .label {
             font-weight: 600;
             font-size: 12px;
             color: #1a237e;
-            min-width: 130px;
+            min-width: 110px;
         }
-        .script-card input[type="text"] {
+        .script-card .script-row input {
             flex: 1;
             min-width: 120px;
             padding: 4px 8px;
@@ -536,29 +747,68 @@
             outline: none;
             height: 30px;
         }
-        .script-card input[type="text"]:focus { border-color: #6c63ff; }
+        .script-card .script-row input:focus {
+            border-color: #6c63ff;
+        }
 
         @media (max-width: 768px) {
-            .upload-box { min-width: unset; }
-            .stats { grid-template-columns: 1fr 1fr; }
-            .extra-grid { grid-template-columns: 1fr; }
-            .extra-stats { grid-template-columns: 1fr 1fr; }
-            .container { padding: 10px; }
-            .controls { flex-direction: column; }
-            .btn { width: 100%; justify-content: center; }
-            .github-section .row { flex-direction: column; }
-            .github-section .row-buttons { flex-direction: column; }
+            .upload-box {
+                min-width: unset;
+            }
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            .extra-grid {
+                grid-template-columns: 1fr;
+            }
+            .extra-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            .container {
+                padding: 10px;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .github-section .row {
+                flex-direction: column;
+            }
+            .github-section .row-buttons {
+                flex-direction: column;
+            }
             .github-section .btn-github-full,
             .github-section .btn-upload-phone,
-            .github-section .btn-edit-list { width: 100%; }
-            .script-card .script-row { flex-wrap: wrap; }
-            .script-card .script-label { min-width: 100%; }
-            .script-card input[type="text"] { min-width: 100%; }
+            .github-section .btn-edit-list {
+                width: 100%;
+            }
+            .script-card .script-row {
+                flex-wrap: wrap;
+            }
+            .script-card .script-row .label {
+                min-width: 100%;
+            }
+            .script-card .script-row input {
+                min-width: 100%;
+            }
         }
-        .question-list::-webkit-scrollbar { width: 5px; }
-        .question-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 3px; }
-        .question-list::-webkit-scrollbar-thumb { background: #c5cae9; border-radius: 3px; }
-        .question-list::-webkit-scrollbar-thumb:hover { background: #9fa8da; }
+        .question-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        .question-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        .question-list::-webkit-scrollbar-thumb {
+            background: #c5cae9;
+            border-radius: 3px;
+        }
+        .question-list::-webkit-scrollbar-thumb:hover {
+            background: #9fa8da;
+        }
     </style>
 </head>
 <body>
@@ -566,7 +816,10 @@
         <h1>🧯 Создание базы → per/bases/</h1>
         <p class="subtitle">Загрузите базы с вопросами и базы с ответами</p>
 
-        <!-- ОСНОВНОЙ БЛОК -->
+        <!-- ========================================================== -->
+        <!-- ОСНОВНОЙ БЛОК                                              -->
+        <!-- ========================================================== -->
+
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
             <div class="upload-box" id="multiQuestionsUpload">
                 <label for="multiQuestionsFile">
@@ -590,16 +843,29 @@
         </div>
 
         <div class="stats">
-            <div class="stat-card"><div class="number" id="multiQuestionsCount">0</div><div class="label">Вопросов</div></div>
-            <div class="stat-card"><div class="number" id="multiAnswersCount">0</div><div class="label">Ответов</div></div>
-            <div class="stat-card success"><div class="number" id="multiFoundCount">0</div><div class="label">✅ Найдено</div></div>
-            <div class="stat-card danger"><div class="number" id="multiNotFoundCount">0</div><div class="label">❌ Не найдено</div></div>
+            <div class="stat-card">
+                <div class="number" id="multiQuestionsCount">0</div>
+                <div class="label">Вопросов</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="multiAnswersCount">0</div>
+                <div class="label">Ответов</div>
+            </div>
+            <div class="stat-card success">
+                <div class="number" id="multiFoundCount">0</div>
+                <div class="label">✅ Найдено</div>
+            </div>
+            <div class="stat-card danger">
+                <div class="number" id="multiNotFoundCount">0</div>
+                <div class="label">❌ Не найдено</div>
+            </div>
         </div>
 
         <div class="controls">
             <button class="btn btn-primary" id="multiFindBtn" disabled>🔍 Найти ответы</button>
             <button class="btn btn-success" id="multiExportBtn" disabled>📥 Скачать все JSON</button>
             <button class="btn btn-word" id="multiExportDocxBtn" disabled>📄 Скачать всё в DOCX</button>
+            <button class="btn btn-word" id="multiExportDocxByPersonBtn" disabled>📄 Скачать по фамилиям</button>
             <button class="btn btn-github" id="multiGhUploadBtn" disabled>🚀 Загрузить все на GitHub</button>
             <button class="btn btn-danger" id="multiClearBtn">🗑️ Очистить</button>
         </div>
@@ -616,7 +882,10 @@
             </div>
         </div>
 
-        <!-- GITHUB СЕКЦИЯ -->
+        <!-- ========================================================== -->
+        <!-- GITHUB СЕКЦИЯ                                              -->
+        <!-- ========================================================== -->
+
         <div class="github-section" id="github-upload-section">
             <div class="row">
                 <input type="password" id="gh-token" placeholder="🔑 GitHub Token (ghp_...)" style="flex: 2;">
@@ -638,7 +907,10 @@
             </div>
         </div>
 
-        <!-- ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ -->
+        <!-- ========================================================== -->
+        <!-- ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ                                     -->
+        <!-- ========================================================== -->
+
         <hr>
 
         <div class="extra-section">
@@ -669,9 +941,18 @@
             </div>
 
             <div class="extra-stats">
-                <div class="stat-card"><div class="number" id="extraFileCount">0</div><div class="label">📄 Файлов</div></div>
-                <div class="stat-card"><div class="number" id="extraQuestionsCount">0</div><div class="label">📋 Вопросов</div></div>
-                <div class="stat-card success"><div class="number" id="extraSectionsCount">0</div><div class="label">📁 Разделов</div></div>
+                <div class="stat-card">
+                    <div class="number" id="extraFileCount">0</div>
+                    <div class="label">📄 Файлов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="extraQuestionsCount">0</div>
+                    <div class="label">📋 Вопросов</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="number" id="extraSectionsCount">0</div>
+                    <div class="label">📁 Разделов</div>
+                </div>
             </div>
 
             <div class="controls">
@@ -692,7 +973,10 @@
             </div>
         </div>
 
-        <!-- СКРИПТЫ -->
+        <!-- ========================================================== -->
+        <!-- СКРИПТЫ (компактная версия с полями)                       -->
+        <!-- ========================================================== -->
+
         <hr>
 
         <div class="scripts-section">
@@ -704,26 +988,26 @@
             <!-- Сборщик вопросов -->
             <div class="script-card">
                 <div class="script-row">
-                    <span class="script-label">🧹 Сборщик вопросов</span>
+                    <span class="label">🧹 Сборщик вопросов</span>
                     <button class="btn-copy" onclick="copyScriptText('scriptCollectorPC')">📋 ПК</button>
                     <input type="text" id="scriptCollectorPC" value="(function(){console.log('🔍 Начинаем сбор вопросов...');function cleanQuestionText(t){return t?t.replace(/(укажите все правильные ответы)/gi,''):t}let allQuestions=[],sequence=window.g_oPlayer?.aSequence;if(!sequence)return console.log('❌ g_oPlayer не найден');console.log(`📊 Всего элементов: ${sequence.length}`);for(let i=0;i<sequence.length;i++){let item=sequence[i];if(item.sType!=='choice'&&item.sType!=='select')continue;let questionText=item.sQuestionText;if(!questionText)continue;let cleanedQuestion=cleanQuestionText(questionText);let punkt='';if(item.sTitle){let match=item.sTitle.match(/[\d\.]+/);if(match)punkt=match[0]}let ident=item.sIdent||item._id||item.id;let renderChoice=item.jxResponse?.[0]?.getElementsByTagName('render_choice')[0];let labels=renderChoice?renderChoice.getElementsByTagName('response_label'):[];let idToText={};for(let lbl of labels){let id=lbl.getAttribute('ident');let mattext=lbl.getElementsByTagName('mattext')[0];if(id&&mattext){idToText[id]=mattext.textContent.trim()}}let correctAnswers=[];let wrongAnswers=[];let allAnswers=[];for(let lbl of labels){let ws_right=lbl.getAttribute('ws_right');let id=lbl.getAttribute('ident');if(idToText[id]){let answerText=idToText[id];let isCorrect=(ws_right==='1');allAnswers.push({text:answerText,correct:isCorrect});if(isCorrect){correctAnswers.push(answerText)}else{wrongAnswers.push(answerText)}}}if(correctAnswers.length>0||wrongAnswers.length>0){let questionData={ident:ident,punkt:punkt,question:cleanedQuestion,correct:correctAnswers,wrong:wrongAnswers,all_answers:allAnswers,answer:correctAnswers.length===1?correctAnswers[0]:correctAnswers.map(a=>'++ '+a).join('\n')};allQuestions.push(questionData);console.log(`✅ [${i}] ${punkt} (ident: ${ident})`);console.log(`   Очищенный вопрос: ${cleanedQuestion.substring(0,70)}...`)}}console.log('\n🎯 ВСЕГО СОБРАНО:',allQuestions.length,'вопросов');if(allQuestions.length>0){let dataStr=JSON.stringify(allQuestions,null,2);let blob=new Blob([dataStr],{type:'application/json'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download=`база_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл скачан!')}})();" readonly>
                 </div>
                 <div class="script-row">
-                    <span class="script-label">📱 Сборщик (тел)</span>
+                    <span class="label">📱 Сборщик (тел)</span>
                     <button class="btn-copy" onclick="copyScriptText('scriptCollectorTel')">📱 Тел</button>
-                    <input type="text" id="scriptCollectorTel" value="javascript:(function(){const p=window.g_oPlayer;if(!p)return;const q=[];const clean=t=>t?t.replace(/(укажите все правильные ответы)/gi,''):t;const seq=p.aSequence||[];for(let i=0;i<seq.length;i++){const item=seq[i];if(item.sType!=='choice'&&item.sType!=='select')continue;const qt=item.sQuestionText;if(!qt)continue;const qClean=clean(qt);let punkt='';if(item.sTitle){const m=item.sTitle.match(/[\d\.]+/);if(m)punkt=m[0];}const rc=item.jxResponse?.[0]?.getElementsByTagName('render_choice')[0];const labels=rc?rc.getElementsByTagName('response_label'):[];const idToText={};for(const lbl of labels){const id=lbl.getAttribute('ident');const mt=lbl.getElementsByTagName('mattext')[0];if(id&&mt)idToText[id]=mt.textContent.trim();}const correct=[];const wrong=[];for(const lbl of labels){const id=lbl.getAttribute('ident');const ws=lbl.getAttribute('ws_right');if(idToText[id]){if(ws==='1')correct.push(idToText[id]);else wrong.push(idToText[id]);}}if(correct.length||wrong.length){q.push({ident:item.sIdent||item._id||item.id,punkt,question:qClean,correct,wrong,all_answers:[...correct,...wrong].map(t=>({text:t,correct:correct.includes(t)})),answer:correct.length===1?correct[0]:correct.map(a=>'++ '+a).join('\n')});}}if(q.length){const data=JSON.stringify(q,null,2);const blob=new Blob([data],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`база_${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},1000);}})();" readonly>
+                    <input type="text" id="scriptCollectorTel" value="javascript:(function(){console.log('%D0%A1%D0%B1%D0%BE%D1%80%20%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D0%BE%D0%B2...');function%20cleanQuestionText(t){return%20t%3Ft.replace(/(%D1%83%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%20%D0%B2%D1%81%D0%B5%20%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D1%8B)/gi,''):t}let%20allQuestions=[],sequence=window.g_oPlayer%3F.aSequence;if(!sequence)return%20alert('%D0%9E%D1%88%D0%B8%D0%B1%D0%BA%D0%B0:%20g_oPlayer%20%D0%BD%D0%B5%20%D0%BD%D0%B0%D0%B9%D0%B4%D0%B5%D0%BD'),void%200;for(let%20e=0;e<sequence.length;e++){let%20n=sequence[e];if('choice'!==n.sType&&'select'!==n.sType)continue;let%20o=n.sQuestionText;if(!o)continue;let%20a=cleanQuestionText(o),l='';if(n.sTitle){let%20r=n.sTitle.match(/[\d\.]+/);r&&(l=r[0])}let%20c=n.sIdent||n._id||n.id,s=n.jxResponse%3F.[0]%3F.getElementsByTagName('render_choice')[0],i=s%3Fs.getElementsByTagName('response_label'):[],d={};for(let%20u%20of%20i){let%20p=u.getAttribute('ident'),p2=u.getElementsByTagName('mattext')[0];p&&p2&&(d[p]=p2.textContent.trim())}let%20m=[],g=[],f=[];for(let%20h%20of%20i){let%20_='1'===h.getAttribute('ws_right'),x=h.getAttribute('ident');if(d[x]){let%20E=d[x];f.push({text:E,correct:_}),_%3F(m.push(E),g.push('%2B%2B%20'+E)):g.push(E)}}if(m.length%3E0||f.length%3E0){let%20v={ident:c,punkt:l,question:a,correct:m,wrong:f.filter(t=%3E!m.includes(t.text)).map(t=%3Et.text),all_answers:f,answer:1===m.length%3Fm[0]:g.join('%5Cn')};allQuestions.push(v)}}if(allQuestions.length%3E0){let%20w='baza_'+new%20Date().toISOString().slice(0,10)%2B'.json',N=prompt('%D0%92%D0%B2%D0%B5%D0%B4%D0%B8%D1%82%D0%B5%20%D0%B8%D0%BC%D1%8F%20%D1%84%D0%B0%D0%B9%D0%BB%D0%B0%20%D0%B4%D0%BB%D1%8F%20%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F:',w);if(null!==N){N.endsWith('.json')||(N%2B='.json');let%20B=JSON.stringify(allQuestions,null,2),A=document.createElement('a');A.href='data:application/json;charset=utf-8,'%2BencodeURIComponent(B),A.download=N,document.body.appendChild(A),A.click(),document.body.removeChild(A)}}else%20alert('%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B%20%D0%BD%D0%B5%20%D0%BD%D0%B0%D0%B9%D0%B4%D0%B5%D0%BD%D1%8B');})();" readonly>
                 </div>
             </div>
 
             <!-- Карта вопросов -->
             <div class="script-card">
                 <div class="script-row">
-                    <span class="script-label">🗺 Карта вопросов</span>
+                    <span class="label">🗺 Карта вопросов</span>
                     <button class="btn-copy" onclick="copyScriptText('scriptMapPC')">📋 ПК</button>
-                    <input type="text" id="scriptMapPC" value="" readonly>
+                    <input type="text" id="scriptMapPC" value="(function(){console.log('🔍 Сохраняем карту вопросов...');let examTitle=document.querySelector('span[wtq-elem=&quot;ass-title&quot;]')?.innerText?.trim()||'';console.log(`📚 Название экзамена: &quot;${examTitle}&quot;`);function getFileBaseName(title){const t=title.toLowerCase();if(t.includes('пожарная безопасность')||t.includes('пожарной безопасности')){return '_Экза_ППБ';}if(t.includes('правила техники безопасности')||t.includes('техники безопасности')){return '_Экза_ПТБ';}if(t.includes('техническая эксплуатация')||t.includes('технической эксплуатации')){return '_Экза_ПТЭ';}return '_Экза_'+title.replace(/[\\/:*?&quot;&lt;&gt;|]/g,'_').trim();}const baseName=getFileBaseName(examTitle);console.log(`💾 Имя файла: ${baseName}.json`);let mapData=[];let rows=document.querySelectorAll('tr[data-ident]');rows.forEach(row=>{let ident=row.getAttribute('data-ident');let number=row.querySelector('.wtq-map-q-number')?.innerText||'';let question=row.querySelector('.wtq-map-q-text')?.innerText||'';let type=row.querySelector('.wtq-map-q-type')?.innerText||'';mapData.push({ident:ident,number:number,question:question,type:type});});console.log(`📋 Сохранено ${mapData.length} вопросов из карты`);if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`${baseName}.json`;a.click();console.log(`📥 Файл &quot;${baseName}.json&quot; скачан!`);}})();" readonly>
                 </div>
                 <div class="script-row">
-                    <span class="script-label">📱 Карта (тел)</span>
+                    <span class="label">📱 Карта (тел)</span>
                     <button class="btn-copy" onclick="copyScriptText('scriptMapTel')">📱 Тел</button>
                     <input type="text" id="scriptMapTel" value="javascript:(function(){console.log('🔍 Сохраняем карту вопросов...');let mapData=[];let rows=document.querySelectorAll('tr[data-ident]');rows.forEach(row=>{let ident=row.getAttribute('data-ident');let number=row.querySelector('.wtq-map-q-number')?.innerText||'';let question=row.querySelector('.wtq-map-q-text')?.innerText||'';let type=row.querySelector('.wtq-map-q-type')?.innerText||'';mapData.push({ident:ident,number:number,question:question,type:type});});console.log(`📋 Сохранено ${mapData.length} вопросов из карты`);if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`карта_${new Date().toISOString().slice(0,10)}.json`;a.click();console.log('📥 Файл с картой скачан!');}else{alert('Элементы карты вопросов не найдены. Убедитесь, что вы находитесь на странице с таблицей вопросов WebTutor.');}})();" readonly>
                 </div>
@@ -775,7 +1059,8 @@
                     const isCorrect = trimmed.startsWith('++');
                     const color = isCorrect ? '#2e7d32' : '#333';
                     const text = isCorrect ? trimmed.replace('++', '').trim() : trimmed;
-                    html += `<div class="ans-item" style="color:${color};">${isCorrect ? '✅ ' : ''}${escapeHtml(text)}</div>`;
+                    html +=
+                        `<div class="ans-item" style="color:${color};">${isCorrect ? '✅ ' : ''}${escapeHtml(text)}</div>`;
                 });
             }
             return html;
@@ -784,6 +1069,15 @@
         function getFileNumber(filename) {
             let match = filename.match(/^\d+/);
             return match ? parseInt(match[0]) : 999999;
+        }
+
+        function readFileAsText(file) {
+            return new Promise((resolve, reject) => {
+                let reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                reader.readAsText(file);
+            });
         }
 
         // ================================================================
@@ -850,44 +1144,52 @@
         }
 
         // ================================================================
-        // АВТОСОХРАНЕНИЕ ТОКЕНА
+        // СОХРАНЕНИЕ ТОКЕНА (localStorage)
         // ================================================================
 
-        // Загрузка токена при открытии страницы
-        document.addEventListener('DOMContentLoaded', () => {
+        const GH_TOKEN_KEY = 'admin_gh_token_v2';
+
+        function saveToken(value) {
             try {
-                const savedToken = localStorage.getItem('admin_gh_token');
-                if (savedToken) {
-                    document.getElementById('gh-token').value = savedToken;
-                    console.log('✅ Токен загружен из памяти');
+                if (value && value.length > 10) {
+                    localStorage.setItem(GH_TOKEN_KEY, value);
                 }
+            } catch (e) {}
+        }
+
+        function loadToken() {
+            try {
+                return localStorage.getItem(GH_TOKEN_KEY) || '';
             } catch (e) {
-                console.error('Ошибка загрузки токена:', e);
+                return '';
             }
-        });
+        }
 
-        // Автосохранение токена при вводе
-        document.getElementById('gh-token').addEventListener('input', function() {
-            const token = this.value.trim();
-            if (token.length >= 20) {
-                try {
-                    localStorage.setItem('admin_gh_token', token);
-                    console.log('💾 Токен сохранён');
-                } catch (e) {
-                    console.error('Ошибка сохранения токена:', e);
-                }
-            }
-        });
+        function setupTokenAutoSave() {
+            const tokenInput = document.getElementById('gh-token');
+            if (!tokenInput) return;
 
-        // Сохранение при потере фокуса
-        document.getElementById('gh-token').addEventListener('blur', function() {
-            const token = this.value.trim();
-            if (token.length >= 20) {
-                try {
-                    localStorage.setItem('admin_gh_token', token);
-                } catch (e) {}
+            // Загружаем токен при старте
+            const saved = loadToken();
+            if (saved) {
+                tokenInput.value = saved;
+                console.log('✅ Токен загружен из localStorage');
             }
-        });
+
+            // Сохраняем при вводе (с задержкой)
+            let saveTimer = null;
+            tokenInput.addEventListener('input', function() {
+                clearTimeout(saveTimer);
+                saveTimer = setTimeout(() => {
+                    saveToken(this.value.trim());
+                }, 500);
+            });
+
+            // Сохраняем при потере фокуса
+            tokenInput.addEventListener('blur', function() {
+                saveToken(this.value.trim());
+            });
+        }
 
         // ================================================================
         // ОСНОВНОЙ БЛОК
@@ -1093,6 +1395,7 @@
             multiRenderResults(results);
             document.getElementById('multiExportBtn').disabled = false;
             document.getElementById('multiExportDocxBtn').disabled = false;
+            document.getElementById('multiExportDocxByPersonBtn').disabled = false;
             document.getElementById('multiGhUploadBtn').disabled = false;
         }
 
@@ -1157,6 +1460,141 @@
         }
 
         // ================================================================
+        // ОБЩАЯ ФУНКЦИЯ ПОСТРОЕНИЯ DOCX
+        // ================================================================
+
+        function buildDocxChildren(bases, options = {}) {
+            const { Document, Paragraph, TextRun, AlignmentType } = window.docx;
+            const children = [];
+            let totalQuestions = 0;
+
+            bases.forEach((base) => {
+                const baseName = base.baseName;
+                let baseCounter = 0;
+
+                children.push(new Paragraph({
+                    children: [
+                        new TextRun({ text: baseName, size: 28, bold: true, font: 'Calibri' })
+                    ],
+                    spacing: { before: 300, after: 150 }
+                }));
+                children.push(new Paragraph({
+                    children: [
+                        new TextRun({ text: '─────────────────────────────────────────────',
+                            size: 16, color: 'cccccc', font: 'Calibri' })
+                    ],
+                    spacing: { after: 150 }
+                }));
+
+                base.items.forEach((item) => {
+                    baseCounter++;
+                    totalQuestions++;
+
+                    const q = item.question;
+                    const a = item.answer;
+                    const qText = q.question || 'Вопрос не указан';
+                    const source = a ? (a.source || '') : '';
+
+                    // Номер вопроса + текст вопроса в одной строке (номер жирный)
+                    children.push(new Paragraph({
+                        children: [
+                            new TextRun({ text: baseCounter + '.', size: 24, bold: true,
+                                font: 'Calibri' }),
+                            new TextRun({ text: ' ' + qText, size: 22, font: 'Calibri' })
+                        ],
+                        spacing: { before: 200, after: 60 }
+                    }));
+
+                    // Ответы с отступом слева
+                    if (a && a.all_answers && a.all_answers.length > 0) {
+                        a.all_answers.forEach(ans => {
+                            const color = ans.correct ? '2e7d32' : 'c62828';
+                            const mark = ans.correct ? '✅' : '❌';
+                            children.push(new Paragraph({
+                                children: [
+                                    new TextRun({ text: mark + ' ' + ans.text, size: 20,
+                                        color: color, font: 'Calibri' })
+                                ],
+                                spacing: { after: 10 },
+                                indent: { firstLine: 360 }
+                            }));
+                        });
+                    } else if (a && (a.correct || a.wrong)) {
+                        const correct = a.correct || [];
+                        const wrong = a.wrong || [];
+                        correct.forEach(ans => {
+                            children.push(new Paragraph({
+                                children: [
+                                    new TextRun({ text: '✅ ' + ans, size: 20,
+                                        color: '2e7d32', font: 'Calibri' })
+                                ],
+                                spacing: { after: 10 },
+                                indent: { firstLine: 360 }
+                            }));
+                        });
+                        wrong.forEach(ans => {
+                            children.push(new Paragraph({
+                                children: [
+                                    new TextRun({ text: '❌ ' + ans, size: 20,
+                                        color: 'c62828', font: 'Calibri' })
+                                ],
+                                spacing: { after: 10 },
+                                indent: { firstLine: 360 }
+                            }));
+                        });
+                    } else {
+                        const answerText = a ? (a.answer || 'Нет ответа') : '❌ Ответ не найден';
+                        const lines = answerText.split('\n');
+                        lines.forEach(line => {
+                            const trimmed = line.trim();
+                            if (!trimmed) return;
+                            const isCorrect = trimmed.startsWith('++');
+                            const color = isCorrect ? '2e7d32' : '333333';
+                            const text = isCorrect ? trimmed.replace('++', '').trim() : trimmed;
+                            children.push(new Paragraph({
+                                children: [
+                                    new TextRun({ text: (isCorrect ? '✅ ' : '') + text,
+                                        size: 20, color: color, font: 'Calibri' })
+                                ],
+                                spacing: { after: 10 },
+                                indent: { firstLine: 360 }
+                            }));
+                        });
+                    }
+
+                    if (source) {
+                        children.push(new Paragraph({
+                            children: [
+                                new TextRun({ text: 'Источник: ' + source, size: 16,
+                                    color: '78909c', font: 'Calibri' })
+                            ],
+                            spacing: { after: 20 }
+                        }));
+                    }
+
+                    children.push(new Paragraph({
+                        children: [
+                            new TextRun({ text: '─────────────────────────────────────────────',
+                                size: 14, color: 'e0e0e0', font: 'Calibri' })
+                        ],
+                        spacing: { before: 80, after: 40 }
+                    }));
+                });
+            });
+
+            children.push(new Paragraph({
+                children: [
+                    new TextRun({ text: 'Всего вопросов: ' + totalQuestions + '  |  Дата: ' + new Date()
+                            .toLocaleString('ru-RU'), size: 16, color: '78909c', font: 'Calibri' })
+                ],
+                alignment: AlignmentType.CENTER,
+                spacing: { before: 150, after: 80 }
+            }));
+
+            return children;
+        }
+
+        // ================================================================
         // ЭКСПОРТ ВСЕХ БАЗ В ОДИН DOCX
         // ================================================================
 
@@ -1172,134 +1610,9 @@
             }
 
             try {
-                const { Document, Packer, Paragraph, TextRun, AlignmentType } = window.docx;
+                const { Document, Packer } = window.docx;
 
-                const children = [];
-
-                let totalQuestions = 0;
-
-                multiState.results.forEach((base) => {
-                    const baseName = base.baseName;
-                    let baseCounter = 0;
-
-                    children.push(new Paragraph({
-                        children: [
-                            new TextRun({ text: baseName, size: 28, bold: true, font: 'Calibri' })
-                        ],
-                        spacing: { before: 300, after: 150 }
-                    }));
-                    children.push(new Paragraph({
-                        children: [
-                            new TextRun({ text: '─────────────────────────────────────────────', size: 16,
-                                color: 'cccccc', font: 'Calibri' })
-                        ],
-                        spacing: { after: 150 }
-                    }));
-
-                    base.items.forEach((item) => {
-                        baseCounter++;
-                        totalQuestions++;
-
-                        const q = item.question;
-                        const a = item.answer;
-                        const qText = q.question || 'Вопрос не указан';
-                        const source = a ? (a.source || '') : '';
-
-                        children.push(new Paragraph({
-                            children: [
-                                new TextRun({ text: baseCounter + '.', size: 24, bold: true,
-                                    font: 'Calibri' }),
-                                new TextRun({ text: ' ' + qText, size: 22, font: 'Calibri' })
-                            ],
-                            spacing: { before: 200, after: 60 }
-                        }));
-
-                        if (a && a.all_answers && a.all_answers.length > 0) {
-                            a.all_answers.forEach(ans => {
-                                const color = ans.correct ? '2e7d32' : 'c62828';
-                                const mark = ans.correct ? '✅' : '❌';
-                                children.push(new Paragraph({
-                                    children: [
-                                        new TextRun({ text: mark + ' ' + ans.text, size: 20,
-                                            color: color, font: 'Calibri' })
-                                    ],
-                                    spacing: { after: 10 },
-                                    indent: { firstLine: 360 }
-                                }));
-                            });
-                        } else if (a && (a.correct || a.wrong)) {
-                            const correct = a.correct || [];
-                            const wrong = a.wrong || [];
-                            correct.forEach(ans => {
-                                children.push(new Paragraph({
-                                    children: [
-                                        new TextRun({ text: '✅ ' + ans, size: 20,
-                                            color: '2e7d32', font: 'Calibri' })
-                                    ],
-                                    spacing: { after: 10 },
-                                    indent: { firstLine: 360 }
-                                }));
-                            });
-                            wrong.forEach(ans => {
-                                children.push(new Paragraph({
-                                    children: [
-                                        new TextRun({ text: '❌ ' + ans, size: 20,
-                                            color: 'c62828', font: 'Calibri' })
-                                    ],
-                                    spacing: { after: 10 },
-                                    indent: { firstLine: 360 }
-                                }));
-                            });
-                        } else {
-                            const answerText = a ? (a.answer || 'Нет ответа') : '❌ Ответ не найден';
-                            const lines = answerText.split('\n');
-                            lines.forEach(line => {
-                                const trimmed = line.trim();
-                                if (!trimmed) return;
-                                const isCorrect = trimmed.startsWith('++');
-                                const color = isCorrect ? '2e7d32' : '333333';
-                                const text = isCorrect ? trimmed.replace('++', '').trim() :
-                                trimmed;
-                                children.push(new Paragraph({
-                                    children: [
-                                        new TextRun({ text: (isCorrect ? '✅ ' : '') +
-                                                text, size: 20, color: color,
-                                            font: 'Calibri' })
-                                    ],
-                                    spacing: { after: 10 },
-                                    indent: { firstLine: 360 }
-                                }));
-                            });
-                        }
-
-                        if (source) {
-                            children.push(new Paragraph({
-                                children: [
-                                    new TextRun({ text: 'Источник: ' + source, size: 16,
-                                            color: '78909c', font: 'Calibri' })
-                                ],
-                                spacing: { after: 20 }
-                            }));
-                        }
-
-                        children.push(new Paragraph({
-                            children: [
-                                new TextRun({ text: '─────────────────────────────────────────────',
-                                    size: 14, color: 'e0e0e0', font: 'Calibri' })
-                            ],
-                            spacing: { before: 80, after: 40 }
-                        }));
-                    });
-                });
-
-                children.push(new Paragraph({
-                    children: [
-                        new TextRun({ text: 'Всего вопросов: ' + totalQuestions + '  |  Дата: ' + new Date()
-                                .toLocaleString('ru-RU'), size: 16, color: '78909c', font: 'Calibri' })
-                    ],
-                    alignment: AlignmentType.CENTER,
-                    spacing: { before: 150, after: 80 }
-                }));
+                const children = buildDocxChildren(multiState.results);
 
                 const doc = new Document({
                     sections: [{
@@ -1312,7 +1625,7 @@
                     }]
                 });
 
-                // Имя файла: ПервоеСлово_экза_ДДММГГ.docx
+                // Имя файла: Фамилия_экза_ДДММГГ.docx
                 const firstName = multiState.questions[0]?.fileName?.split('_')[0] || 'База';
                 const now = new Date();
                 const day = String(now.getDate()).padStart(2, '0');
@@ -1336,6 +1649,102 @@
         });
 
         // ================================================================
+        // ЭКСПОРТ ПО ФАМИЛИЯМ (отдельный DOCX для каждого человека)
+        // ================================================================
+
+        document.getElementById('multiExportDocxByPersonBtn').addEventListener('click', async function() {
+            if (multiState.results.length === 0) {
+                alert('❌ Сначала найдите ответы!');
+                return;
+            }
+
+            if (typeof window.docx === 'undefined') {
+                alert('❌ Библиотека docx.js не загружена!\nПроверьте интернет.');
+                return;
+            }
+
+            // Группируем базы по фамилии (первое слово до "_")
+            const groupedByPerson = {};
+
+            multiState.results.forEach((base) => {
+                // Берём имя до первого "_"
+                const personName = base.baseName.split('_')[0].trim();
+                if (!groupedByPerson[personName]) {
+                    groupedByPerson[personName] = [];
+                }
+                groupedByPerson[personName].push(base);
+            });
+
+            const persons = Object.keys(groupedByPerson);
+            console.log(`👥 Найдено ${persons.length} человек:`, persons);
+
+            if (persons.length === 0) {
+                alert('❌ Нет данных для экспорта');
+                return;
+            }
+
+            const btn = this;
+            btn.disabled = true;
+            btn.textContent = '⏳ Создание файлов...';
+
+            const { Document, Packer } = window.docx;
+
+            // Формируем дату: ДДММГГ
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = String(now.getFullYear()).slice(-2);
+            const dateStr = day + month + year;
+
+            let fileCount = 0;
+
+            for (const personName of persons) {
+                try {
+                    const personBases = groupedByPerson[personName];
+
+                    const children = buildDocxChildren(personBases);
+
+                    const doc = new Document({
+                        sections: [{
+                            properties: {
+                                page: {
+                                    margin: { top: 1000, right: 1000, bottom: 1000, left: 1000 }
+                                }
+                            },
+                            children: children
+                        }]
+                    });
+
+                    // Имя файла: Фамилия_экза_ДДММГГ.docx
+                    const fileName = personName + '_экза_' + dateStr + '.docx';
+
+                    // Задержка 500мс между файлами, чтобы браузер не захлебнулся
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
+                    const blob = await Packer.toBlob(doc);
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(link.href);
+
+                    fileCount++;
+                    btn.textContent = `⏳ Создано ${fileCount}/${persons.length}...`;
+
+                } catch (err) {
+                    console.error('Ошибка создания файла для ' + personName + ': ' + err.message);
+                }
+            }
+
+            btn.disabled = false;
+            btn.textContent = '📄 Скачать по фамилиям';
+
+            alert('✅ Готово!\nСоздано файлов: ' + fileCount + '\nФамилии: ' + persons.join(', '));
+        });
+
+        // ================================================================
         // ЗАГРУЗКА ВСЕХ БАЗ НА GITHUB (с автоповтором и паузами)
         // ================================================================
 
@@ -1356,7 +1765,7 @@
                 }
 
                 // Сохраняем токен
-                try { localStorage.setItem('admin_gh_token', token); } catch (e) {}
+                saveToken(token);
 
                 const total = multiState.results.length;
                 const successList = [];
@@ -1410,6 +1819,7 @@
                     status.innerHTML = `⏳ Повторная загрузка ${failList.length} баз...`;
                     status.style.color = '#ed6c02';
 
+                    // Пауза 5 секунд перед повтором
                     await new Promise(resolve => setTimeout(resolve, 5000));
 
                     const stillFailed = [];
@@ -1429,17 +1839,20 @@
 
                         try {
                             await uploadSingleBaseToGitHub(dataToUpload, baseName, token);
-                            const idx = failList.indexOf(baseName);
-                            if (idx > -1) failList.splice(idx, 1);
                             successList.push(baseName);
                         } catch (err) {
                             stillFailed.push(baseName);
                         }
 
+                        // Пауза 3 секунды между повторами
                         if (i < failList.length - 1) {
                             await new Promise(resolve => setTimeout(resolve, 3000));
                         }
                     }
+
+                    // Обновляем список неудавшихся
+                    failList.length = 0;
+                    stillFailed.forEach(n => failList.push(n));
                 }
 
                 // === ИТОГ ===
@@ -1588,6 +2001,7 @@
             document.getElementById('multiFindBtn').disabled = true;
             document.getElementById('multiExportBtn').disabled = true;
             document.getElementById('multiExportDocxBtn').disabled = true;
+            document.getElementById('multiExportDocxByPersonBtn').disabled = true;
             document.getElementById('multiGhUploadBtn').disabled = true;
             document.getElementById('multiProgressContainer').style.display = 'none';
         });
@@ -1641,6 +2055,9 @@
                 alert('❌ Введите токен и название базы!');
                 return;
             }
+
+            // Сохраняем токен
+            saveToken(token);
 
             const input = document.createElement('input');
             input.type = 'file';
@@ -1844,7 +2261,7 @@
         });
 
         // ================================================================
-        // ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ
+        // ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ: ОБЪЕДИНЕНИЕ ФАЙЛОВ С РАЗДЕЛАМИ
         // ================================================================
 
         const extraState = {
@@ -2067,25 +2484,20 @@
         });
 
         // ================================================================
-        // НОВЫЙ СКРИПТ КАРТЫ ВОПРОСОВ (ПК)
-        // ================================================================
-
-        const newScriptMapPC = `(function(){console.log('🔍 Сохраняем карту вопросов...');let examTitle=document.querySelector('span[wtq-elem="ass-title"]')?.innerText?.trim()||'';console.log('📚 Название экзамена: "'+examTitle+'"');function getFileBaseName(title){const t=title.toLowerCase();if(t.includes('пожарная безопасность')||t.includes('пожарной безопасности')){return '_Экза_ППБ';}if(t.includes('правила техники безопасности')||t.includes('техники безопасности')){return '_Экза_ПТБ';}if(t.includes('техническая эксплуатация')||t.includes('технической эксплуатации')){return '_Экза_ПТЭ';}return '_Экза_'+title.replace(/[\\\\/:*?"<>|]/g,'_').trim();}const baseName=getFileBaseName(examTitle);console.log('💾 Имя файла: '+baseName+'.json');let mapData=[];let rows=document.querySelectorAll('tr[data-ident]');rows.forEach(row=>{let ident=row.getAttribute('data-ident');let number=row.querySelector('.wtq-map-q-number')?.innerText||'';let question=row.querySelector('.wtq-map-q-text')?.innerText||'';let type=row.querySelector('.wtq-map-q-type')?.innerText||'';mapData.push({ident:ident,number:number,question:question,type:type});});console.log('📋 Сохранено '+mapData.length+' вопросов из карты');if(mapData.length>0){let blob=new Blob([JSON.stringify(mapData,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=baseName+'.json';a.click();console.log('📥 Файл "'+baseName+'.json" скачан!');}})();`;
-
-        // Устанавливаем значение в input
-        document.getElementById('scriptMapPC').value = newScriptMapPC;
-
-        // ================================================================
         // EVENT LISTENERS
         // ================================================================
 
         document.getElementById('multiFindBtn').addEventListener('click', multiFindAnswers);
 
+        // Запускаем автозагрузку токена
+        setupTokenAutoSave();
+
         console.log('🚀 Готово!');
+        console.log('💾 Токен сохраняется автоматически');
         console.log('📄 Основной блок: загрузка вопросов/ответов, поиск, DOCX, GitHub.');
+        console.log('👥 Кнопка "Скачать по фамилиям" создаёт отдельный DOCX для каждого человека');
         console.log('🛠 Дополнительные функции: объединение файлов с разделами.');
         console.log('📜 Скрипты: сборщик вопросов и карта вопросов для WebTutor.');
-        console.log('💾 Токен автоматически сохраняется в localStorage.');
     </script>
 </body>
 </html>
