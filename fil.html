@@ -76,8 +76,11 @@
             border-radius: 4px; cursor: pointer; font-size: 11px;
         }
         .btn-delete-small:hover { background: #b91c1c; }
+        .btn-delete-small:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-purple { background: #6c63ff; color: white; }
         .btn-purple:hover:not(:disabled) { background: #5a52e0; transform: translateY(-1px); }
+        .btn-gray { background: #607d8b; color: white; }
+        .btn-gray:hover:not(:disabled) { background: #455a64; transform: translateY(-1px); }
         .btn-copy {
             background: #607d8b; color: white; border: none; padding: 2px 12px;
             border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: 600;
@@ -225,6 +228,16 @@
         .bases-list .list-header {
             padding: 8px 14px; background: #f5f7fa; font-weight: 600;
             font-size: 12px; color: #1a237e; border-bottom: 1px solid #e0e0e0;
+            display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+        }
+        .bases-list .list-header .spacer { flex: 1; }
+        .bases-list .base-item .checkbox-wrap {
+            display: flex; align-items: center; gap: 8px;
+            cursor: pointer; flex: 1;
+        }
+        .bases-list .base-item input[type="checkbox"] {
+            width: 16px; height: 16px; cursor: pointer;
+            accent-color: #dc2626;
         }
 
         .extra-section {
@@ -397,7 +410,12 @@
             <div id="gh-status">Ожидание действий...</div>
 
             <div class="bases-list" id="basesList">
-                <div class="list-header">📋 Список баз в per/bases/:</div>
+                <div class="list-header">
+                    <span>📋 Список баз в per/bases/:</span>
+                    <span class="spacer"></span>
+                    <button class="btn-delete-small btn-gray" id="selectAllBtn" style="display:none; background:#607d8b;" onclick="toggleSelectAll()">☑️ Выбрать все</button>
+                    <button class="btn-delete-small" id="deleteSelectedBtn" style="display:none;" onclick="deleteSelectedBases()">🗑️ Удалить выбранные</button>
+                </div>
                 <div id="basesListItems">
                     <div style="padding:12px;text-align:center;color:#90a4ae;font-size:12px;">Загрузка...</div>
                 </div>
@@ -1524,7 +1542,7 @@
         });
 
         // ================================================================
-        // GITHUB: загрузка с телефона, список баз, удаление
+        // GITHUB: загрузка с телефона
         // ================================================================
 
         let currentBasesList = [];
@@ -1630,6 +1648,8 @@
 
                 if (basesList.length === 0) {
                     listContainer.innerHTML = '<div style="padding:12px;text-align:center;color:#90a4ae;font-size:12px;">📭 Нет загруженных баз</div>';
+                    document.getElementById('deleteSelectedBtn').style.display = 'none';
+                    document.getElementById('selectAllBtn').style.display = 'none';
                     return;
                 }
 
@@ -1637,21 +1657,60 @@
                 for (let base of basesList) {
                     html += `
                         <div class="base-item" id="base-item-${base}">
-                            <span class="name">📄 ${base}</span>
-                            <div class="actions">
-                                <button class="btn-delete-small" onclick="deleteBase('${base}')">🗑️ Удалить</button>
-                            </div>
+                            <label class="checkbox-wrap" style="cursor:pointer; flex:1;">
+                                <input type="checkbox" class="base-checkbox" value="${base}" onchange="updateDeleteButton()">
+                                <span class="name">📄 ${base}</span>
+                            </label>
                         </div>
                     `;
                 }
                 listContainer.innerHTML = html;
+
+                document.getElementById('selectAllBtn').style.display = 'inline-flex';
+                document.getElementById('deleteSelectedBtn').style.display = 'none';
+                allSelected = false;
+                document.getElementById('selectAllBtn').textContent = '☑️ Выбрать все';
+
             } catch (err) {
                 listContainer.innerHTML = '<div style="padding:12px;text-align:center;color:#dc2626;font-size:12px;">❌ Ошибка: ' + err.message + '</div>';
             }
         }
 
-        window.deleteBase = async function(baseName) {
-            if (!confirm('🗑️ Удалить базу "' + baseName + '" из per/bases/ ?')) return;
+        // Обновление видимости кнопки "Удалить выбранные"
+        function updateDeleteButton() {
+            const checked = document.querySelectorAll('.base-checkbox:checked');
+            const btn = document.getElementById('deleteSelectedBtn');
+            if (checked.length > 0) {
+                btn.style.display = 'inline-flex';
+                btn.textContent = '🗑️ Удалить выбранные (' + checked.length + ')';
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+
+        // Выбрать все / снять все
+        let allSelected = false;
+        function toggleSelectAll() {
+            const checkboxes = document.querySelectorAll('.base-checkbox');
+            allSelected = !allSelected;
+            checkboxes.forEach(cb => {
+                cb.checked = allSelected;
+            });
+            updateDeleteButton();
+            document.getElementById('selectAllBtn').textContent = allSelected ? '☐ Снять все' : '☑️ Выбрать все';
+        }
+
+        // Удаление выбранных баз
+        async function deleteSelectedBases() {
+            const checked = document.querySelectorAll('.base-checkbox:checked');
+            if (checked.length === 0) {
+                alert('❌ Ничего не выбрано');
+                return;
+            }
+
+            const baseNames = Array.from(checked).map(cb => cb.value);
+
+            if (!confirm('🗑️ Удалить ' + baseNames.length + ' баз?\n\n' + baseNames.join('\n'))) return;
 
             const token = document.getElementById('gh-token').value.trim();
             const status = document.getElementById('gh-status');
@@ -1659,73 +1718,112 @@
             const REPO = 'exam-helper';
             const BASE_PATH = 'per/bases';
 
-            if (!token) { status.textContent = '❌ Введите GitHub Token'; status.style.color = '#dc2626'; return; }
+            if (!token) {
+                alert('❌ Введите GitHub Token');
+                return;
+            }
 
-            const btn = document.querySelector('#base-item-' + baseName + ' .btn-delete-small');
-            if (btn) btn.disabled = true;
+            const deleteBtn = document.getElementById('deleteSelectedBtn');
+            deleteBtn.disabled = true;
+            deleteBtn.textContent = '⏳ Удаление...';
 
-            status.textContent = '🗑️ Удаляем базу "' + baseName + '"...';
+            status.innerHTML = '🗑️ Удаляем ' + baseNames.length + ' баз...';
             status.style.color = '#1f2937';
 
-            try {
-                const filePath = BASE_PATH + '/' + baseName + '.json';
-                let sha = '';
+            let successCount = 0;
+            let failCount = 0;
+
+            for (let i = 0; i < baseNames.length; i++) {
+                const baseName = baseNames[i];
+                status.innerHTML = '🗑️ Удаление <strong>' + baseName + '</strong> (' + (i + 1) + ' из ' + baseNames.length + ')...';
+
                 try {
+                    const filePath = BASE_PATH + '/' + baseName + '.json';
+                    let sha = '';
+
                     const res = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + filePath, {
                         headers: { 'Authorization': 'token ' + token }
                     });
-                    if (res.status === 200) { const d = await res.json(); sha = d.sha; }
-                    else { throw new Error('Файл не найден'); }
-                } catch (e) { throw new Error('Файл ' + baseName + '.json не найден'); }
+                    if (res.status === 200) {
+                        const d = await res.json();
+                        sha = d.sha;
+                    } else {
+                        throw new Error('Файл не найден');
+                    }
 
-                const deleteRes = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + filePath, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: '🗑️ Удаление базы: ' + baseName, sha: sha })
-                });
+                    const deleteRes = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + filePath, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            message: '🗑️ Удаление базы: ' + baseName,
+                            sha: sha
+                        })
+                    });
 
-                if (!deleteRes.ok) { const errData = await deleteRes.json(); throw new Error('Ошибка: ' + errData.message); }
+                    if (!deleteRes.ok) {
+                        const errData = await deleteRes.json();
+                        throw new Error(errData.message);
+                    }
+
+                    successCount++;
+
+                    if (i < baseNames.length - 1) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
+                } catch (err) {
+                    console.error('Ошибка удаления ' + baseName + ': ' + err.message);
+                    failCount++;
+                }
+            }
+
+            // Обновляем index.json ОДИН РАЗ в конце
+            status.innerHTML = '🔄 Обновляем index.json...';
+
+            try {
+                const remainingBases = currentBasesList.filter(name => !baseNames.includes(name));
 
                 const indexPath = BASE_PATH + '/index.json';
                 let indexSha = '';
-                let currentList = [...currentBasesList];
 
-                try {
-                    const indexGet = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
-                        headers: { 'Authorization': 'token ' + token }
-                    });
-                    if (indexGet.status === 200) {
-                        const indexData = await indexGet.json();
-                        indexSha = indexData.sha;
-                        const parsedIndex = JSON.parse(decodeURIComponent(escape(atob(indexData.content))));
-                        if (parsedIndex.bases) currentList = parsedIndex.bases;
-                    }
-                } catch (e) {}
+                const indexGet = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
+                    headers: { 'Authorization': 'token ' + token }
+                });
+                if (indexGet.status === 200) {
+                    const indexData = await indexGet.json();
+                    indexSha = indexData.sha;
+                }
 
-                const newList = currentList.filter(name => name !== baseName);
-                const newIndexContent = JSON.stringify({ bases: newList }, null, 2);
+                const newIndexContent = JSON.stringify({ bases: remainingBases }, null, 2);
                 const base64Index = btoa(unescape(encodeURIComponent(newIndexContent)));
 
                 const indexPut = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + indexPath, {
                     method: 'PUT',
                     headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: '🗑️ Удаление из списка: ' + baseName, content: base64Index, sha: indexSha })
+                    body: JSON.stringify({
+                        message: '🗑️ Обновление index.json после удаления ' + successCount + ' баз',
+                        content: base64Index,
+                        sha: indexSha
+                    })
                 });
 
-                if (indexPut.ok) {
-                    status.innerHTML = '✅ <strong>База "' + baseName + '" удалена!</strong>';
-                    status.style.color = '#16a34a';
-                    await loadBasesList();
-                } else {
+                if (!indexPut.ok) {
                     const errData = await indexPut.json();
-                    throw new Error('Ошибка обновления индекса: ' + errData.message);
+                    throw new Error(errData.message);
                 }
+
+                status.innerHTML = `✅ <strong>Удалено: ${successCount} баз</strong>${failCount > 0 ? '<br>❌ Не удалось: ' + failCount : ''}<br><span style="font-size:10px;color:#16a34a;">index.json обновлён</span>`;
+                status.style.color = '#16a34a';
             } catch (err) {
-                status.textContent = '❌ Ошибка: ' + err.message;
-                status.style.color = '#dc2626';
-                if (btn) btn.disabled = false;
+                status.innerHTML = `⚠️ <strong>Удалено: ${successCount} баз</strong><br>❌ Ошибка index.json: ${err.message}`;
+                status.style.color = '#ed6c02';
             }
-        };
+
+            deleteBtn.disabled = false;
+            allSelected = false;
+            document.getElementById('selectAllBtn').textContent = '☑️ Выбрать все';
+
+            await loadBasesList();
+        }
 
         document.getElementById('gh-edit-list-btn').addEventListener('click', async () => {
             const listEl = document.getElementById('basesList');
@@ -1930,8 +2028,9 @@
         document.getElementById('multiFindBtn').addEventListener('click', multiFindAnswers);
 
         console.log('🚀 Готово!');
-        console.log('📄 Проверка файлов теперь идёт через API GitHub (по одному).');
+        console.log('✅ Проверка файлов идёт через API GitHub.');
         console.log('✅ index.json обновляется один раз в конце.');
+        console.log('✅ Массовое удаление баз через чекбоксы.');
     </script>
 </body>
 </html>
