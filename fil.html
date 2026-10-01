@@ -79,6 +79,8 @@
         .btn-delete-small:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-purple { background: #6c63ff; color: white; }
         .btn-purple:hover:not(:disabled) { background: #5a52e0; transform: translateY(-1px); }
+        .btn-orange { background: #e65100; color: white; }
+        .btn-orange:hover:not(:disabled) { background: #bf360c; transform: translateY(-1px); }
         .btn-copy {
             background: #607d8b; color: white; border: none; padding: 2px 12px;
             border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: 600;
@@ -251,6 +253,7 @@
             flex-shrink: 0;
         }
 
+        /* ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ */
         .extra-section {
             margin-top: 16px; padding: 14px; border: 2px solid #e8eaf6;
             border-radius: 10px; background: #fafbff;
@@ -291,6 +294,43 @@
         .extra-stats .stat-card .number { font-size: 16px; font-weight: 700; color: #1a237e; }
         .extra-stats .stat-card .label { font-size: 9px; color: #78909c; margin-top: 1px; }
 
+        /* БЛОК ДОБАВЛЕНИЯ К БАЗЕ */
+        .add-section {
+            margin-top: 16px; padding: 14px; border: 2px solid #fff3e0;
+            border-radius: 10px; background: #fffaf5;
+        }
+        .add-section .section-title {
+            font-weight: 700; color: #e65100; font-size: 14px;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+        }
+        .add-section .section-title .badge {
+            font-size: 10px; background: #fff3e0; padding: 1px 10px;
+            border-radius: 12px; font-weight: 400; color: #e65100;
+        }
+        .add-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .add-box {
+            border: 2px dashed #ffcc80; border-radius: 8px; padding: 8px 12px;
+            text-align: center; transition: all 0.3s; background: #fffaf5;
+            cursor: pointer; min-height: 60px; display: flex;
+            flex-direction: column; justify-content: center;
+        }
+        .add-box:hover { border-color: #e65100; background: #fff3e0; }
+        .add-box.dragover { border-color: #e65100; background: #ffe0b2; }
+        .add-box.loaded { border-color: #e65100; background: #ffe0b2; }
+        .add-box input[type="file"] { display: none; }
+        .add-box .icon { font-size: 20px; display: block; }
+        .add-box .title { font-weight: 600; font-size: 12px; color: #e65100; }
+        .add-box .hint { font-size: 10px; color: #bf360c; }
+        .add-box .file-info { font-size: 11px; color: #bf360c; font-weight: 500; margin-top: 2px; }
+
+        .add-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 10px; }
+        .add-stats .stat-card {
+            background: #fffaf5; border-radius: 6px; padding: 4px 8px;
+            text-align: center; border-left: 3px solid #e65100;
+        }
+        .add-stats .stat-card .number { font-size: 16px; font-weight: 700; color: #e65100; }
+        .add-stats .stat-card .label { font-size: 9px; color: #bf360c; margin-top: 1px; }
+
         .scripts-section {
             margin-top: 16px; padding: 14px; border: 2px solid #fce4ec;
             border-radius: 10px; background: #fefafb;
@@ -327,6 +367,8 @@
             .stats { grid-template-columns: 1fr 1fr; }
             .extra-grid { grid-template-columns: 1fr; }
             .extra-stats { grid-template-columns: 1fr 1fr; }
+            .add-grid { grid-template-columns: 1fr; }
+            .add-stats { grid-template-columns: 1fr 1fr; }
             .container { padding: 10px; }
             .controls { flex-direction: column; }
             .btn { width: 100%; justify-content: center; }
@@ -432,13 +474,13 @@
             </div>
         </div>
 
-        <!-- ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ -->
+        <!-- ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ: ОБЪЕДИНЕНИЕ -->
         <hr>
 
         <div class="extra-section">
             <div class="section-title">
-                🛠 Дополнительные функции
-                <span class="badge">объединение файлов с разделами</span>
+                🛠 Объединение файлов с разделами
+                <span class="badge">создание новой базы</span>
             </div>
 
             <div class="extra-grid">
@@ -482,6 +524,61 @@
                     <span class="icon">📂</span>
                     <h3>Нет файлов</h3>
                     <p>Выберите несколько JSON-файлов с вопросами</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ: ДОБАВЛЕНИЕ К БАЗЕ -->
+        <hr>
+
+        <div class="add-section">
+            <div class="section-title">
+                ➕ Добавление файлов к существующей базе
+                <span class="badge">продолжение нумерации</span>
+            </div>
+
+            <div class="add-grid">
+                <div class="add-box" id="addExistingUpload">
+                    <label for="addExistingFile">
+                        <span class="icon">📦</span>
+                        <div class="title">1. Загрузите СУЩЕСТВУЮЩУЮ базу</div>
+                        <div class="hint">Объединённая_база.json (то, что уже собрано)</div>
+                        <div class="file-info" id="addExistingInfo"></div>
+                    </label>
+                    <input type="file" id="addExistingFile" accept=".json">
+                </div>
+
+                <div class="add-box" id="addNewUpload">
+                    <label for="addNewFile">
+                        <span class="icon">📁</span>
+                        <div class="title">2. Загрузите НОВЫЕ файлы</div>
+                        <div class="hint">22_, 23_, 24_... (можно несколько)</div>
+                        <div class="file-info" id="addNewInfo"></div>
+                    </label>
+                    <input type="file" id="addNewFile" accept=".json" multiple>
+                </div>
+            </div>
+
+            <div class="add-stats">
+                <div class="stat-card"><div class="number" id="addExistingQuestions">0</div><div class="label">📋 Вопросов в базе</div></div>
+                <div class="stat-card"><div class="number" id="addNewQuestions">0</div><div class="label">➕ Новых вопросов</div></div>
+                <div class="stat-card success"><div class="number" id="addNewSections">0</div><div class="label">📁 Новых разделов</div></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-orange" id="addToBaseBtn" disabled>➕ Добавить к базе</button>
+                <button class="btn btn-danger" id="addClearBtn">🗑️ Очистить</button>
+            </div>
+
+            <div class="progress-container" id="addProgressContainer">
+                <div class="fill" id="addProgressFill"></div>
+            </div>
+
+            <div class="results" id="addResultsContainer">
+                <div class="empty-state">
+                    <span class="icon">📦</span>
+                    <h3>Нужно 2 файла</h3>
+                    <p>Существующая база + новые файлы</p>
                 </div>
             </div>
         </div>
@@ -1840,7 +1937,7 @@
         });
 
         // ================================================================
-        // ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ
+        // ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ: ОБЪЕДИНЕНИЕ ФАЙЛОВ С РАЗДЕЛАМИ
         // ================================================================
 
         const extraState = { files: [], mergedData: [], sections: [] };
@@ -2024,6 +2121,291 @@
         });
 
         // ================================================================
+        // ФУНКЦИЯ: ДОБАВЛЕНИЕ ФАЙЛОВ К СУЩЕСТВУЮЩЕЙ БАЗЕ
+        // ================================================================
+
+        const addState = {
+            existingBase: [],       // массив вопросов из существующей базы
+            existingBaseName: '',   // имя существующего файла
+            newFiles: [],           // [{ data, name, number }]
+            existingMaxPunkt: 0,    // максимальный punkt в существующей базе
+            existingSections: []    // массив уникальных source из существующей базы
+        };
+
+        // Загрузка существующей базы
+        const addExistingInput = document.getElementById('addExistingFile');
+        const addExistingBox = document.getElementById('addExistingUpload');
+        const addExistingInfo = document.getElementById('addExistingInfo');
+
+        addExistingBox.addEventListener('dragover', e => { e.preventDefault(); addExistingBox.classList.add('dragover'); });
+        addExistingBox.addEventListener('dragleave', () => { addExistingBox.classList.remove('dragover'); });
+        addExistingBox.addEventListener('drop', e => {
+            e.preventDefault(); addExistingBox.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                addExistingInput.files = e.dataTransfer.files;
+                addExistingInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        addExistingInput.addEventListener('change', function(e) {
+            const file = this.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (!Array.isArray(data)) throw new Error('Файл должен содержать массив');
+
+                    addState.existingBase = data;
+                    addState.existingBaseName = file.name.replace('.json', '');
+
+                    // Определяем максимальный punkt (последний номер вопроса)
+                    let maxPunkt = 0;
+                    data.forEach(item => {
+                        const p = parseInt(item.punkt);
+                        if (!isNaN(p) && p > maxPunkt) maxPunkt = p;
+                    });
+                    addState.existingMaxPunkt = maxPunkt;
+
+                    // Определяем уникальные разделы (source)
+                    const sections = new Set();
+                    data.forEach(item => {
+                        if (item.source) sections.add(item.source);
+                    });
+                    addState.existingSections = Array.from(sections);
+
+                    addExistingInfo.innerHTML = `
+                        <div style="font-size:11px;color:#bf360c;font-weight:600;">
+                            ✅ ${file.name}
+                        </div>
+                        <div style="font-size:10px;color:#bf360c;margin-top:2px;">
+                            ${data.length} вопросов, ${addState.existingSections.length} разделов<br>
+                            Последний №: <strong>${maxPunkt}</strong>
+                        </div>
+                    `;
+                    addExistingBox.classList.add('loaded');
+
+                    updateAddStats();
+                    updateAddButton();
+                } catch (error) {
+                    alert('❌ Ошибка: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // Загрузка новых файлов
+        const addNewInput = document.getElementById('addNewFile');
+        const addNewBox = document.getElementById('addNewUpload');
+        const addNewInfo = document.getElementById('addNewInfo');
+
+        addNewBox.addEventListener('dragover', e => { e.preventDefault(); addNewBox.classList.add('dragover'); });
+        addNewBox.addEventListener('dragleave', () => { addNewBox.classList.remove('dragover'); });
+        addNewBox.addEventListener('drop', e => {
+            e.preventDefault(); addNewBox.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                addNewInput.files = e.dataTransfer.files;
+                addNewInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        addNewInput.addEventListener('change', function(e) {
+            const files = this.files;
+            if (!files || files.length === 0) return;
+
+            addState.newFiles = [];
+            const fileNames = [];
+            let processed = 0, hasError = false;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (!Array.isArray(data)) throw new Error('Файл "' + file.name + '" не содержит массив');
+                        const number = getFileNumber(file.name);
+                        addState.newFiles.push({
+                            file: file,
+                            data: data,
+                            name: file.name.replace('.json', ''),
+                            number: number
+                        });
+                        fileNames.push(file.name);
+                    } catch (error) {
+                        alert('❌ Ошибка в файле "' + file.name + '": ' + error.message);
+                        hasError = true;
+                    }
+                    processed++;
+                    if (processed === files.length && !hasError) {
+                        let html = '';
+                        fileNames.forEach(name => {
+                            const item = addState.newFiles.find(f => f.file.name === name);
+                            html += `<div style="font-size:11px;color:#bf360c;">📄 ${name} <strong>(${item?.data.length || 0})</strong></div>`;
+                        });
+                        html += `<div style="font-size:10px;color:#bf360c;margin-top:4px;">Всего: ${addState.newFiles.length} файлов</div>`;
+                        addNewInfo.innerHTML = html;
+                        addNewBox.classList.add('loaded');
+
+                        updateAddStats();
+                        updateAddButton();
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function updateAddStats() {
+            document.getElementById('addExistingQuestions').textContent = addState.existingBase.length;
+            document.getElementById('addNewQuestions').textContent = addState.newFiles.reduce((sum, f) => sum + f.data.length, 0);
+            document.getElementById('addNewSections').textContent = addState.newFiles.length;
+        }
+
+        function updateAddButton() {
+            const hasExisting = addState.existingBase.length > 0;
+            const hasNew = addState.newFiles.length > 0;
+            document.getElementById('addToBaseBtn').disabled = !(hasExisting && hasNew);
+        }
+
+        // Кнопка "Добавить к базе"
+        document.getElementById('addToBaseBtn').addEventListener('click', async function() {
+            if (addState.existingBase.length === 0) { alert('❌ Загрузите существующую базу!'); return; }
+            if (addState.newFiles.length === 0) { alert('❌ Загрузите новые файлы!'); return; }
+
+            const progressContainer = document.getElementById('addProgressContainer');
+            const progressFill = document.getElementById('addProgressFill');
+            progressContainer.style.display = 'block';
+
+            // Сортируем новые файлы по номеру
+            addState.newFiles.sort((a, b) => a.number - b.number);
+
+            // Начинаем нумерацию с existingMaxPunkt + 1
+            let currentNumber = addState.existingMaxPunkt + 1;
+            let allQuestions = [...addState.existingBase];
+            const newSections = [];
+            const totalSteps = addState.newFiles.length;
+
+            for (let i = 0; i < totalSteps; i++) {
+                const item = addState.newFiles[i];
+                newSections.push(item.name);
+
+                const tagged = item.data.map((q) => ({
+                    ...q,
+                    punkt: currentNumber.toString(),
+                    source: item.name
+                }));
+
+                allQuestions = [...allQuestions, ...tagged];
+                currentNumber += item.data.length;
+
+                progressFill.style.width = ((i + 1) / totalSteps * 100) + '%';
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+                progressFill.style.width = '0%';
+            }, 400);
+
+            // Сохраняем
+            const fileName = addState.existingBaseName + '_дополненная.json';
+            const blob = new Blob([JSON.stringify(allQuestions, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            a.click();
+
+            // Показываем результат
+            addRenderResults(allQuestions, [...addState.existingSections, ...newSections], addState.existingMaxPunkt, currentNumber - 1);
+
+            alert('✅ Готово!\n' +
+                'Было вопросов: ' + addState.existingBase.length + '\n' +
+                'Добавлено вопросов: ' + (allQuestions.length - addState.existingBase.length) + '\n' +
+                'Всего стало: ' + allQuestions.length + '\n' +
+                'Всего разделов: ' + (addState.existingSections.length + newSections.length) + '\n' +
+                'Нумерация вопросов: с ' + (addState.existingMaxPunkt + 1) + ' по ' + (currentNumber - 1) + '\n\n' +
+                'Файл: ' + fileName);
+
+            document.getElementById('addToBaseBtn').disabled = true;
+        });
+
+        function addRenderResults(data, sections, oldMax, newMax) {
+            const container = document.getElementById('addResultsContainer');
+
+            let html = `
+                <div class="results-header">
+                    <span class="count">✅ Всего: ${data.length} вопросов | 📁 Разделов: ${sections.length}</span>
+                    <span>
+                        <span class="badge badge-info">Было: ${oldMax} вопросов</span>
+                        <span class="badge badge-success">Добавлено: ${newMax - oldMax} вопросов</span>
+                    </span>
+                </div>
+                <div class="question-list">
+            `;
+
+            let currentSection = '';
+            let counter = 0;
+
+            data.forEach((item) => {
+                const source = item.source || '—';
+                const punkt = item.punkt || '—';
+                const question = item.question || 'Вопрос не указан';
+
+                if (source !== currentSection) {
+                    currentSection = source;
+                    html += `<div style="padding:12px 14px;background:#fff3e0;border-bottom:2px solid #e65100;margin:4px 0;"><strong style="color:#e65100;font-size:15px;">📁 ${source}</strong></div>`;
+                }
+
+                counter++;
+                html += `
+                    <div class="question-item">
+                        <div class="q-header">
+                            <span class="q-number">#${counter}</span>
+                            <span class="q-section-tag">${source}</span>
+                            <span class="q-ident">🆔 ${punkt}</span>
+                        </div>
+                        <div class="q-text">${escapeHtml(question)}</div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        document.getElementById('addClearBtn').addEventListener('click', function() {
+            addState.existingBase = [];
+            addState.existingBaseName = '';
+            addState.newFiles = [];
+            addState.existingMaxPunkt = 0;
+            addState.existingSections = [];
+
+            document.getElementById('addExistingQuestions').textContent = '0';
+            document.getElementById('addNewQuestions').textContent = '0';
+            document.getElementById('addNewSections').textContent = '0';
+
+            document.getElementById('addExistingInfo').innerHTML = '';
+            document.getElementById('addNewInfo').innerHTML = '';
+            document.getElementById('addExistingUpload').classList.remove('loaded');
+            document.getElementById('addNewUpload').classList.remove('loaded');
+            document.getElementById('addExistingFile').value = '';
+            document.getElementById('addNewFile').value = '';
+
+            document.getElementById('addResultsContainer').innerHTML = `
+                <div class="empty-state">
+                    <span class="icon">📦</span>
+                    <h3>Нужно 2 файла</h3>
+                    <p>Существующая база + новые файлы</p>
+                </div>
+            `;
+
+            document.getElementById('addToBaseBtn').disabled = true;
+            document.getElementById('addProgressContainer').style.display = 'none';
+        });
+
+        // ================================================================
         // EVENT LISTENERS
         // ================================================================
 
@@ -2034,6 +2416,7 @@
         console.log('✅ Пауза перед повтором: 5 секунд');
         console.log('✅ index.json обновляется один раз в конце.');
         console.log('✅ Названия баз слева, чекбоксы справа.');
+        console.log('➕ Добавлена функция "Добавление файлов к существующей базе".');
     </script>
 </body>
 </html>
